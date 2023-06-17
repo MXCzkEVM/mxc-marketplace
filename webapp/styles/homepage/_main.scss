@@ -1,0 +1,142 @@
+div.mainList {
+  width: 100%;
+  padding: 20px 32px 60px 32px;
+  div.button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgb(227, 227, 227);
+    div.leftButton {
+      display: flex;
+      align-items: center;
+      width: 195px;
+      height: 48px;
+      justify-content: space-between;
+      button.trending,
+      button.top {
+        font-size: 24px;
+        color: rgb(4, 17, 29);
+        background-color: transparent;
+        padding: 0 0 12px;
+        cursor: pointer;
+      }
+    }
+    div.rightButton {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 440px;
+      margin-bottom: 8px;
+      div.sort {
+        padding: 11px 16px 11px 24px;
+        border-radius: 15px;
+        border: 1px solid rgb(227, 227, 227);
+        display: flex;
+        align-items: center;
+        margin-right: 16px;
+        flex-wrap: nowrap;
+        cursor: pointer;
+        @media (max-width: 700px) {
+          display: none;
+        }
+        span {
+          font-size: 16px;
+          color: rgb(4, 17, 29);
+          white-space: nowrap;
+          cursor: pointer;
+        }
+        button.material-icons {
+          background: none;
+          cursor: pointer;
+        }
+      }
+      div.chains {
+        border: 1px solid rgb(227, 227, 227);
+        border-radius: 15px;
+        margin-right: 16px;
+        cursor: pointer;
+        @media (max-width: 700px) {
+          margin-left: auto;
+        }
+        p {
+          font-size: 16px;
+          padding: 11px 24px;
+          color: rgb(4, 17, 29);
+          white-space: nowrap;
+          cursor: pointer;
+        }
+      }
+
+      button.viewAll {
+        border: 1px solid rgb(227, 227, 227);
+        font-size: 16px;
+        padding: 11px 24px;
+        border-radius: 15px;
+        background: none;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+    }
+  }
+  section.allList {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    overflow-x: auto;
+    gap: 110px;
+
+    .leftList,
+    .rightList {
+      width: 100%;
+    }
+
+    div.title {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      padding: 4px 8px 0px;
+      span {
+        color: #646d75;
+        font-size: 12px;
+      }
+      div.section1 {
+        width: 64%;
+      }
+      div.section2 {
+        text-align: right;
+        width: 18%;
+        @media (max-width: 1200px) {
+          display: none;
+        }
+      }
+      div.section3 {
+        margin-left: auto;
+        text-align: right;
+        width: 18%;
+      }
+    }
+  }
+  section.allCard {
+    width: 100%;
+    span.allCardTitle {
+      margin-top: 40px;
+      display: block;
+      font-size: 24px;
+      color: #04111d;
+      margin-bottom: 25px;
+    }
+    div.fiveCard {
+      height: 300px;
+      overflow-x: auto;
+      max-width: 100%;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: row-reverse;
+      gap: 16px;
+    }
+  }
+}

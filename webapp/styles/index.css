@@ -1,0 +1,229 @@
+.circle-marker {
+  text-align: center;
+  line-height: 10px;
+}
+
+/*换行省略*/
+.break_ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/*多行省略*/
+.break_ellipsis_more {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.usn {
+  user-select: none;
+}
+
+.tlc {
+  text-align: center;
+}
+.tll {
+  text-align: left;
+}
+.tlr {
+  text-align: right;
+}
+
+/*换行*/
+.wbb {
+  word-break: break-all;
+}
+
+.bbox {
+  box-sizing: border-box;
+}
+
+.csp {
+  cursor: pointer;
+}
+
+.hidden {
+  display: none !important;
+}
+.hide {
+  opacity: 0;
+}
+
+/* color S*/
+.c000 {
+  color: #000;
+}
+.c333 {
+  color: #333;
+}
+.c666 {
+  color: #666;
+}
+.c999 {
+  color: #999;
+}
+.c_white {
+  color: #fff;
+}
+.c_red {
+  color: #ff0101;
+}
+.c_gray {
+  color: #9fa4b9;
+}
+/* color E */
+
+/* width S */
+.w100 {
+  width: 100%;
+}
+.w14 {
+  width: 14px;
+}
+.w16 {
+  width: 16px;
+}
+.w18 {
+  width: 18px;
+}
+/* width E */
+
+/* padding S*/
+.pd5 {
+  padding: 5px;
+}
+.pd10 {
+  padding: 10px;
+}
+.pd15 {
+  padding: 15px;
+}
+/* padding E*/
+
+/* margin S */
+.mr10 {
+  margin-right: 10px;
+}
+.mt5 {
+  margin-top: 5px;
+}
+.mt8 {
+  margin-top: 8px;
+}
+.mt10 {
+  margin-top: 10px;
+}
+/* margin E */
+
+/* font size S */
+.fs10 {
+  font-size: 10px;
+}
+.fs11 {
+  font-size: 11px;
+}
+.fs12 {
+  font-size: 12px;
+}
+.fs13 {
+  font-size: 13px;
+}
+.fs14 {
+  font-size: 14px;
+}
+.fs15 {
+  font-size: 15px;
+}
+.fs16 {
+  font-size: 16px;
+}
+.fs17 {
+  font-size: 17px;
+}
+.fs18 {
+  font-size: 18px;
+}
+.fs20 {
+  font-size: 20px;
+}
+.fs21 {
+  font-size: 21px;
+}
+.fs24 {
+  font-size: 24px;
+}
+.fs30 {
+  font-size: 30px;
+}
+.fw400 {
+  font-weight: 400;
+}
+.fw500 {
+  font-weight: 500;
+}
+.fw600 {
+  font-weight: 600;
+}
+.fwb {
+  font-weight: bold;
+}
+/* font size E */
+
+/* flex S */
+.flex {
+  display: flex;
+}
+.flexbox {
+  display: flex;
+  align-items: center;
+}
+.flex1 {
+  flex: 1;
+}
+.flex_c {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flex_s {
+  display: flex;
+  justify-content: space-between;
+}
+.flex_cs {
+  display: flex;
+  align-items: center;
+}
+.flex_sc {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.flex_ec {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.flex_wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+.flex_wrap_sb {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.flex_y_js {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.flex_css {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+/* flex  E */

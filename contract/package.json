@@ -1,0 +1,50 @@
+{
+    "name": "web3",
+    "version": "1.0.0",
+    "author": "",
+    "license": "ISC",
+    "scripts": {
+        "aave": "hh run scripts/aave/index.js --network wannsee",
+        "aave-ui": "hh run scripts/aave/ui.js --network wannsee"
+    },
+    "devDependencies": {
+        "@nomicfoundation/hardhat-chai-matchers": "^1.0.6",
+        "@nomicfoundation/hardhat-network-helpers": "^1.0.8",
+        "@nomicfoundation/hardhat-toolbox": "^2.0.1",
+        "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
+        "@nomiclabs/hardhat-etherscan": "^3.1.5",
+        "@nomiclabs/hardhat-waffle": "^2.0.3",
+        "@typechain/hardhat": "^6.1.5",
+        "@types/mocha": "^10.0.1",
+        "chai": "^4.3.7",
+        "dotenv": "^16.0.3",
+        "ethereum-waffle": "^4.0.9",
+        "ethers": "^5.7.2",
+        "hardhat": "^2.12.6",
+        "hardhat-contract-sizer": "^2.7.0",
+        "hardhat-deploy": "^0.11.22",
+        "hardhat-gas-reporter": "^1.0.9",
+        "hardhat-storage-layout": "^0.1.7",
+        "prettier": "^2.8.3",
+        "prettier-plugin-solidity": "^1.1.1",
+        "solhint": "^3.3.8",
+        "solidity-coverage": "^0.8.2",
+        "ts-node": "^10.9.1",
+        "typescript": "^4.9.5",
+        "undici": "^5.21.0"
+    },
+    "dependencies": {
+        "@chainlink/contracts": "^0.6.1",
+        "@openzeppelin/contracts": "^4.8.1",
+        "@openzeppelin/contracts-upgradeable": "^4.8.1",
+        "@openzeppelin/hardhat-upgrades": "^1.22.1",
+        "base64-sol": "^1.1.0",
+        "erc721a": "^4.2.3",
+        "erc721a-upgradeable": "^4.2.3",
+        "h3-js": "^4.1.0",
+        "keccak256": "^1.0.6",
+        "merkletreejs": "^0.3.9",
+        "web3": "^1.9.0",
+        "solmate": "^6.7.0"
+    }
+}

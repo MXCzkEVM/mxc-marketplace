@@ -1,0 +1,19 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  ::selection {
+    background-color: rgb(21, 178, 229);
+    color: rgb(255, 255, 255);
+  }
+}
+@import "./whiteheader";
+@import "./banner";
+@import "./collectionmain";
+@import "./collectioncard";
+@import "./aside";
+@import "./cart";

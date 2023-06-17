@@ -1,0 +1,22 @@
+
+
+.profile_page {
+    .create_btn {
+        display: inline-flex;
+        flex-direction: row;
+        -webkit-box-align: center;
+        align-items: center;
+        border-radius: 12px;
+        -webkit-box-pack: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 22px;
+        font-family: __Inter_6faf11, __Inter_Fallback_6faf11, sans-serif;
+        letter-spacing: 0.01em;
+        padding: 17px 24px;
+        background-color: rgb(32, 129, 226);
+        border: 1px solid rgb(32, 129, 226);
+        color: rgb(255, 255, 255);
+    }
+}

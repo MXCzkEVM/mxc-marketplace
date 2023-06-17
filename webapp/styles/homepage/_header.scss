@@ -1,0 +1,265 @@
+header {
+  width: 100%;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  position: sticky;
+  background-color: transparent;
+  top: 0;
+  z-index: 10;
+  &.scrolled {
+    background-color: white;
+    color: black;
+  }
+
+  .block1 {
+    display: flex;
+    align-items: center;
+    padding-right: 32px;
+    cursor: pointer;
+
+    .logo {
+      img {
+        height: 35px;
+      }
+    }
+
+    .separator {
+      border-left: 1px solid rgba(255, 255, 255, 0.5);
+      height: 32px;
+      margin: 0 24px;
+      &.scrolledseparator {
+        border-left: 1px solid rgb(227, 227, 227);
+      }
+    }
+
+    ul {
+      display: flex;
+      justify-content: space-between;
+      list-style: none;
+      width: 121.45px;
+      @media (max-width: 1200px) {
+        display: none;
+      }
+
+      li {
+        position: relative;
+        a {
+          cursor: pointer;
+          text-decoration: none;
+          color: white;
+          &.scrolledlink {
+            color: #353840;
+          }
+        }
+        div.dropdown-menu__content {
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          // position: sticky;
+
+          position: absolute;
+          top: 35px;
+          left: 0;
+          background-color: white;
+          width: 200px;
+
+          border-radius: 15px;
+          z-index: 20;
+
+          ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding: 10px;
+
+            li {
+              width: 100%;
+
+              padding: 12px;
+              border-radius: 12px;
+              &:hover {
+                background-color: rgba(229, 232, 235, 0.5);
+              }
+              a {
+                color: #333;
+                text-decoration: none;
+                font-size: 16px;
+                font-weight: 600;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .search,
+  .cart {
+    display: flex;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.12);
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.05, 0, 0.2, 1);
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    &.scrolleddiv {
+      border: 1px solid rgb(227, 227, 227);
+    }
+
+    button.material-icons {
+      padding: 0;
+      background: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      &.scrolledbutton {
+        color: #8a939b;
+      }
+      @media (max-width: 600px) {
+        width: 26px;
+      }
+    }
+  }
+
+  .search {
+    width: 100%;
+    margin-right: 12px;
+    cursor: text;
+    padding: 12px;
+    input {
+      padding: 1 0 1px 5px;
+      width: 100%;
+      height: 26px;
+      background-color: rgba(255, 255, 255, 0);
+      transition: all 0.2s cubic-bezier(0.05, 0, 0.2, 1);
+      margin-left: 8px;
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+        font-weight: 400;
+        font-size: 16px;
+      }
+      &:hover::placeholder {
+        color: rgba(255, 255, 255, 0.8);
+      }
+      &.scrolledholder::placeholder {
+        color: #8a939b;
+      }
+
+      @media (max-width: 600px) {
+        display: none;
+      }
+      button.material-icons {
+        font-size: 24px;
+        &.scrolledbutton {
+          color: #8a939b;
+        }
+      }
+    }
+
+    button.slash {
+      width: 26px;
+      height: 26px;
+      padding: 0;
+      background-color: rgba(255, 255, 255, 0.3);
+      color: white;
+      font-size: 12px;
+      border-radius: 10px;
+
+      @media (max-width: 600px) {
+        display: none;
+      }
+      &.scrolledslash {
+        color: #353840;
+        background-color: #e5e8eb;
+      }
+    }
+  }
+
+  .walletandaccount {
+    margin-right: 12px;
+    display: flex;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.12);
+    border-radius: 15px;
+    transition: all 0.2s cubic-bezier(0.05, 0, 0.2, 1);
+    &.scrolleddiv {
+      border: 1px solid rgb(227, 227, 227);
+    }
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    @media (max-width: 1023px) {
+      display: none;
+    }
+
+    button.material-icons {
+      padding: 0;
+      background: none;
+      color: white;
+      cursor: pointer;
+      &.scrolledbutton {
+        color: #353840;
+      }
+    }
+
+    .wallet {
+      display: flex;
+      justify-content: center;
+      padding: 12px;
+      cursor: pointer;
+
+      span {
+        padding-left: 5px;
+        color: white;
+        white-space: nowrap;
+        font-weight: 600;
+        &.scrolledspan {
+          color: #353840;
+        }
+      }
+    }
+
+    .account {
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      padding: 12px;
+      border-left: 1px solid rgba(255, 255, 255, 0.12);
+      &.scrolleddiv {
+        border-left: 1px solid rgb(227, 227, 227);
+      }
+    }
+  }
+  .cart {
+    padding: 12px;
+    position: relative;
+    .number {
+      background: rgb(32, 129, 226);
+      border-radius: 50%;
+      color: rgb(255, 255, 255);
+      height: 18px;
+      width: 18px;
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      span {
+        font-size: 10px;
+        font-weight: 600;
+      }
+    }
+
+    button.material-icons {
+      &.scrolledbutton {
+        color: #353840;
+      }
+    }
+  }
+}
