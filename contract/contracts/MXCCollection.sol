@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract MXCCollection is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
     using Counters for Counters.Counter;
-    Counters.Counter private _tokenIdTracker;
+    uint256 private _tokenIdCounter;
     uint256 public royaltiesCutPerMillion;
     address public royaltyRecipientAddress;
     address public marketplaceContract;
@@ -49,12 +49,20 @@ contract MXCCollection is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
         }
     }
 
-    function safeMint(address to, string memory _tokenURI) public onlyOwner {
-        uint256 newItemId = _tokenIdTracker.current() + 1;
-        _safeMint(to, newItemId);
+    function mint(string memory _tokenURI) public onlyOwner {
+        uint256 newItemId = _tokenIdCounter;
+        _safeMint(msg.sender, newItemId);
         _setTokenURI(newItemId, _tokenURI);
         setApprovalForAll(marketplaceContract, true);
-        _tokenIdTracker.increment();
+        _tokenIdCounter = _tokenIdCounter + 1;
+    }
+
+    function burn(uint256 tokenId) public {
+        require(
+            _isApprovedOrOwner(_msgSender(), tokenId),
+            "Caller is not owner nor approved"
+        );
+        _burn(tokenId);
     }
 
     function _burn(
@@ -89,7 +97,9 @@ contract MXCCollection is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
         address to,
         uint256 firstTokenId,
         uint256 batchSize
-    ) internal override(ERC721, ERC721Enumerable) {}
+    ) internal override(ERC721, ERC721Enumerable) {
+        super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
+    }
 
     function supportsInterface(
         bytes4 interfaceId

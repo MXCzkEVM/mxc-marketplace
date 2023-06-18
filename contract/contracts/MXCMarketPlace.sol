@@ -8,19 +8,19 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 import "./interfaces/IMXCCollection.sol";
 
-error MXCMarketplace_NotOwner();
-error MXCMarketplace_NotApproveFor();
-error MXCMarketplace_PriceNotAllow();
-error MXCMarketplace_InvalidExpiresAt();
-error MXCMarketplace_InvalidOrder();
-error MXCMarketplace_UnauthorizedUser();
-error MXCMarketplace_InvalidNftAddress();
-error MXCMarketplace_InvalidErc721Implementation();
-error MXCMarketplace_AssetNotForSale();
-error MXCMarketplace_InvalidSeller();
-error MXCMarketplace_SenderIsSeller();
-error MXCMarketplace_OrderExpired();
-error MXCMarketplace_SellerNotOwner();
+error MXCMarketplace__NotOwner();
+error MXCMarketplace__NotApproveFor();
+error MXCMarketplace__PriceNotAllow();
+error MXCMarketplace__InvalidExpiresAt();
+error MXCMarketplace__InvalidOrder();
+error MXCMarketplace__UnauthorizedUser();
+error MXCMarketplace__InvalidNftAddress();
+error MXCMarketplace__InvalidErc721Implementation();
+error MXCMarketplace__AssetNotForSale();
+error MXCMarketplace__InvalidSeller();
+error MXCMarketplace__SenderIsSeller();
+error MXCMarketplace__OrderExpired();
+error MXCMarketplace__SellerNotOwner();
 
 contract MXCMarketplace is IERC721Receiver, Ownable {
     using Address for address;
@@ -87,22 +87,22 @@ contract MXCMarketplace is IERC721Receiver, Ownable {
         address assetOwner = token.ownerOf(assetId);
 
         if (msg.sender != assetOwner) {
-            revert MXCMarketplace_NotOwner();
+            revert MXCMarketplace__NotOwner();
         }
 
         if (
             !token.isApprovedForAll(msg.sender, address(this)) &&
             token.getApproved(assetId) == address(this)
         ) {
-            revert MXCMarketplace_NotApproveFor();
+            revert MXCMarketplace__NotApproveFor();
         }
 
         if (priceInWei <= 0) {
-            revert MXCMarketplace_PriceNotAllow();
+            revert MXCMarketplace__PriceNotAllow();
         }
 
         if (expiresAt <= block.timestamp + 1 minutes) {
-            revert MXCMarketplace_InvalidExpiresAt();
+            revert MXCMarketplace__InvalidExpiresAt();
         }
 
         bytes32 orderId = keccak256(
@@ -141,11 +141,11 @@ contract MXCMarketplace is IERC721Receiver, Ownable {
         Order memory order = orderByAssetId[nftAddress][assetId];
 
         if (order.id == 0) {
-            revert MXCMarketplace_InvalidOrder();
+            revert MXCMarketplace__InvalidOrder();
         }
         // can only be canceled by seller or the contract owner
         if (order.seller != sender && sender != owner()) {
-            revert MXCMarketplace_UnauthorizedUser();
+            revert MXCMarketplace__UnauthorizedUser();
         }
 
         bytes32 orderId = order.id;
@@ -168,19 +168,19 @@ contract MXCMarketplace is IERC721Receiver, Ownable {
         Order memory order = orderByAssetId[nftAddress][assetId];
 
         if (order.id == 0) {
-            revert MXCMarketplace_AssetNotForSale();
+            revert MXCMarketplace__AssetNotForSale();
         }
         if (order.seller == address(0)) {
-            revert MXCMarketplace_InvalidSeller();
+            revert MXCMarketplace__InvalidSeller();
         }
         if (order.seller == sender) {
-            revert MXCMarketplace_SenderIsSeller();
+            revert MXCMarketplace__SenderIsSeller();
         }
         if (block.timestamp >= order.expiresAt) {
-            revert MXCMarketplace_OrderExpired();
+            revert MXCMarketplace__OrderExpired();
         }
         if (order.seller != mxcToken.ownerOf(assetId)) {
-            revert MXCMarketplace_SellerNotOwner();
+            revert MXCMarketplace__SellerNotOwner();
         }
 
         delete orderByAssetId[nftAddress][assetId];
@@ -205,12 +205,12 @@ contract MXCMarketplace is IERC721Receiver, Ownable {
 
     function _requireERC721(address nftAddress) internal view {
         if (!nftAddress.isContract()) {
-            revert MXCMarketplace_InvalidNftAddress();
+            revert MXCMarketplace__InvalidNftAddress();
         }
 
         IERC721 nftRegistry = IERC721(nftAddress);
         if (!nftRegistry.supportsInterface(ERC721_Interface)) {
-            revert MXCMarketplace_InvalidErc721Implementation();
+            revert MXCMarketplace__InvalidErc721Implementation();
         }
     }
 }
