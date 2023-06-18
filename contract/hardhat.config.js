@@ -32,7 +32,8 @@ module.exports = {
         },
         hardhat: {
             chainId: 31337,
-            gasPrice: 6000000000000,
+            gasPrice: 875000000,
+            allowUnlimitedContractSize: true,
         },
         arbiture_goerli: {
             url: "https://goerli-rollup.arbitrum.io/rpc",
@@ -56,6 +57,12 @@ module.exports = {
             },
             {
                 version: "0.8.17",
+                settings: {
+                    optimizer: {
+                        enabled: true,
+                        runs: 200,
+                    },
+                },
             },
             {
                 version: "0.8.4",

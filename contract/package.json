@@ -4,8 +4,6 @@
     "author": "",
     "license": "ISC",
     "scripts": {
-        "aave": "hh run scripts/aave/index.js --network wannsee",
-        "aave-ui": "hh run scripts/aave/ui.js --network wannsee"
     },
     "devDependencies": {
         "@nomicfoundation/hardhat-chai-matchers": "^1.0.6",

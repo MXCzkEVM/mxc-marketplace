@@ -2,20 +2,23 @@
 
 pragma solidity ^0.8.17;
 
-import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+error MXCCollection__NotCreator();
+error MXCCollection__NotExistToken();
+
 contract MXCCollection is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
-    using Counters for Counters.Counter;
     uint256 private _tokenIdCounter;
     uint256 public royaltiesCutPerMillion;
     address public royaltyRecipientAddress;
     address public marketplaceContract;
+    address public creator;
 
     constructor(
+        address _owner,
         address _mpAddress,
         string memory _name,
         string memory _symbol,
@@ -25,6 +28,12 @@ contract MXCCollection is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
         marketplaceContract = _mpAddress;
         royaltiesCutPerMillion = _royaltiesCutPerMillion;
         royaltyRecipientAddress = _royaltyRecipient;
+        creator = _owner;
+    }
+
+    modifier onlyCreator() {
+        if (msg.sender != creator) revert MXCCollection__NotCreator();
+        _;
     }
 
     function royaltyInfo(
@@ -49,7 +58,7 @@ contract MXCCollection is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
         }
     }
 
-    function mint(string memory _tokenURI) public onlyOwner {
+    function mint(string memory _tokenURI) public onlyCreator {
         uint256 newItemId = _tokenIdCounter;
         _safeMint(msg.sender, newItemId);
         _setTokenURI(newItemId, _tokenURI);
@@ -85,10 +94,9 @@ contract MXCCollection is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
     function tokenURI(
         uint256 tokenId
     ) public view override(ERC721, ERC721URIStorage) returns (string memory) {
-        require(
-            _exists(tokenId),
-            "ERC721Metadata: URI query for nonexistent token"
-        );
+        if (!_exists(tokenId)) {
+            revert MXCCollection__NotExistToken();
+        }
         return super.tokenURI(tokenId);
     }
 
