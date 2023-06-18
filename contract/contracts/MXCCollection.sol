@@ -10,21 +10,20 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract MXCCollection is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
     using Counters for Counters.Counter;
-
     Counters.Counter private _tokenIdTracker;
-    uint256 public royaltyPercentage;
+    uint256 public royaltiesCutPerMillion;
     address public royaltyRecipientAddress;
-    address private marketplaceContract;
+    address public marketplaceContract;
 
     constructor(
         address _mpAddress,
         string memory _name,
         string memory _symbol,
-        uint256 _royaltyPercentage,
+        uint256 _royaltiesCutPerMillion,
         address _royaltyRecipient
     ) ERC721(_name, _symbol) {
         marketplaceContract = _mpAddress;
-        royaltyPercentage = _royaltyPercentage;
+        royaltiesCutPerMillion = _royaltiesCutPerMillion;
         royaltyRecipientAddress = _royaltyRecipient;
     }
 
@@ -39,10 +38,10 @@ contract MXCCollection is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
             address royaltyRecipient
         )
     {
-        if (royaltyPercentage > 0) {
+        if (royaltiesCutPerMillion > 0) {
             return (
                 owner(),
-                (_salePrice * royaltyPercentage) / 100,
+                (_salePrice * royaltiesCutPerMillion) / 10000,
                 royaltyRecipientAddress
             );
         } else {

@@ -3,7 +3,7 @@ pragma solidity ^0.8.17;
 
 import "./MXCCollection.sol";
 
-contract MXCCollectionFactory is Ownable {
+contract MXCCollectionFactory {
     MXCCollection[] public collectionAddressByIndex;
     event newCollectionEvent(
         address collectionAddress,
