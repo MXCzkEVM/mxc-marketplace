@@ -27,17 +27,18 @@ if (!developmentChains.includes(network.name)) {
 
             marketplace = await getContract("MXCMarketplace")
             mxcCollection = await getContract("MXCCollection", [
+                owner.address,
                 marketplace.address,
-                "Alpha",
-                "Alpha",
-                10,
                 addr1.address,
+                10,
+                "Alpha",
+                "Alpha",
             ])
         })
 
         describe("Init correctly", function () {
             it("Should variable correctly", async function () {
-                expect(await mxcCollection.owner()).to.equal(owner.address)
+                expect(await mxcCollection.creator()).to.equal(owner.address)
                 expect(await mxcCollection.marketplaceContract()).to.equal(
                     marketplace.address
                 )
@@ -52,10 +53,9 @@ if (!developmentChains.includes(network.name)) {
 
         describe("royaltyInfo", function () {
             it("Get back correct value", async function () {
-                let { receiver, royaltyAmount, royaltyRecipient } =
+                let { royaltyAmount, royaltyRecipient } =
                     await mxcCollection.royaltyInfo(parseEther("1"))
 
-                expect(receiver).to.equal(owner.address)
                 expect(royaltyAmount).to.equal(
                     parseEther("1").mul(10).div(10000)
                 )
@@ -67,7 +67,7 @@ if (!developmentChains.includes(network.name)) {
             it("Only owner can mint", async function () {
                 await expect(
                     mxcCollection.connect(addr1).mint(tokenUri)
-                ).to.be.revertedWith("Ownable: caller is not the owner")
+                ).to.be.revertedWith("MXCCollection__NotCreator")
             })
             it("mint collect", async function () {
                 await mxcCollection.mint(tokenUri)
@@ -104,22 +104,8 @@ if (!developmentChains.includes(network.name)) {
                 expect(totalSupply).to.equal(1)
 
                 await expect(mxcCollection.tokenURI(0)).to.be.revertedWith(
-                    "ERC721Metadata: URI query for nonexistent token"
+                    "MXCCollection__NotExistToken"
                 )
-            })
-        })
-
-        describe("tokensOfOwner", function () {
-            beforeEach(async () => {
-                await mxcCollection.mint(tokenUri)
-                await mxcCollection.mint(tokenUri)
-                await mxcCollection.mint(tokenUri)
-                await mxcCollection.burn(1)
-            })
-            it("Get back right", async function () {
-                let arr = await mxcCollection.tokensOfOwner(owner.address)
-                expect(arr[0]).to.equal(0)
-                expect(arr[1]).to.equal(2)
             })
         })
     })

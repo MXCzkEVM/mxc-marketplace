@@ -12,7 +12,7 @@ hh run scripts/layer2.js --network wannsee
 
 test
 /* 
-hh test test/unit/MXCCollection.test.js 
+hh test test/unit/MXCCollection.test.js
 hh test test/unit/MXCCollectionFactory.test.js
 
 hh console --network wannsee

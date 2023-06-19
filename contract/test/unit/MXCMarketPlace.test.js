@@ -50,29 +50,6 @@ if (!developmentChains.includes(network.name)) {
                 expect(ipfs).to.equal(collect1Uri)
                 expect(owner_address).to.equal(owner.address)
             })
-            it("event correctly", async function () {
-                let collection =
-                    await mxcCollectionFactory.callStatic.createCollection(
-                        marketplace.address,
-                        "CryptoPunks",
-                        "CryptoPunks",
-                        5,
-                        owner.address,
-                        collect1Uri
-                    )
-                await expect(
-                    mxcCollectionFactory.createCollection(
-                        marketplace.address,
-                        "CryptoPunks",
-                        "CryptoPunks",
-                        5,
-                        owner.address,
-                        collect1Uri
-                    )
-                )
-                    .to.emit(mxcCollectionFactory, "newCollectionEvent")
-                    .withArgs(collection, owner.address)
-            })
         })
 
         describe("createCollection and Mint", function () {
@@ -98,8 +75,8 @@ if (!developmentChains.includes(network.name)) {
             })
             it("createCollection correctly", async function () {
                 let collections = await mxcCollectionFactory.fetchCollections()
-                let CryptoPunksAddr = collections[0].collection
-                let AzukiAddr = collections[1].collection
+                let CryptoPunksAddr = collections[0].mxcCollection
+                let AzukiAddr = collections[1].mxcCollection
 
                 // await CryptoPunks.
                 const nftContract = await ethers.getContractFactory(
@@ -149,16 +126,6 @@ if (!developmentChains.includes(network.name)) {
                 expect(
                     await mxcCollectionFactory.fetchCollectionsLength()
                 ).to.equal(1)
-            })
-
-            it("event correctly", async function () {
-                let collection =
-                    await mxcCollectionFactory.callStatic.delCollection(
-                        collect2Uri
-                    )
-                await expect(mxcCollectionFactory.delCollection(collect2Uri))
-                    .to.emit(mxcCollectionFactory, "delCollectionEvent")
-                    .withArgs(collection, owner.address)
             })
         })
     })

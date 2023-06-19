@@ -9,10 +9,19 @@ contract MXCCollectionFactory {
     struct MXCCollectionData {
         string ipfs;
         address owner;
-        address mxcCollection;
+        address collection;
     }
 
     MXCCollectionData[] public collections;
+
+    event newCollectionEvent(
+        address indexed collectionAddress,
+        address indexed owner
+    );
+    event delCollectionEvent(
+        address indexed collectionAddress,
+        address indexed owner
+    );
 
     function createCollection(
         address _marketplaceAddress,
@@ -21,19 +30,21 @@ contract MXCCollectionFactory {
         uint256 _royaltiesCutPerMillion,
         address _royaltyRecipient,
         string memory _ipfs
-    ) external {
+    ) external returns (address) {
         address newCollection = address(
             new MXCCollection(
                 msg.sender,
                 _marketplaceAddress,
-                _name,
-                _symbol,
+                _royaltyRecipient,
                 _royaltiesCutPerMillion,
-                _royaltyRecipient
+                _name,
+                _symbol
             )
         );
 
         collections.push(MXCCollectionData(_ipfs, msg.sender, newCollection));
+        emit newCollectionEvent(newCollection, msg.sender);
+        return newCollection;
     }
 
     function fetchCollections()
@@ -48,18 +59,20 @@ contract MXCCollectionFactory {
         return collections.length;
     }
 
-    function delCollection(string memory _ipfs) external {
+    function delCollection(string memory _ipfs) external returns (address) {
         for (uint256 i = 0; i < collections.length; i++) {
             if (collections[i].owner != msg.sender) {
                 revert MXCCollectionFactory__NotOwner();
             }
             if (compareStrings(collections[i].ipfs, _ipfs)) {
-                // move last one and delete it
+                address collection = collections[i].collection;
                 collections[i] = collections[collections.length - 1];
                 collections.pop();
-                return;
+                emit delCollectionEvent(collection, msg.sender);
+                return collection;
             }
         }
+        return address(0);
     }
 
     function compareStrings(

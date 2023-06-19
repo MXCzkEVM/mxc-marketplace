@@ -5,12 +5,11 @@ pragma solidity ^0.8.17;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 
 error MXCCollection__NotCreator();
 error MXCCollection__NotExistToken();
 
-contract MXCCollection is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
+contract MXCCollection is ERC721, ERC721Enumerable, ERC721URIStorage {
     uint256 private _tokenIdCounter;
     uint256 public royaltiesCutPerMillion;
     address public royaltyRecipientAddress;
@@ -18,17 +17,17 @@ contract MXCCollection is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
     address public creator;
 
     constructor(
-        address _owner,
+        address _creator,
         address _mpAddress,
-        string memory _name,
-        string memory _symbol,
+        address _royaltyRecipient,
         uint256 _royaltiesCutPerMillion,
-        address _royaltyRecipient
+        string memory _name,
+        string memory _symbol
     ) ERC721(_name, _symbol) {
         marketplaceContract = _mpAddress;
         royaltiesCutPerMillion = _royaltiesCutPerMillion;
         royaltyRecipientAddress = _royaltyRecipient;
-        creator = _owner;
+        creator = _creator;
     }
 
     modifier onlyCreator() {
@@ -38,23 +37,14 @@ contract MXCCollection is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
 
     function royaltyInfo(
         uint256 _salePrice
-    )
-        external
-        view
-        returns (
-            address receiver,
-            uint256 royaltyAmount,
-            address royaltyRecipient
-        )
-    {
+    ) external view returns (uint256 royaltyAmount, address royaltyRecipient) {
         if (royaltiesCutPerMillion > 0) {
             return (
-                owner(),
                 (_salePrice * royaltiesCutPerMillion) / 10000,
                 royaltyRecipientAddress
             );
         } else {
-            return (address(0), 0, address(0));
+            return (0, address(0));
         }
     }
 
@@ -78,17 +68,6 @@ contract MXCCollection is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
         uint256 tokenId
     ) internal override(ERC721, ERC721URIStorage) {
         super._burn(tokenId);
-    }
-
-    function tokensOfOwner(
-        address _owner
-    ) public view returns (uint256[] memory) {
-        uint256 count = balanceOf(_owner);
-        uint256[] memory result = new uint256[](count);
-        for (uint256 index = 0; index < count; index++) {
-            result[index] = tokenOfOwnerByIndex(_owner, index);
-        }
-        return result;
     }
 
     function tokenURI(
