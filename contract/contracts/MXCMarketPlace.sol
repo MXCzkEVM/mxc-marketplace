@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 import "./interfaces/IMXCCollection.sol";
+import "hardhat/console.sol";
 
 error MXCMarketplace__NotOwner();
 error MXCMarketplace__NotApproveFor();
@@ -21,6 +22,7 @@ error MXCMarketplace__InvalidSeller();
 error MXCMarketplace__SenderIsSeller();
 error MXCMarketplace__OrderExpired();
 error MXCMarketplace__SellerNotOwner();
+error MXCMarketplace__PriceMisMatch();
 
 contract MXCMarketplace is IERC721Receiver, Ownable {
     using Address for address;
@@ -38,7 +40,15 @@ contract MXCMarketplace is IERC721Receiver, Ownable {
         uint256 expiresAt;
     }
 
+    struct LatestInfo {
+        uint256 price;
+        uint256 transactions;
+    }
+
+    // collection => assetId => Order
     mapping(address => mapping(uint256 => Order)) public orderByAssetId;
+    // collection => assetId => LatestInfo
+    mapping(address => mapping(uint256 => LatestInfo)) public assertPrice;
 
     bytes4 public constant ERC721_Interface = bytes4(0x80ac58cd);
 
@@ -92,7 +102,7 @@ contract MXCMarketplace is IERC721Receiver, Ownable {
 
         if (
             !token.isApprovedForAll(msg.sender, address(this)) &&
-            token.getApproved(assetId) == address(this)
+            token.getApproved(assetId) != address(this)
         ) {
             revert MXCMarketplace__NotApproveFor();
         }
@@ -182,17 +192,27 @@ contract MXCMarketplace is IERC721Receiver, Ownable {
         if (order.seller != mxcToken.ownerOf(assetId)) {
             revert MXCMarketplace__SellerNotOwner();
         }
+        if (msg.value != order.price) {
+            revert MXCMarketplace__PriceMisMatch();
+        }
 
         delete orderByAssetId[nftAddress][assetId];
 
         // send royalty fee to nft creator
-        (, uint256 royaltyAmount, address royaltyRecipient) = mxcToken
+        (uint256 royaltyAmount, address royaltyRecipient) = mxcToken
             .royaltyInfo(order.price);
+
         payable(royaltyRecipient).transfer(royaltyAmount);
         // send left to seller
         payable(order.seller).transfer(order.price - royaltyAmount);
         // send nft to buyer
         mxcToken.safeTransferFrom(order.seller, sender, assetId);
+        // update new transaction
+        uint256 transactions = assertPrice[nftAddress][assetId].transactions;
+        assertPrice[nftAddress][assetId] = LatestInfo(
+            order.price,
+            transactions + 1
+        );
         emit OrderSuccessful(
             order.id,
             assetId,

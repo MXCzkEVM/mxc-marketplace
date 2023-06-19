@@ -12,12 +12,5 @@ interface IMXCCollection {
 
     function royaltyInfo(
         uint256 _salePrice
-    )
-        external
-        view
-        returns (
-            address receiver,
-            uint256 royaltyAmount,
-            address royaltyRecipient
-        );
+    ) external view returns (uint256 royaltyAmount, address royaltyRecipient);
 }

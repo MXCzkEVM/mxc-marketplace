@@ -2,18 +2,10 @@ const { assert, expect } = require("chai")
 const { network, ethers } = require("hardhat")
 const { developmentChains } = require("../../helper-hardhat-config")
 
-const { increaseTime } = require("../../utils/utils")
+const { deployContracts } = require("../../utils/utils")
 const parseEther = ethers.utils.parseEther
 const formatEther = ethers.utils.formatEther
 const getBalance = ethers.provider.getBalance
-
-const getContract = async (name, args) => {
-    const contract = await ethers.getContractFactory(name)
-    if (args && args.length) {
-        return await contract.deploy(...args)
-    }
-    return await contract.deploy()
-}
 
 const collect1Uri = "ipfs://QQ1"
 const collect2Uri = "ipfs://QQ2"
@@ -29,8 +21,8 @@ if (!developmentChains.includes(network.name)) {
         let owner, addr1, addr2, addrs, marketplace, mxcCollectionFactory
         beforeEach(async () => {
             ;[owner, addr1, addr2, ...addrs] = await ethers.getSigners()
-            mxcCollectionFactory = await getContract("MXCCollectionFactory")
-            marketplace = await getContract("MXCMarketplace")
+            mxcCollectionFactory = await deployContracts("MXCCollectionFactory")
+            marketplace = await deployContracts("MXCMarketplace")
         })
 
         describe("createCollection", function () {
@@ -63,8 +55,8 @@ if (!developmentChains.includes(network.name)) {
                 await expect(
                     mxcCollectionFactory.createCollection(
                         marketplace.address,
-                        "CryptoPunks",
-                        "CryptoPunks",
+                        "Azuki",
+                        "Azuki",
                         5,
                         owner.address,
                         collect1Uri
@@ -101,7 +93,6 @@ if (!developmentChains.includes(network.name)) {
                 let CryptoPunksAddr = collections[0].collection
                 let AzukiAddr = collections[1].collection
 
-                // await CryptoPunks.
                 const nftContract = await ethers.getContractFactory(
                     "MXCCollection"
                 )

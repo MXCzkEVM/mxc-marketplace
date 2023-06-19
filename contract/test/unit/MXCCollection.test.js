@@ -2,18 +2,10 @@ const { assert, expect } = require("chai")
 const { network, ethers } = require("hardhat")
 const { developmentChains } = require("../../helper-hardhat-config")
 
-const { increaseTime } = require("../../utils/utils")
+const { deployContracts } = require("../../utils/utils")
 const parseEther = ethers.utils.parseEther
 const formatEther = ethers.utils.formatEther
 const getBalance = ethers.provider.getBalance
-
-const getContract = async (name, args) => {
-    const contract = await ethers.getContractFactory(name)
-    if (args && args.length) {
-        return await contract.deploy(...args)
-    }
-    return await contract.deploy()
-}
 
 const tokenUri = "ipfs://QmaVkBn2tKmjbhphU7eyztbvSQU5EXDdqRyXZtRhSGgJGo"
 
@@ -25,8 +17,8 @@ if (!developmentChains.includes(network.name)) {
         beforeEach(async () => {
             ;[owner, addr1, addr2, ...addrs] = await ethers.getSigners()
 
-            marketplace = await getContract("MXCMarketplace")
-            mxcCollection = await getContract("MXCCollection", [
+            marketplace = await deployContracts("MXCMarketplace")
+            mxcCollection = await deployContracts("MXCCollection", [
                 owner.address,
                 marketplace.address,
                 addr1.address,
