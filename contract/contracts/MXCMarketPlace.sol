@@ -5,9 +5,7 @@ import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-
 import "./interfaces/IMXCCollection.sol";
-import "hardhat/console.sol";
 
 error MXCMarketplace__NotOwner();
 error MXCMarketplace__NotApproveFor();
@@ -23,6 +21,7 @@ error MXCMarketplace__SenderIsSeller();
 error MXCMarketplace__OrderExpired();
 error MXCMarketplace__SellerNotOwner();
 error MXCMarketplace__PriceMisMatch();
+error MXCMarketplace__OrderExisted();
 
 contract MXCMarketplace is IERC721Receiver, Ownable {
     using Address for address;
@@ -45,10 +44,17 @@ contract MXCMarketplace is IERC721Receiver, Ownable {
         uint256 transactions;
     }
 
+    struct collectionMarket {
+        uint256 floorPrice;
+        uint256 ceilingPrice;
+    }
+
     // collection => assetId => Order
     mapping(address => mapping(uint256 => Order)) public orderByAssetId;
     // collection => assetId => LatestInfo
     mapping(address => mapping(uint256 => LatestInfo)) public assertPrice;
+    // collection => marketInfo
+    mapping(address => collectionMarket) public collectionMarketInfo;
 
     bytes4 public constant ERC721_Interface = bytes4(0x80ac58cd);
 
@@ -96,11 +102,8 @@ contract MXCMarketplace is IERC721Receiver, Ownable {
         IERC721 token = IERC721(nftAddress);
         address assetOwner = token.ownerOf(assetId);
 
-        if (msg.sender != assetOwner) {
-            revert MXCMarketplace__NotOwner();
-        }
-
         if (
+            msg.sender != assetOwner &&
             !token.isApprovedForAll(msg.sender, address(this)) &&
             token.getApproved(assetId) != address(this)
         ) {
@@ -113,6 +116,11 @@ contract MXCMarketplace is IERC721Receiver, Ownable {
 
         if (expiresAt <= block.timestamp + 1 minutes) {
             revert MXCMarketplace__InvalidExpiresAt();
+        }
+
+        Order memory order = orderByAssetId[nftAddress][assetId];
+        if (order.price > 0) {
+            revert MXCMarketplace__OrderExisted();
         }
 
         bytes32 orderId = keccak256(
@@ -213,6 +221,25 @@ contract MXCMarketplace is IERC721Receiver, Ownable {
             order.price,
             transactions + 1
         );
+
+        // update collection marketplace info
+        uint256 floorPrice = collectionMarketInfo[nftAddress].floorPrice;
+        uint256 ceilingPrice = collectionMarketInfo[nftAddress].ceilingPrice;
+        if (transactions == 0) {
+            floorPrice = order.price;
+            ceilingPrice = order.price;
+        }
+        if (order.price < floorPrice) {
+            floorPrice = order.price;
+        }
+        if (order.price > ceilingPrice) {
+            ceilingPrice = order.price;
+        }
+        collectionMarketInfo[nftAddress] = collectionMarket(
+            floorPrice,
+            ceilingPrice
+        );
+
         emit OrderSuccessful(
             order.id,
             assetId,

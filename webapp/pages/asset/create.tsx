@@ -1,44 +1,72 @@
-import { useRouter } from "next/router"
+import Router, { useRouter } from "next/router"
+import Link from "next/link"
 import React, { useState, useEffect, useRef } from "react"
 import Select from "react-select"
-import Container from "../../components/Container/Container"
+import { toast } from "react-toastify"
+import {
+  Web3Button,
+  useAddress,
+  useContract,
+  useContractWrite,
+  useContractRead,
+} from "@thirdweb-dev/react"
+import { getJsonFromIPFS } from "@/util/uploadToPinata"
+import Container from "@/components/Container/Container"
+import uploadIcon from "@/assets/imgs/upload.png"
+import plusIcon from "@/assets/svgs/plus.svg"
+import closeIcon from "@/assets/svgs/close.svg"
+import { storeImage, storeJson } from "@/util/uploadToPinata"
 
-import uploadIcon from "../../assets/imgs/upload.png"
-import plusIcon from "../../assets/svgs/plus.svg"
-import closeIcon from "../../assets/svgs/close.svg"
+import { CONTRACTS_MAP, ABI } from "@/const/Network"
+import { IPFS_GATEWAY, version } from "@/const/Local"
 
 export default function AssetCrearePage() {
-  const logoRef = useRef<any>(null)
+  const imageRef = useRef<any>(null)
 
   const [name, setName] = useState("")
   const [nameError, setNameError] = useState<any>(null)
-  const [logo, setLogo] = useState(null)
+  const [nftImage, setImage] = useState(null)
+  const [nftImageFile, setImageFile] = useState<any>(null)
   const [external_link, setExternal] = useState("")
   const [description, setDescription] = useState("")
-  const [collection_id, setCollection] = useState("")
-
-  const [isSwitchOn, setSwitch] = useState(false)
-
-  // const [address, setAddress] = useState("")
-
+  const [collection_address, setCollection] = useState("")
+  const [isRealWorldNFT, setSwitch] = useState(false)
   // traits
   const [traits, setTraits] = useState<any>([])
   const [editingIndex, setEditingIndex] = useState(null)
-  const [key, setKey] = useState("")
+  const [trait_type, setTraitType] = useState("")
   const [value, setValue] = useState("")
+  const [userCollections, setUserCollections] = useState<any>([])
 
-  const collections = [
-    {
-      id: "1",
-      label: "cxkjntm",
-      img: "https://i.seadn.io/gcs/files/2c5f99a43056d7b4b49e5ba8815739de.jpg?auto=format&dpr=1&w=48",
-    },
-    {
-      id: "2",
-      label: "hellw",
-      img: "https://i.seadn.io/gcs/files/b1702aae1b4cf0b577ab93c0732ff29e.jpg?auto=format&dpr=1&w=48",
-    },
-  ]
+  const address = useAddress()
+  const { contract: collectionFactoryContract } = useContract(
+    CONTRACTS_MAP.COLLECTION_FACTORY,
+    ABI.collectionFactory
+  )
+  const { data } = useContractRead(
+    collectionFactoryContract,
+    "fetchUserCollections",
+    [address]
+  )
+
+  const { contract: collectionContract } = useContract(
+    collection_address,
+    ABI.collection
+  )
+  const { mutateAsync: mintNFT } = useContractWrite(collectionContract, "mint")
+
+  // const  collections = [
+  // {
+  //   id: "1",
+  //   label: "cxkjntm",
+  //   img: "https://i.seadn.io/gcs/files/2c5f99a43056d7b4b49e5ba8815739de.jpg?auto=format&dpr=1&w=48",
+  // },
+  // {
+  //   id: "2",
+  //   label: "hellw",
+  //   img: "https://i.seadn.io/gcs/files/b1702aae1b4cf0b577ab93c0732ff29e.jpg?auto=format&dpr=1&w=48",
+  // },
+  // ]
 
   // useEffect(() => {
   //   const fetchData = async () => {}
@@ -46,32 +74,129 @@ export default function AssetCrearePage() {
   // }, [])
 
   useEffect(() => {
-    if (isSwitchOn) {
+    if (isRealWorldNFT) {
       // 当 switch 打开时执行一些操作
       console.log("Switch is on")
     }
-  }, [isSwitchOn])
+  }, [isRealWorldNFT])
 
-  const removeLogo = () => {
-    setLogo(null)
+  useEffect(() => {
+    const fetchData = async () => {
+      const usersData: any = data.filter((item: any) => item.owner == address)
+      let userCollection = []
+      for (let i = 0; i < usersData.length; i++) {
+        let { ipfs, collection } = usersData[i]
+        let res = (await getJsonFromIPFS(ipfs)) || {}
+        userCollection.push({
+          name: res.name,
+          cover: `${IPFS_GATEWAY}${res.cover}`,
+          profile: `${IPFS_GATEWAY}${res.profile}`,
+          collection,
+        })
+      }
+      setUserCollections(userCollection)
+    }
+    if (address && data?.length) {
+      fetchData()
+    }
+  }, [address, data])
+
+  const removeImage = () => {
+    setImage(null)
+    setImageFile(null)
+  }
+  const handleImageSelect = (e: any) => {
+    if (e.target.files.length > 0) {
+      const file = e.target.files[0]
+
+      setImageFile(file)
+
+      const reader = new FileReader()
+      reader.onload = function (e: any) {
+        setImage(e.target.result)
+      }
+
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const createItem = async () => {
+    if (!name) {
+      toast.warn("Please type your collection name.")
+      return
+    }
+
+    let image_ipfs: any = ""
+    if (nftImageFile) {
+      const formData = new FormData()
+      const metadata = JSON.stringify({
+        name: `${version}_${nftImageFile.name}`,
+      })
+      formData.append("pinataMetadata", metadata)
+      formData.append("file", nftImageFile)
+      image_ipfs = await storeImage(formData)
+    }
+
+    const formData = {
+      image: image_ipfs,
+      name,
+      external_link,
+      description,
+      attributes: traits,
+      isRealWorldNFT,
+    }
+
+    const json_data = JSON.stringify({
+      pinataOptions: {},
+      pinataMetadata: {
+        name,
+      },
+      pinataContent: formData,
+    })
+
+    let jsonIpfs = await storeJson(json_data)
+    if (!jsonIpfs) {
+      toast.error("Upload json to ipfs failed.")
+      return
+    }
+
+    // console.log(jsonIpfs)
+
+    // console.log(jsonIpfs)
+    // const jsonIpfs = "QmTebZ6SYmRffjLNJopEwkwMxwRLGoPqrZVMLkU4JNksGx"
+    let txResult
+    try {
+      // Simple one-liner for buying the NFT
+      txResult = await mintNFT({
+        args: [`ipfs://${jsonIpfs}`],
+      })
+      toast.success("NFT item create successfully!")
+      Router.push(`/collection/${collection_address}`)
+    } catch (error) {
+      // console.error(error)
+      console.log(error)
+      toast.error(`NFT item create failed`)
+    }
+
+    return txResult
   }
 
   const handleAddOrEditTrait = (e: any) => {
     e.preventDefault()
     if (editingIndex !== null) {
       const newTraits: any = [...traits]
-      newTraits[editingIndex] = { key, value }
+      newTraits[editingIndex] = { trait_type, value }
       setTraits(newTraits)
       setEditingIndex(null)
     } else {
-      setTraits([...traits, { key, value }])
+      setTraits([...traits, { trait_type, value }])
     }
-    setKey("")
+    setTraitType("")
     setValue("")
   }
 
   const handleEditTrait = (index: any): void => {
-    setKey(traits[index].key)
+    setTraitType(traits[index].trait_type)
     setValue(traits[index].value)
     setEditingIndex(index)
   }
@@ -81,23 +206,10 @@ export default function AssetCrearePage() {
   }
 
   const onChangeCollection = (e: any) => {
-    if (e && e.target && e.target.id) {
-      setCollection(e.target.id as string)
+    if (e?.collection) {
+      setCollection(e.collection as string)
     } else {
       setCollection("")
-    }
-  }
-
-  const handleLogoSelect = (e: any) => {
-    if (e.target.files.length > 0) {
-      const file = e.target.files[0]
-
-      const reader = new FileReader()
-      reader.onload = function (e: any) {
-        setLogo(e.target.result)
-      }
-
-      reader.readAsDataURL(file)
     }
   }
 
@@ -141,12 +253,12 @@ export default function AssetCrearePage() {
               This image will also be used for navigation. 300x300 recommended.
             </div>
             <div className="inputWrapper">
-              <div className="logoUploadBox">
-                {logo ? (
+              <div className="uploadBox">
+                {nftImage ? (
                   <>
-                    <img src={logo} />
+                    <img src={nftImage} />
                     <div className="removeOverlay">
-                      <div className="removeIcon" onClick={removeLogo}>
+                      <div className="removeIcon" onClick={removeImage}>
                         <img src={closeIcon.src} />
                       </div>
                     </div>
@@ -154,14 +266,14 @@ export default function AssetCrearePage() {
                 ) : (
                   <div
                     className="uploadOverlay"
-                    onClick={() => logoRef.current?.click()}
+                    onClick={() => imageRef.current?.click()}
                   >
                     <input
-                      ref={logoRef}
+                      ref={imageRef}
                       type="file"
                       accept="image/*"
                       hidden
-                      onChange={handleLogoSelect}
+                      onChange={handleImageSelect}
                     />
                     <div className="upload">
                       <div className="uploadInner">
@@ -181,8 +293,9 @@ export default function AssetCrearePage() {
             <div className="inputTitle">External link</div>
             <div className="inputSubTitle">
               MXC loT NFT marketplace will include a link to this URL on this
-              item's detail page, so that users can click to learn more about
-              it.You are welcome to link to your own webpage with more details.
+              item&apos;s detail page, so that users can click to learn more
+              about it.You are welcome to link to your own webpage with more
+              details.
             </div>
             <div className="inputWrapper">
               <input
@@ -198,7 +311,7 @@ export default function AssetCrearePage() {
           <div className="inputGroup">
             <div className="inputTitle">Description</div>
             <div className="inputSubTitle">
-              The description will be inclueded on the item's detail page
+              The description will be inclueded on the item&apos;s detail page
               unserneath its image.
             </div>
             <div className="inputWrapper">
@@ -219,20 +332,20 @@ export default function AssetCrearePage() {
             </div>
             <div className="inputWrapper">
               <Select
-                options={collections}
+                options={userCollections}
                 isClearable
                 isSearchable
-                defaultInputValue={collection_id}
+                defaultInputValue={collection_address}
                 placeholder="Select your collection"
                 onChange={onChangeCollection}
-                formatOptionLabel={({ label, img }: any) => (
+                formatOptionLabel={({ cover, collection, name }: any) => (
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <img
-                      src={img}
-                      alt={label}
+                      src={cover}
+                      alt={collection}
                       style={{ marginRight: 10, height: 20, width: 20 }}
                     />
-                    <span className="text-zinc-950	">{label}</span>
+                    <span className="text-zinc-950	">{name}</span>
                   </div>
                 )}
               />
@@ -240,16 +353,17 @@ export default function AssetCrearePage() {
           </div>
 
           <div className="inputGroup">
-            <div className="inputTitle">Traits *</div>
+            <div className="inputTitle">Traits</div>
             <div className="inputSubTitle">
               Textual traits that show up as rectangles
             </div>
             <div className="inputWrapper">
               <div className="p-4 bg-black text-white shadow-md rounded">
-                {traits.map(({ key, value }: any, i: any) => (
+                {traits.map(({ trait_type, value }: any, i: any) => (
                   <div key={i} className="flex justify-between mb-2">
                     <p>
-                      <span className="font-semibold">{key}</span>: {value}
+                      <span className="font-semibold">{trait_type}</span>:{" "}
+                      {value}
                     </p>
                     <div>
                       <button
@@ -273,8 +387,8 @@ export default function AssetCrearePage() {
                     <input
                       type="text"
                       placeholder="Trait Key"
-                      value={key}
-                      onChange={(e) => setKey(e.target.value)}
+                      value={trait_type}
+                      onChange={(e) => setTraitType(e.target.value)}
                       className="p-2 bg-gray-800 text-white border rounded w-1/2"
                       required
                     />
@@ -307,35 +421,54 @@ export default function AssetCrearePage() {
                 <label
                   htmlFor="toggle"
                   className={`relative inline-block w-12 h-6 transition-all duration-200 ease-in-out bg-gray-400 rounded-full shadow-inner cursor-pointer ${
-                    isSwitchOn && "bg-green-400"
+                    isRealWorldNFT && "bg-green-400"
                   }`}
                 >
                   <input
                     id="toggle"
                     type="checkbox"
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                    checked={isSwitchOn}
-                    onChange={() => setSwitch(!isSwitchOn)}
+                    checked={isRealWorldNFT}
+                    onChange={() => setSwitch(!isRealWorldNFT)}
                   />
                   <span
                     className={`absolute left-1 top-1 w-4 h-4 transition-all duration-200 ease-in-out bg-white rounded-full shadow ${
-                      isSwitchOn && "transform translate-x-6"
+                      isRealWorldNFT && "transform translate-x-6"
                     }`}
                   />
                 </label>
               </div>
             </div>
             <div className="inputSubTitle">
-              The location proofs of the loT NFT will be included in the product
-              exhibition page for the device
+              The proofs of location for IoT NFTs will be prominently displayed
+              on the dedicated product exhibition page for each device. For the
+              purpose of provisioning a tag, an MXC N3XUS is necessary. You can
+              find more details on the provisioning process by visiting this
+              link:
+              <Link
+                href={`https://www.youtube.com/watch?v=AcJp5PE4TDg`}
+                passHref
+                legacyBehavior
+              >
+                <a target="_blank" rel="noopener noreferrer">
+                  MXC N3XUS Provisioning Guide.
+                </a>
+              </Link>
             </div>
           </div>
 
-          <div className="subwrap flex_c mt-5">
-            <button type="submit" className="px-4 py-2 bg-blue-600 text-white">
-              Create
-            </button>
-          </div>
+          {collection_address && (
+            <div className="subwrap flex_c mt-5">
+              <Web3Button
+                contractAddress={collection_address}
+                contractAbi={ABI.collection}
+                action={async () => await createItem()}
+                className="px-4 py-2 bg-blue-600 text-white"
+              >
+                Create item
+              </Web3Button>
+            </div>
+          )}
         </div>
       </div>
     </Container>

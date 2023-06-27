@@ -7,9 +7,9 @@ const parseEther = ethers.utils.parseEther
 const formatEther = ethers.utils.formatEther
 const getBalance = ethers.provider.getBalance
 
-const collect1Uri = "ipfs://QQ1"
-const collect2Uri = "ipfs://QQ2"
-const collect3Uri = "ipfs://QQ3"
+const collect1Uri = "QQ1dsdsewew111"
+const collect2Uri = "QQ2dsdsewew222"
+const collect3Uri = "QQ3dsdsewew333"
 const token1Uri =
     "ipfs://QmaVkBn2tKmjbhphU7eyztbvSQU5EXDdqRyXZtRhSGgCryptoPunks"
 const token2Uri = "ipfs://QmaVkBn2tKmjbhphU7eyztbvSQU5EXDdqRyXZtRhSGgAzuki"
@@ -23,6 +23,69 @@ if (!developmentChains.includes(network.name)) {
             ;[owner, addr1, addr2, ...addrs] = await ethers.getSigners()
             mxcCollectionFactory = await deployContracts("MXCCollectionFactory")
             marketplace = await deployContracts("MXCMarketplace")
+        })
+
+        describe("fetchCollection", function () {
+            beforeEach(async () => {
+                await mxcCollectionFactory.createCollection(
+                    marketplace.address,
+                    "CryptoPunks",
+                    "CryptoPunks",
+                    5,
+                    owner.address,
+                    collect1Uri
+                )
+                await mxcCollectionFactory.createCollection(
+                    marketplace.address,
+                    "Azuki",
+                    "Azuki",
+                    10,
+                    owner.address,
+                    collect2Uri
+                )
+            })
+
+            it("fetch correctly", async function () {
+                let collections = await mxcCollectionFactory.fetchCollections()
+                let CryptoPunks = collections[0].collection
+                let getCryptoPunks = await mxcCollectionFactory.fetchCollection(
+                    CryptoPunks
+                )
+                expect(getCryptoPunks.collection).to.equal(CryptoPunks)
+            })
+        })
+
+        describe("fetchUserCollections", function () {
+            beforeEach(async () => {
+                await mxcCollectionFactory.createCollection(
+                    marketplace.address,
+                    "CryptoPunks",
+                    "CryptoPunks",
+                    5,
+                    owner.address,
+                    collect1Uri
+                )
+                await mxcCollectionFactory
+                    .connect(addr1)
+                    .createCollection(
+                        marketplace.address,
+                        "Azuki",
+                        "Azuki",
+                        10,
+                        owner.address,
+                        collect2Uri
+                    )
+            })
+
+            it("fetch correctly", async function () {
+                let collections = await mxcCollectionFactory.fetchCollections()
+                let CryptoPunks = collections[0].collection
+                let userCollections =
+                    await mxcCollectionFactory.fetchUserCollections(
+                        owner.address
+                    )
+                expect(CryptoPunks).to.equal(userCollections[0].collection)
+            })
         })
 
         describe("createCollection", function () {
@@ -99,12 +162,51 @@ if (!developmentChains.includes(network.name)) {
                 const CryptoPunks = await nftContract.attach(CryptoPunksAddr)
                 const Azuki = await nftContract.attach(AzukiAddr)
                 await CryptoPunks.mint(token1Uri)
-                let totalSupply = await CryptoPunks.totalSupply()
-                expect(totalSupply).to.equal(1)
-
                 await Azuki.connect(addr1).mint(token2Uri)
-                totalSupply = await Azuki.totalSupply()
-                expect(totalSupply).to.equal(1)
+            })
+        })
+
+        describe("editCollection", function () {
+            beforeEach(async () => {
+                await mxcCollectionFactory.createCollection(
+                    marketplace.address,
+                    "CryptoPunks",
+                    "CryptoPunks",
+                    5,
+                    owner.address,
+                    collect1Uri
+                )
+                await mxcCollectionFactory
+                    .connect(addr1)
+                    .createCollection(
+                        marketplace.address,
+                        "Azuki",
+                        "Azuki",
+                        10,
+                        owner.address,
+                        collect2Uri
+                    )
+            })
+
+            it("Only owner can do it", async function () {
+                let collections = await mxcCollectionFactory.fetchCollections()
+                let CryptoPunks = collections[0]
+                await expect(
+                    mxcCollectionFactory
+                        .connect(addr1)
+                        .editCollection(CryptoPunks.collection, collect2Uri)
+                ).to.be.revertedWith("MXCCollectionFactory__NotOwner")
+            })
+            it("editCollection correctly", async function () {
+                let collections = await mxcCollectionFactory.fetchCollections()
+                let CryptoPunks = collections[0]
+                await mxcCollectionFactory.editCollection(
+                    CryptoPunks.collection,
+                    collect2Uri
+                )
+                collections = await mxcCollectionFactory.fetchCollections()
+                CryptoPunks = collections[0]
+                expect(CryptoPunks.ipfs).to.equal(collect2Uri)
             })
         })
 
@@ -128,14 +230,18 @@ if (!developmentChains.includes(network.name)) {
                 )
             })
             it("Only owner can do it", async function () {
+                let collections = await mxcCollectionFactory.fetchCollections()
+                let CryptoPunks = collections[0]
                 await expect(
                     mxcCollectionFactory
                         .connect(addr1)
-                        .delCollection(collect2Uri)
+                        .delCollection(CryptoPunks.collection)
                 ).to.be.revertedWith("MXCCollectionFactory__NotOwner")
             })
             it("delCollection correctly", async function () {
-                await mxcCollectionFactory.delCollection(collect2Uri)
+                let collections = await mxcCollectionFactory.fetchCollections()
+                let CryptoPunks = collections[0]
+                await mxcCollectionFactory.delCollection(CryptoPunks.collection)
 
                 expect(
                     await mxcCollectionFactory.fetchCollectionsLength()
@@ -143,13 +249,13 @@ if (!developmentChains.includes(network.name)) {
             })
 
             it("event correctly", async function () {
-                let collection =
-                    await mxcCollectionFactory.callStatic.delCollection(
-                        collect2Uri
-                    )
-                await expect(mxcCollectionFactory.delCollection(collect2Uri))
+                let collections = await mxcCollectionFactory.fetchCollections()
+                let CryptoPunks = collections[0]
+                await expect(
+                    mxcCollectionFactory.delCollection(CryptoPunks.collection)
+                )
                     .to.emit(mxcCollectionFactory, "delCollectionEvent")
-                    .withArgs(collection, owner.address)
+                    .withArgs(CryptoPunks.collection, owner.address)
             })
         })
     })

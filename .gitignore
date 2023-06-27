@@ -3,6 +3,7 @@
 
 webapp/node_modules
 webapp/.next
+webapp/.env.*.local
 contract/node_modules
 
 

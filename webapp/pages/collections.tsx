@@ -1,20 +1,30 @@
 // import { useContract, useNFTs } from "@thirdweb-dev/react"
 import React, { useEffect, useState } from "react"
-import Container from "../components/Container/Container"
-import CollectionService from "../service/collection"
-import Card from "../components/card-component"
-import HexagonLogo from "../components/HexagonLogo"
+import Container from "@/components/Container/Container"
+import CollectionCard from "@/components/CollectionCard"
+import HexagonLogo from "@/components/HexagonLogo"
 import Router from "next/router"
+import { useContract, useContractRead } from "@thirdweb-dev/react"
+import { CONTRACTS_MAP, ABI } from "@/const/Network"
+import { getCollectList } from "@/util/getNFT"
+import Skeleton from "@/components/Skeleton/Skeleton"
 
 export default function Overview() {
-  const [nftData, setNftData] = useState(null)
-  const [collectionData, setCollectionData] = useState(null)
-  // const [nameData, setNameData] = useState(null)
-  // const [hexData, setHexData] = useState(null)
-  // const [hexagonData, setHexagonData] = useState(null)
+  const [collections, setCollections] = useState<any>([])
+  const [isLoading, setLoading] = useState(false)
+
+  const { contract: collectionContract } = useContract(
+    CONTRACTS_MAP.COLLECTION_FACTORY,
+    ABI.collectionFactory
+  )
+  const { data: collectionsData } = useContractRead(
+    collectionContract,
+    "fetchCollections"
+  )
 
   const namesArr = Array.from({ length: 5 }, (_, i) => i)
   const hexagonArr = Array.from({ length: 5 }, (_, i) => i)
+
   const getColor = () => {
     const r = Math.floor(Math.random() * 256)
     const g = Math.floor(Math.random() * 256)
@@ -23,23 +33,18 @@ export default function Overview() {
   }
 
   useEffect(() => {
-    window.scrollTo(0, 0)
     const fetchData = async () => {
-      try {
-        let nftData: any = await CollectionService.NftData()
-        setNftData(nftData)
-
-        // let hexData: any = await CollectionService.HexData()
-        // setHexData(hexData)
-
-        // let nameData: any = await CollectionService.NameData()
-        // setNameData(nameData)
-      } catch (error) {
-        console.error(error)
+      setLoading(true)
+      if (!collectionsData) {
+        return
       }
+
+      let collections = await getCollectList(collectionsData)
+      setCollections(collections)
+      setLoading(false)
     }
     fetchData()
-  }, [])
+  }, [collectionsData])
 
   const toPath = (link: string) => {
     Router.push(link)
@@ -52,15 +57,13 @@ export default function Overview() {
           <h1>Featured NFTs</h1>
           <p>Discover the most outstanding NFTs in all topics of life.</p>
           <div className="nfts_feature">
-            {nftData &&
-              (nftData as any).map((nft: any, index: number) => (
-                <Card
-                  nft={nft}
-                  key={index}
-                  collectionData={collectionData}
-                  setCollectionData={setCollectionData}
-                />
-              ))}
+            {collections && !isLoading ? (
+              (collections as any).map((nft: any, index: number) => (
+                <CollectionCard nft={nft} key={index} />
+              ))
+            ) : (
+              <Skeleton width="17.5%" height="250px" />
+            )}
           </div>
         </div>
 

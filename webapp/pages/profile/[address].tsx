@@ -1,23 +1,23 @@
 import {
+  useAddress,
   useContract,
+  useContractRead,
   useOwnedNFTs,
-  useValidDirectListings,
-  // useValidEnglishAuctions,
 } from "@thirdweb-dev/react"
 import { useRouter } from "next/router"
-import React, { useState } from "react"
-import Container from "../../components/Container/Container"
-import ListingWrapper from "../../components/ListingWrapper/ListingWrapper"
-import NFTGrid from "../../components/NFT/NFTGrid"
-import Skeleton from "../../components/Skeleton/Skeleton"
+import React, { useState, useEffect } from "react"
+import Container from "@/components/Container/Container"
+import Skeleton from "@/components/Skeleton/Skeleton"
+import NFTCard from "@/components/NFTCard"
 import Router from "next/router"
+import styles from "@/styles/Profile.module.css"
+import randomColor from "@/util/randomColor"
+import { CONTRACTS_MAP, ABI } from "@/const/Network"
+import { zeroAddress } from "viem"
+import MyNFTS from "@/components/MyNFTs"
+import { getCollectList } from "@/util/getNFT"
 
-import {
-  MARKETPLACE_ADDRESS,
-  NFT_COLLECTION_ADDRESS,
-} from "../../const/contractAddresses"
-import styles from "../../styles/Profile.module.css"
-import randomColor from "../../util/randomColor"
+// import CollectionCard from "@/components/collection/CollectionCard"
 
 const [randomColor1, randomColor2, randomColor3, randomColor4] = [
   randomColor(),
@@ -29,20 +29,41 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
 export default function ProfilePage() {
   const router = useRouter()
   const [tab, setTab] = useState<
-    "nfts" | "mycollections" | "listings" | "auctions"
+    "nfts" | "mycollections" | "mynfts" | "auctions"
   >("mycollections")
 
-  const { contract: nftCollection } = useContract(NFT_COLLECTION_ADDRESS)
+  const [userCollections, setUserCollections] = useState<any>([])
 
-  const { contract: marketplace } = useContract(
-    MARKETPLACE_ADDRESS,
-    "marketplace"
+  const address = router.query.address || zeroAddress
+
+  const { contract: collectionFactoryContract } = useContract(
+    CONTRACTS_MAP.COLLECTION_FACTORY,
+    ABI.collectionFactory
+  )
+  const { data: myCollections, isLoading } = useContractRead(
+    collectionFactoryContract,
+    "fetchUserCollections",
+    [address]
   )
 
-  const { data: ownedNfts, isLoading: loadingOwnedNfts } = useOwnedNFTs(
-    nftCollection,
-    router.query.address as string
+  const { data: collections } = useContractRead(
+    collectionFactoryContract,
+    "fetchCollections"
   )
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!myCollections) {
+        setUserCollections([])
+        return
+      }
+      let collections = await getCollectList(myCollections)
+      setUserCollections(collections)
+    }
+    if (address) {
+      fetchData()
+    }
+  }, [address, myCollections])
 
   const toPath = (link: string) => {
     Router.push(link)
@@ -75,28 +96,26 @@ export default function ProfilePage() {
           </h1>
         </div>
 
+        {/* tab */}
         <div className={styles.tabs}>
           <h3
             className={`${styles.tab} 
-          ${tab === "mycollections" ? styles.activeTab : ""}`}
+            ${tab === "mycollections" ? styles.activeTab : ""}`}
             onClick={() => setTab("mycollections")}
           >
-            My Collections
+            Collections
+          </h3>
+
+          <h3
+            className={`${styles.tab} 
+            ${tab === "mynfts" ? styles.activeTab : ""}`}
+            onClick={() => setTab("mynfts")}
+          >
+            NFTS
           </h3>
         </div>
 
-        {/* <div
-        className={`${
-          tab === "nfts" ? styles.activeTabContent : styles.tabContent
-        }`}
-      >
-        <NFTGrid
-          data={ownedNfts}
-          isLoading={loadingOwnedNfts}
-          emptyText="Looks like you don't have any NFTs from this collection. Head to the buy page to buy some!"
-        />
-      </div> */}
-
+        {/* mycollections */}
         <div
           className={`${
             tab === "mycollections"
@@ -104,17 +123,34 @@ export default function ProfilePage() {
               : styles.tabContent
           }`}
         >
-          <div className="mb-5">
-            Create, curate, and manage collections of unique NFTs to share and
-            sell.
-          </div>
           <div>
-            <button
-              onClick={() => toPath("/collection/create")}
-              className="create_btn"
-            >
-              Create a collection
-            </button>
+            <div className="feature mb-10">
+              <div className="nfts_collection">
+                {isLoading ? (
+                  <Skeleton width="17.8%" height="250px" />
+                ) : (
+                  (userCollections.length &&
+                    (userCollections as any).map((nft: any, index: number) => (
+                      <NFTCard nft={nft} key={index} />
+                    ))) ||
+                  ""
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* mynfts */}
+        <div
+          className={`${
+            tab === "mynfts" ? styles.activeTabContent : styles.tabContent
+          }`}
+        >
+          <div className="cardsection">
+            {collections &&
+              collections.map((collection: any, index: string) => (
+                <MyNFTS {...collection} key={index} />
+              ))}
           </div>
         </div>
       </Container>

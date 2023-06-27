@@ -23,7 +23,8 @@ html {
 
 body {
   color: #ffffff;
-  background: #191c1f;
+  /* background: #191c1f; */
+  background-color: #151718;
   --color-primary: #fada3f;
   --color-secondary: #ff2136;
   --color-tertiary: #0294fe;

@@ -34,7 +34,10 @@ if (!developmentChains.includes(network.name)) {
         beforeEach(async () => {
             ;[owner, addr1, addr2, royaltyRecevier, ...addrs] =
                 await ethers.getSigners()
-            mxcCollectionFactory = await deployContracts("MXCCollectionFactory")
+            mxcCollectionFactory = await deployContracts(
+                "MXCCollectionFactory",
+                [owner.address]
+            )
             marketplace = await deployContracts("MXCMarketplace")
             baseNft = await deployContracts("BasicNft", ["doge", "doge"])
             baseNft.mintNft()
@@ -314,7 +317,6 @@ if (!developmentChains.includes(network.name)) {
                 let royalty = 5
 
                 await mxcCollectionFactory.createCollection(
-                    marketplace.address,
                     "CryptoPunks",
                     "CryptoPunks",
                     royalty,
@@ -382,6 +384,83 @@ if (!developmentChains.includes(network.name)) {
 
                 // user2-buyer will get the nft
                 expect(await CryptoPunks.ownerOf(0)).to.equal(addr2.address)
+            })
+        })
+
+        describe("executeOrder collectionMarket", function () {
+            it("Order excute collectly", async function () {
+                let royalty = 5
+                // owner create CryptoPunks collection
+                await mxcCollectionFactory.createCollection(
+                    "CryptoPunks",
+                    "CryptoPunks",
+                    royalty,
+                    royaltyRecevier.address,
+                    collect1Uri
+                )
+
+                let allColelctions =
+                    await mxcCollectionFactory.fetchCollections()
+                let CryptoPunksAddress = allColelctions[0].collection
+                const nftContract = await ethers.getContractFactory(
+                    "MXCCollection"
+                )
+                // CryptoPunks collection
+                let CryptoPunks = await nftContract.attach(CryptoPunksAddress)
+                await CryptoPunks.mint(token1Uri)
+
+                // owner make a order
+                expiresAt = (await getBlockTime()) + 6 * 30 * 24 * 60 * 60
+                await CryptoPunks.setApprovalForAll(marketplace.address, true)
+                await marketplace.createOrder(
+                    CryptoPunks.address,
+                    0,
+                    parseEther("1"),
+                    expiresAt
+                )
+                // address1 buy the nft
+                await marketplace
+                    .connect(addr1)
+                    .executeOrder(CryptoPunks.address, 0, {
+                        value: parseEther("1"),
+                    })
+
+                let collectionMarketInfo =
+                    await marketplace.collectionMarketInfo(CryptoPunks.address)
+                let floorPrice = await collectionMarketInfo.floorPrice
+                let ceilingPrice = await collectionMarketInfo.ceilingPrice
+                expect(floorPrice).to.equal(parseEther("1"))
+                expect(ceilingPrice).to.equal(parseEther("1"))
+
+                // address1 make a order
+                expiresAt = (await getBlockTime()) + 6 * 30 * 24 * 60 * 60
+                await CryptoPunks.connect(addr1).setApprovalForAll(
+                    marketplace.address,
+                    true
+                )
+                await marketplace
+                    .connect(addr1)
+                    .createOrder(
+                        CryptoPunks.address,
+                        0,
+                        parseEther("20"),
+                        expiresAt
+                    )
+
+                // address2 buy the nft
+                await marketplace
+                    .connect(addr2)
+                    .executeOrder(CryptoPunks.address, 0, {
+                        value: parseEther("20"),
+                    })
+
+                collectionMarketInfo = await marketplace.collectionMarketInfo(
+                    CryptoPunks.address
+                )
+                floorPrice = await collectionMarketInfo.floorPrice
+                ceilingPrice = await collectionMarketInfo.ceilingPrice
+                expect(floorPrice).to.equal(parseEther("1"))
+                expect(ceilingPrice).to.equal(parseEther("20"))
             })
         })
     })

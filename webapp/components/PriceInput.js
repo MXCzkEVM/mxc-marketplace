@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { PriceConstants } from "../const/price.constants"
+import { PriceConstants } from "@/const/Local"
 
 export const PriceInputErrors = {
   MAX_INPUT_EXCEEDED: "Max input value exceeded",
@@ -9,7 +9,9 @@ const PriceInput = ({
   value,
   decimals = 0,
   onChange,
-  onInputError = (err) => console.log(err),
+  onInputError = (err) => {
+    // console.log(err)
+  },
   max = PriceConstants.MAX_PRICE,
   ...rest
 }) => {

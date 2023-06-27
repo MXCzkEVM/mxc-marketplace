@@ -1,0 +1,7 @@
+
+
+import Image from "@/components/Image"
+import defaultPng from "@/assets/placeholder.png"
+<Image src={nft.profile} defaultImage={defaultPng.src} alt="" />
+
+node scripts/index.ts

@@ -1,20 +1,28 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "./MXCCollection.sol";
+import "./MXCCollectionV2.sol";
 
 error MXCCollectionFactory__NotOwner();
+error MXCCollectionFactory__NotFound();
+error MXCCollectionFactory__NotAdmin();
 
 contract MXCCollectionFactory {
     struct MXCCollectionData {
         string ipfs;
         address owner;
         address collection;
+        bool isCert;
     }
-
+    address public admin;
     MXCCollectionData[] public collections;
+    mapping(address => uint256[]) private userToCollections;
 
     event newCollectionEvent(
+        address indexed collectionAddress,
+        address indexed owner
+    );
+    event editCollectionEvent(
         address indexed collectionAddress,
         address indexed owner
     );
@@ -23,8 +31,23 @@ contract MXCCollectionFactory {
         address indexed owner
     );
 
+    constructor(address _admin) {
+        admin = _admin;
+    }
+
+    function setCertification(address _collection, bool _isCert) external {
+        if (msg.sender != admin) {
+            revert MXCCollectionFactory__NotAdmin();
+        }
+        for (uint256 i = 0; i < collections.length; i++) {
+            if (collections[i].collection == _collection) {
+                MXCCollectionData storage target = collections[i];
+                target.isCert = _isCert;
+            }
+        }
+    }
+
     function createCollection(
-        address _marketplaceAddress,
         string memory _name,
         string memory _symbol,
         uint256 _royaltiesCutPerMillion,
@@ -32,9 +55,8 @@ contract MXCCollectionFactory {
         string memory _ipfs
     ) external returns (address) {
         address newCollection = address(
-            new MXCCollection(
+            new MXCCollectionV2(
                 msg.sender,
-                _marketplaceAddress,
                 _royaltyRecipient,
                 _royaltiesCutPerMillion,
                 _name,
@@ -42,9 +64,67 @@ contract MXCCollectionFactory {
             )
         );
 
-        collections.push(MXCCollectionData(_ipfs, msg.sender, newCollection));
+        collections.push(
+            MXCCollectionData(_ipfs, msg.sender, newCollection, false)
+        );
+        uint256 index = collections.length - 1;
+        userToCollections[msg.sender].push(index);
         emit newCollectionEvent(newCollection, msg.sender);
         return newCollection;
+    }
+
+    function editCollection(address _collection, string memory _ipfs) external {
+        for (uint256 i = 0; i < collections.length; i++) {
+            if (collections[i].collection == _collection) {
+                if (collections[i].owner != msg.sender) {
+                    revert MXCCollectionFactory__NotOwner();
+                }
+                MXCCollectionData storage target = collections[i];
+                target.ipfs = _ipfs;
+                emit editCollectionEvent(_collection, msg.sender);
+            }
+        }
+    }
+
+    function delCollection(address _collection) external returns (address) {
+        for (uint256 i = 0; i < collections.length; i++) {
+            address collection = collections[i].collection;
+            if (collection == _collection) {
+                if (collections[i].owner != msg.sender) {
+                    revert MXCCollectionFactory__NotOwner();
+                }
+                collections[i] = collections[collections.length - 1];
+                collections.pop();
+                emit delCollectionEvent(collection, msg.sender);
+                return collection;
+            }
+        }
+        revert MXCCollectionFactory__NotFound();
+    }
+
+    function fetchCollection(
+        address _collection
+    ) public view returns (MXCCollectionData memory) {
+        for (uint256 i = 0; i < collections.length; i++) {
+            address collection = collections[i].collection;
+            if (collection == _collection) {
+                return collections[i];
+            }
+        }
+        return MXCCollectionData("", address(0), address(0), false);
+    }
+
+    function fetchUserCollections(
+        address _user
+    ) public view returns (MXCCollectionData[] memory) {
+        uint256[] storage indices = userToCollections[_user];
+        MXCCollectionData[] memory result = new MXCCollectionData[](
+            indices.length
+        );
+        for (uint i = 0; i < indices.length; i++) {
+            result[i] = collections[indices[i]];
+        }
+        return result;
     }
 
     function fetchCollections()
@@ -57,29 +137,5 @@ contract MXCCollectionFactory {
 
     function fetchCollectionsLength() public view returns (uint256) {
         return collections.length;
-    }
-
-    function delCollection(string memory _ipfs) external returns (address) {
-        for (uint256 i = 0; i < collections.length; i++) {
-            if (collections[i].owner != msg.sender) {
-                revert MXCCollectionFactory__NotOwner();
-            }
-            if (compareStrings(collections[i].ipfs, _ipfs)) {
-                address collection = collections[i].collection;
-                collections[i] = collections[collections.length - 1];
-                collections.pop();
-                emit delCollectionEvent(collection, msg.sender);
-                return collection;
-            }
-        }
-        return address(0);
-    }
-
-    function compareStrings(
-        string memory a,
-        string memory b
-    ) private pure returns (bool) {
-        return (keccak256(abi.encodePacked(a)) ==
-            keccak256(abi.encodePacked(b)));
     }
 }

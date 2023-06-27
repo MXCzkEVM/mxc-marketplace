@@ -1,63 +1,64 @@
 import { useRouter } from "next/router"
+import Router from "next/router"
 import React, { useState, useEffect, useRef } from "react"
+import {
+  Web3Button,
+  useAddress,
+  useContract,
+  useContractWrite,
+} from "@thirdweb-dev/react"
+import { toast } from "react-toastify"
+import { storeImage, storeJson } from "@/util/uploadToPinata"
+import FormData from "form-data"
 
-import Container from "../../components/Container/Container"
-import PriceInput from "../../components/PriceInput"
+import { ethers } from "ethers"
+import Container from "@/components/Container/Container"
+import PriceInput from "@/components/PriceInput"
 
-import uploadIcon from "../../assets/imgs/upload.png"
-import plusIcon from "../../assets/svgs/plus.svg"
-import closeIcon from "../../assets/svgs/close.svg"
+import uploadIcon from "@/assets/imgs/upload.png"
+import plusIcon from "@/assets/svgs/plus.svg"
+import closeIcon from "@/assets/svgs/close.svg"
+
+import { CONTRACTS_MAP, ABI } from "@/const/Network"
+import { CategoryArray, CategoryMap, version } from "@/const/Local"
 
 export default function CollectPage() {
-  const logoRef = useRef<any>(null)
+  const coverRef = useRef<any>(null)
   const profileRef = useRef<any>(null)
 
   const [name, setName] = useState("")
   const [nameError, setNameError] = useState<any>(null)
-  const [logo, setLogo] = useState(null)
+  const [Cover, setCover] = useState<any>(null)
+  const [coverFile, setCoverFile] = useState<any>(null)
   const [profile, setProfile] = useState(null)
-
+  const [profileImage, setprofileImage] = useState<any>(null)
   const [description, setDescription] = useState("")
   const [descriptionError, setDescriptionError] = useState<any>(null)
-  const [royalty, setRoyalty] = useState<any>("")
   const [domainValue, setDomainValue] = useState<any>()
   const [categoryValue, setCategory] = useState<any>()
   const [site, setSite] = useState("")
   const [social, setSocial] = useState("")
+  const [tags, setTags] = useState<any>([])
+  const [inputValue, setInputValue] = useState("")
+  const [royalty, setRoyalty] = useState<any>("")
+  const [royaltyRecipient, setRoyaltyRecipient] = useState("")
 
-  // const [address, setAddress] = useState("")
-
+  const address = useAddress()
   const domains = ["Techcode.MXC", "HelloWorld.MXC"]
-  const category = [
-    {
-      label: "Winery",
-      value: 1,
-    },
-    {
-      label: "Gemstone",
-      value: 2,
-    },
-    {
-      label: "Fashion",
-      value: 3,
-    },
-    {
-      label: "Sports",
-      value: 4,
-    },
-    {
-      label: "Watch",
-      value: 5,
-    },
-    {
-      label: "Cars",
-      value: 6,
-    },
-  ]
+
+  const { contract } = useContract(
+    CONTRACTS_MAP.COLLECTION_FACTORY,
+    ABI.collectionFactory
+  )
+  const { mutateAsync: createCollection } = useContractWrite(
+    contract,
+    "createCollection"
+  )
 
   useEffect(() => {
-    // const fetchData = async () => {}
-    // fetchData()
+    if (address && !royaltyRecipient) {
+      setRoyaltyRecipient(address)
+    }
   }, [])
 
   const onChangeDomain = (e: any) => {
@@ -68,21 +69,25 @@ export default function CollectPage() {
     setCategory(e.target.value as string)
   }
 
-  const removeLogo = () => {
-    setLogo(null)
+  const removeCover = () => {
+    setCover(null)
+    setCoverFile(null)
   }
 
   const removeProfile = () => {
     setProfile(null)
+    setprofileImage(null)
   }
 
-  const handleLogoSelect = (e: any) => {
+  const handleCoverSelect = (e: any) => {
     if (e.target.files.length > 0) {
       const file = e.target.files[0]
 
+      setCoverFile(file)
+
       const reader = new FileReader()
       reader.onload = function (e: any) {
-        setLogo(e.target.result)
+        setCover(e.target.result)
       }
 
       reader.readAsDataURL(file)
@@ -92,6 +97,8 @@ export default function CollectPage() {
   const handleProfileSelect = (e: any) => {
     if (e.target.files.length > 0) {
       const file = e.target.files[0]
+
+      setprofileImage(file)
 
       const reader = new FileReader()
       reader.onload = function (e: any) {
@@ -117,9 +124,6 @@ export default function CollectPage() {
       setDescriptionError(null)
     }
   }
-
-  const [tags, setTags] = useState<any>([])
-  const [inputValue, setInputValue] = useState("")
 
   const handleInputChange = (e: any) => {
     setInputValue(e.target.value)
@@ -147,6 +151,104 @@ export default function CollectPage() {
     setTags(updatedTags)
   }
 
+  async function saveCollection() {
+    if (!name) {
+      toast.warn("Please type your collection name.")
+      return
+    }
+    if (!description) {
+      toast.warn("Please type your collection description.")
+      return
+    }
+    if (!royaltyRecipient) {
+      toast.warn("Please type your collection royalty recipient.")
+      return
+    }
+    if (!ethers.utils.isAddress(royaltyRecipient)) {
+      toast.warn("Please type a correct address.")
+      return
+    }
+
+    let cover_ipfs: any = ""
+    let profile_ipfs: any = ""
+    if (coverFile) {
+      const formData = new FormData()
+      const metadata = JSON.stringify({
+        name: `${version}_${coverFile.name}`,
+      })
+      formData.append("pinataMetadata", metadata)
+      formData.append("file", coverFile)
+      cover_ipfs = await storeImage(formData)
+    }
+    if (profileImage) {
+      const formData = new FormData()
+      const metadata = JSON.stringify({
+        name: `${version}_${profileImage.name}`,
+      })
+      formData.append("pinataMetadata", metadata)
+      formData.append("file", profileImage)
+      profile_ipfs = await storeImage(formData)
+    }
+
+    const formData = {
+      cover: cover_ipfs,
+      profile: profile_ipfs,
+      name,
+      description,
+      royaltyRecipient,
+      royaltiesCutPerMillion: royalty * 100,
+      url: domainValue,
+      category: categoryValue ? CategoryMap[categoryValue] : "",
+      tags,
+      site,
+      social,
+    }
+
+    const json_data = JSON.stringify({
+      pinataOptions: {},
+      pinataMetadata: {
+        name,
+      },
+      pinataContent: formData,
+    })
+
+    let jsonIpfs = await storeJson(json_data)
+    if (!jsonIpfs) {
+      toast.error("Upload json to ipfs failed.")
+      return
+    }
+
+    // console.log(
+    //   formData.name,
+    //   formData.name,
+    //   formData.royaltiesCutPerMillion,
+    //   formData.royaltyRecipient,
+    //   jsonIpfs
+    // )
+
+    let txResult
+    try {
+      // Simple one-liner for buying the NFT
+      txResult = await createCollection({
+        args: [
+          formData.name,
+          formData.name,
+          formData.royaltiesCutPerMillion,
+          formData.royaltyRecipient,
+          jsonIpfs,
+        ],
+      })
+      toast.success("NFT Collection create successfully!")
+      Router.push(`/profile`)
+    } catch (error) {
+      // console.error(error)
+      console.log(error)
+      toast.error(`NFT Collection create failed`)
+    }
+
+    return txResult
+  }
+
   return (
     <Container maxWidth="lg">
       <div className="create_page">
@@ -158,7 +260,7 @@ export default function CollectPage() {
             <div className="inputWrapper">
               <input
                 className={`input ${nameError && "hasError"}`}
-                maxLength={30}
+                maxLength={60}
                 placeholder="Collection Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -168,7 +270,7 @@ export default function CollectPage() {
                 {(nameError && <div className="error">{nameError}</div>) || (
                   <span className="hide"></span>
                 )}
-                <div className="lengthIndicator">{name.length}/30</div>
+                <div className="lengthIndicator">{name.length}/60</div>
               </div>
             </div>
           </div>
@@ -176,15 +278,15 @@ export default function CollectPage() {
           <div className="inputGroup">
             <div className="inputTitle">Cover Image</div>
             <div className="inputSubTitle">
-              This image will also be used for navigation. 300x300 recommended.
+              This image will be used for navigation. 300x300 recommended.
             </div>
             <div className="inputWrapper">
-              <div className="logoUploadBox">
-                {logo ? (
+              <div className="uploadBox">
+                {Cover ? (
                   <>
-                    <img src={logo} />
+                    <img src={Cover} />
                     <div className="removeOverlay">
-                      <div className="removeIcon" onClick={removeLogo}>
+                      <div className="removeIcon" onClick={removeCover}>
                         <img src={closeIcon.src} />
                       </div>
                     </div>
@@ -192,14 +294,14 @@ export default function CollectPage() {
                 ) : (
                   <div
                     className="uploadOverlay"
-                    onClick={() => logoRef.current?.click()}
+                    onClick={() => coverRef.current?.click()}
                   >
                     <input
-                      ref={logoRef}
+                      ref={coverRef}
                       type="file"
                       accept="image/*"
                       hidden
-                      onChange={handleLogoSelect}
+                      onChange={handleCoverSelect}
                     />
                     <div className="upload">
                       <div className="uploadInner">
@@ -218,10 +320,11 @@ export default function CollectPage() {
           <div className="inputGroup">
             <div className="inputTitle">Profile Image</div>
             <div className="inputSubTitle">
-              This image will also be used for navigation. 1200x300 recommended.
+              This image will also be used for collection detail. 1200x300
+              recommended.
             </div>
             <div className="inputWrapper">
-              <div className="logoUploadBox">
+              <div className="uploadBox">
                 {profile ? (
                   <>
                     <img src={profile} />
@@ -313,7 +416,7 @@ export default function CollectPage() {
                 className={`block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500`}
               >
                 <option value="">Select a category</option>
-                {category.map((option) => (
+                {CategoryArray.map((option) => (
                   <option key={option.label} value={option.value}>
                     {option.label}
                   </option>
@@ -353,7 +456,7 @@ export default function CollectPage() {
           </div>
 
           <div className="inputGroup">
-            <div className="inputTitle">Creator Earnings *</div>
+            <div className="inputTitle">Creator Earnings(%) *</div>
             <div className="inputSubTitle">
               Collection owners can colelct creator earnings when a user
               re-sells an item they created. Contract the collection onwer to
@@ -361,12 +464,16 @@ export default function CollectPage() {
             </div>
             <div className="inputWrapper flex_c">
               <input
+                value={royaltyRecipient}
                 type="text"
-                className="addressInput w-9/12 mr-5 p-2 border border-gray-300 rounded"
+                className="addressInput w-10/12 mr-5 p-2 border border-gray-300 rounded"
                 placeholder="Please input a address"
+                onChange={(e: any) => {
+                  setRoyaltyRecipient(e.target.value)
+                }}
               ></input>
               <PriceInput
-                className="priceInput w-3/12"
+                className="priceInput w-2/12"
                 placeholder="Collection Royalty"
                 decimals={2}
                 value={"" + royalty}
@@ -376,6 +483,7 @@ export default function CollectPage() {
                     : setRoyalty(Math.min(100, +val))
                 }
               />
+              %
             </div>
           </div>
 
@@ -406,9 +514,14 @@ export default function CollectPage() {
           </div>
 
           <div className="subwrap flex_c mt-5">
-            <button type="submit" className="px-4 py-2 bg-blue-600 text-white">
+            <Web3Button
+              contractAddress={CONTRACTS_MAP.COLLECTION_FACTORY}
+              contractAbi={ABI.collectionFactory}
+              action={async () => await saveCollection()}
+              className="px-4 py-2 bg-blue-600 text-white"
+            >
               Save Collection
-            </button>
+            </Web3Button>
           </div>
         </div>
       </div>

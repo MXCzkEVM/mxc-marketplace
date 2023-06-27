@@ -2,18 +2,21 @@ import type { AppProps } from "next/app"
 import { ThirdwebProvider } from "@thirdweb-dev/react"
 import { Navbar } from "../components/Navbar/Navbar"
 import NextNProgress from "nextjs-progressbar"
-import { NETWORK } from "../const/contractAddresses"
+import { NETWORK } from "../const/Network"
 import { StateContextProvider } from "../context"
 import Head from "next/head"
+import { ToastContainer } from "react-toastify"
 
 import "../styles/globals.css"
 import "../styles/index.css"
 import "../styles/pages/index.scss"
 import "../styles/collection/style.scss"
+import "react-toastify/dist/ReactToastify.css"
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThirdwebProvider activeChain={NETWORK}>
+      <ToastContainer />
       <Head>
         <title>MXC NFT Marketplaces</title>
         <meta
