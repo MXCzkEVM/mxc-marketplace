@@ -1,0 +1,55 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "collectionAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      }
+    ],
+    "name": "newCollectionEvent",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_name",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_symbol",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_royaltiesCutPerMillion",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_royaltyRecipient",
+        "type": "address"
+      }
+    ],
+    "name": "createCollection",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

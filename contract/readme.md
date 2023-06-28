@@ -1,5 +1,0 @@
-[wannsee]
-marketplace
-0x0BC56f298d40217f02c211Efe64D9B3a1Bf9ee6E
-collection_factory
-0x85e35a884774757B252B83EB1e33AbA625A8B71b
