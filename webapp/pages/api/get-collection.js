@@ -1,0 +1,30 @@
+import { Redis } from "@upstash/redis"
+require("dotenv").config()
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+})
+
+export default async function handler(req, res) {
+  let { chainId, collection_id } = req.body
+
+  if (!chainId) {
+    return res.status(200).send({ status: 500 })
+  }
+
+  let collections = await redis.hgetall(`${chainId}_collections`)
+  let ops = {}
+  for (let item in collections) {
+    let citem = collections[item]
+    if (citem.tags.length) {
+      citem.tags = JSON.parse(citem.tags)
+    }
+    if (collection_id == citem.collection) {
+      ops = citem
+    }
+  }
+
+  return res
+    .status(200)
+    .send({ code: 200, data: { collection: ops }, message: "success" })
+}

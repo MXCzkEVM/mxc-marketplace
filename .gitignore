@@ -1,8 +1,23 @@
 
 #
 
+contracts/.env
+contracts/.env.*.local
+contracts/articles
+contracts/cache
+contracts/node_modules
+
+webapp/.vercel
+webapp/.next
+webapp/.env
+webapp/.env.local
+webapp/node_modules
+
+
+
 .next
 .env.*.local
+
 
 
 

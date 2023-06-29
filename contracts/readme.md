@@ -1,0 +1,8 @@
+[wannsee]
+deploying "MXCCollectionFactoryV2" (tx: 0xe51e006b92aa803ebf02d264a7f483b3ee0233ca4d901a029da6e8d3b55bc961)...: deployed at 0xD15A89C59A1aF63588B0b905dAD47eF20058998a with 4710474 gas
+
+0x91fd2e13379dF87f752c82E8C16a1aE72601a9B2 marketPlaceProxy address
+
+[localhost]
+deploying "MXCCollectionFactoryV2" deployed at 0x5FbDB2315678afecb367f032d93F642f64180aa3 with 4636313 gas
+marketPlaceProxy 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
