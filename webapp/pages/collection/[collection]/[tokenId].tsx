@@ -221,6 +221,7 @@ export default function TokenPage() {
         args: [collection, tokenId],
         overrides: {
           value: nftPrice,
+          gasLimit: 300000, // override default gas limit
         },
       })
       setInputPrice("")
@@ -341,19 +342,6 @@ export default function TokenPage() {
                     onChange={(val: any) => setInputPrice(val)}
                   />
 
-                  {isApproved &&
-                  isApproved !== CONTRACTS_MAP.MARKETPLACE &&
-                  !isApprovedForAll ? (
-                    <Web3Button
-                      contractAddress={collection}
-                      contractAbi={ABI.collection}
-                      action={async () => await approveForSale()}
-                      className="list_btn"
-                    >
-                      Approve item for marketplace
-                    </Web3Button>
-                  ) : null}
-
                   <Web3Button
                     isDisabled={
                       isApproved &&
@@ -368,6 +356,24 @@ export default function TokenPage() {
                     List for sale
                   </Web3Button>
                 </div>
+              ) : null}
+
+              {/* 自己的nft 并且还没授权给市场 */}
+              {isApproved == zeroAddress &&
+              isApproved !== CONTRACTS_MAP.MARKETPLACE &&
+              !isApprovedForAll &&
+              nft.owner == address ? (
+                <>
+                  <h4 className="formSectionTitle mb-2">Approve</h4>
+                  <Web3Button
+                    contractAddress={collection}
+                    contractAbi={ABI.collection}
+                    action={async () => await approveForSale()}
+                    className="list_btn"
+                  >
+                    Approve item for marketplace
+                  </Web3Button>
+                </>
               ) : null}
 
               {address !== zeroAddress &&

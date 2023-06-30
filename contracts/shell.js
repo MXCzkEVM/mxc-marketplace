@@ -17,6 +17,7 @@ test
 hh test test/unit/MXCCollection.test.js
 hh test test/unit/MXCCollectionFactory.test.js
 hh test test/unit/MXCMarketPlace.test.js --grep "executeOrder"
+hh test test/unit/MXCMarketPlaceV2.test.js --grep "executeOrder"
 
 
 hh console --network wannsee

@@ -29,6 +29,8 @@ export default async function handler(req, res) {
     }
   }
 
+  ops = ops.sort((a, b) => a.collection - b.collection)
+
   return res
     .status(200)
     .send({ code: 200, data: { collections: ops }, message: "success" })

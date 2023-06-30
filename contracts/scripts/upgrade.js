@@ -15,7 +15,75 @@ async function main() {
     // console.log(res)
 
     // await createColelction()
-    await createNFT()
+    // await createNFT()
+    // await makeOrder()
+    await excuteOrder()
+}
+
+async function excuteOrder() {
+    const [deployer, user] = await ethers.getSigners()
+    let nftMarketplace = await contractAttach(
+        "MXCMarketplaceUpgrade",
+        "0x91fd2e13379dF87f752c82E8C16a1aE72601a9B2"
+    )
+    const collectionAddress = "0x19887DACDcc657B77880b7648fe869Ac3Ef7a8fd"
+    const gasPrice = await ethers.provider.getGasPrice()
+    // let res = await nftMarketplace
+    //     .connect(user)
+    //     .executeOrder(collectionAddress, 0, {
+    //         value: parseEther("100000"),
+    //         gasPrice: gasPrice.mul(2),
+    //     })
+    // console.log(res) estimateGas
+    let res = await nftMarketplace
+        .connect(user)
+        .estimateGas.executeOrder(collectionAddress, 3, {
+            value: parseEther("100000"),
+            gasPrice: gasPrice.mul(2),
+        })
+    console.log(formatEther(res))
+}
+
+async function makeOrder() {
+    let nftMarketplace = await contractAttach(
+        "MXCMarketplaceUpgrade",
+        "0x91fd2e13379dF87f752c82E8C16a1aE72601a9B2"
+    )
+    // let nftCollection = await contractAttach(
+    //     "MXCCollectionV2Upgrade",
+    //     "0x1fF4332089e649Ff98C8cE3BFA0137aF9bE6B67a"
+    // )
+
+    const collectionAddress = "0x19887DACDcc657B77880b7648fe869Ac3Ef7a8fd"
+
+    let date = new Date()
+    date.setMonth(date.getMonth() + 6)
+    let expiresAt = Math.floor(date.getTime() / 1000)
+    for (let i = 0; i < 10; i++) {
+        console.log(i, 9999)
+        const gasPrice = await ethers.provider.getGasPrice()
+
+        // let res = await nftMarketplace.callStatic.createOrder(
+        //     collectionAddress,
+        //     i,
+        //     parseEther("100000"),
+        //     expiresAt,
+        //     {
+        //         gasPrice: gasPrice.mul(2),
+        //     }
+        // )
+        // console.log(res)
+
+        await nftMarketplace.createOrder(
+            collectionAddress,
+            i,
+            parseEther("100000"),
+            expiresAt,
+            {
+                gasPrice: gasPrice.mul(2),
+            }
+        )
+    }
 }
 
 async function createNFT() {

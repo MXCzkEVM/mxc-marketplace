@@ -42,7 +42,9 @@ export default function CollectPage() {
   return (
     <Container maxWidth="lg">
       <div className="w-full">
-        {collectionDta && <BannerComponent collectionDta={collectionDta} />}
+        {collectionDta && (
+          <BannerComponent nfts={nfts?.length} collectionDta={collectionDta} />
+        )}
         {collectionDta && (
           <div className="cardsection">
             {nfts &&

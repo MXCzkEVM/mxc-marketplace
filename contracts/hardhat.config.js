@@ -12,6 +12,7 @@ require("@openzeppelin/hardhat-upgrades")
 // require("@nomicfoundation/hardhat-toolbox")
 
 const PRIVATE_KEY_ADMIN = process.env.PRIVATE_KEY_ADMIN
+const PRIVATE_KEY_MAIN = process.env.PRIVATE_KEY_MAIN
 
 module.exports = {
     defaultNetwork: "hardhat",
@@ -56,16 +57,18 @@ module.exports = {
         },
         wannsee: {
             // url: "https://wannsee-rpc.mxc.com",
-            url: "http://207.246.99.8:8545",
+            // url: "http://207.246.99.8:8545",
+            url: "http://144.202.111.198:8545",
             chainId: 5167003,
-            accounts: [PRIVATE_KEY_ADMIN],
+            accounts: [PRIVATE_KEY_ADMIN, PRIVATE_KEY_MAIN],
             saveDeployments: true,
             allowUnlimitedContractSize: true,
+            gasLimit: 3000000,
             // gasPrice: 6000000000000,
         },
     },
     abiExporter: {
-        path: "../mxc-marketplace/const/abi_mxccollection",
+        path: "../webapp/const/abi_mxccollection",
         runOnCompile: true,
         clear: true,
         flat: true,

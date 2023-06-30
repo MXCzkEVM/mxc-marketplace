@@ -3,10 +3,11 @@ import React, { useState } from "react"
 import Link from "next/link"
 import Image from "@/components/Image"
 import defaultPng from "@/assets/placeholder.png"
+import defaultlongPng from "@/assets/placeholder_long.png"
 
 const BannerComponent = (props: any) => {
   let dta = props.collectionDta
-  // const date = new Date(data.createDate)
+  const date = new Date(dta.timestamp)
   const monthNames = [
     "Jan",
     "Feb",
@@ -21,18 +22,13 @@ const BannerComponent = (props: any) => {
     "Nov",
     "Dec",
   ]
-  // const formattedDate = `${monthNames[date.getMonth()]} ${date.getFullYear()}`
 
-  const [isOpen, setIsOpen] = useState(false)
-  const toggle = () => setIsOpen(!isOpen)
-
+  const formattedDate = `${monthNames[date.getMonth()]} ${date.getFullYear()}`
   return (
     <div className="banner">
       <div className="coverPhoto">
-        <Image src={dta.profile} defaultImage={defaultPng.src} alt="" />
+        <Image src={dta.profile} defaultImage={defaultlongPng.src} alt="" />
         <div className="profilePhoto">
-          {/* */}
-
           <div className="square">
             <div className="square-content">
               <Image src={dta.cover} defaultImage={defaultPng.src} alt="" />
@@ -54,12 +50,12 @@ const BannerComponent = (props: any) => {
         <div className="statisticalDataTop">
           <div className="items">
             <span className="text">Items</span>
-            <span>-</span>
+            <span>{props.nfts || 0}</span>
           </div>
           &nbsp;&nbsp;&middot;&nbsp;&nbsp;
           <div className="created">
             <span className="text">Created</span>
-            <span>-</span>
+            <span>{formattedDate}</span>
           </div>
           &nbsp;&nbsp;&middot;&nbsp;&nbsp;
           <div className="earnings">
