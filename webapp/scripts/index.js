@@ -32,13 +32,13 @@ const NETWORK = {
 }
 
 async function main() {
-  const sdk = ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, NETWORK)
-  const contract = await sdk.getContract(
-    "0xa16E02E87b7454126E5E10d957A927A7F5B5d2be",
-    ABI.collection
-  )
-  const txResult = await contract.erc721.burn("0")
-  console.log(txResult)
+  // const sdk = ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, NETWORK)
+  // const contract = await sdk.getContract(
+  //   "0xa16E02E87b7454126E5E10d957A927A7F5B5d2be",
+  //   ABI.collection
+  // )
+  // const txResult = await contract.erc721.burn("0")
+  // console.log(txResult)
 }
 
 main().catch((error) => {

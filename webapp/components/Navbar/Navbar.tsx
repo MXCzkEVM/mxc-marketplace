@@ -1,7 +1,7 @@
 import { ConnectWallet, useAddress } from "@thirdweb-dev/react"
 import Image from "next/image"
 import Link from "next/link"
-import styles from "./Navbar.module.css"
+// import styles from "./Navbar.module.css"
 
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu"
 import "@szhsin/react-menu/dist/index.css"
@@ -33,12 +33,12 @@ export function Navbar() {
               <Link href="/collections" className="link">
                 Collections
               </Link>
-              <Link href="/hexagons" className="link">
+              {/* <Link href="/hexagons" className="link">
                 Hexagon
               </Link>
               <Link href="/domains" className="link">
                 Domains
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
@@ -51,9 +51,9 @@ export function Navbar() {
               </MenuButton>
             }
           >
-            <MenuItem href="/collections">collections</MenuItem>
-            <MenuItem href="/hexagons">Hexagon</MenuItem>
-            <MenuItem href="/domains">Domains</MenuItem>
+            <MenuItem href="/collections">Collections</MenuItem>
+            {/* <MenuItem href="/hexagons">Hexagon</MenuItem>
+            <MenuItem href="/domains">Domains</MenuItem> */}
           </Menu>
         </div>
 

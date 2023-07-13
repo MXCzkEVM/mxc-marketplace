@@ -61,7 +61,7 @@ export default function Overview() {
           </div>
         </div>
 
-        <div className="hexgon mb-10">
+        {/* <div className="hexgon mb-10">
           <div className="flex justify-between items-center">
             <h1 className="title">Hexagon</h1>
             <div className="more csp pr-10" onClick={() => toPath("/hexagons")}>
@@ -81,9 +81,9 @@ export default function Overview() {
               )
             })}
           </div>
-        </div>
+        </div> */}
 
-        <div className="names">
+        {/* <div className="names">
           <div className="flex justify-between items-center">
             <h1 className="title">MXC domains</h1>
             <div className="more csp pr-10" onClick={() => toPath("/domains")}>
@@ -110,7 +110,7 @@ export default function Overview() {
               )
             })}
           </div>
-        </div>
+        </div> */}
       </Container>
     </div>
   )

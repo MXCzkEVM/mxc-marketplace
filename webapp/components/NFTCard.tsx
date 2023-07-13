@@ -5,25 +5,67 @@ import verifyIcon from "@/assets/verify.svg"
 import { RiMore2Fill, RiMarkPenLine, RiDeleteBin6Line } from "react-icons/ri"
 import Image from "@/components/Image"
 import defaultPng from "@/assets/placeholder.png"
+import { CHAIN_ID } from "@/const/Network"
+import { useAddress } from "@thirdweb-dev/react"
+import { toast } from "react-toastify"
+import { confirmAlert } from "react-confirm-alert" // Import
+import "react-confirm-alert/src/react-confirm-alert.css" // Import css
+
+import ApiClient from "@/util/request"
+const api = new ApiClient("/")
 
 export default function NFTCard(props: any) {
-  let { nft } = props
+  let { nft, setUpdate, update } = props
 
   const [isHovered, setIsHovered] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
   const router = useRouter()
+  const address = useAddress()
 
-  const toDetail = (id: string) => {
-    Router.push(`/collection/${id}`)
+  const toPath = (path: string) => {
+    Router.push(path)
+  }
+
+  const submitDel = () => {
+    const web3 = require("web3")
+    confirmAlert({
+      title: "Confirm to delete this collection",
+      message: "Are you sure to do this.",
+      buttons: [
+        {
+          label: "Confilm",
+          onClick: async () => {
+            const signedMessage = await window.ethereum.request({
+              method: "personal_sign",
+              params: [web3.utils.utf8ToHex(nft.collection), address],
+            })
+
+            let res: any = await api.post("/api/del-collection", {
+              chainId: CHAIN_ID,
+              collection: nft.collection,
+              signedMessage,
+            })
+
+            if (res.status) {
+              toast.success("NFT Collection delete successfully!"),
+                setUpdate(!update)
+            }
+          },
+        },
+        {
+          label: "Cancel",
+          onClick: () => {
+            // console.log("noe")
+          },
+        },
+      ],
+    })
   }
 
   return (
     <div
-      className="nft_item csp"
+      className="nft_item"
       onMouseEnter={() => setIsHovered(true)}
-      onClick={() => {
-        toDetail(nft.collection)
-      }}
       onMouseLeave={() => {
         setIsHovered(false)
         setShowMenu(false)
@@ -42,16 +84,22 @@ export default function NFTCard(props: any) {
             <ul className="absolute right-0 w-40 py-2 mt-6 bg-white border rounded-md shadow-xl">
               <li className="flex items-center hover:bg-gray-100 pl-2">
                 <RiMarkPenLine />
-                <Link
-                  href={`/collections/${nft.id}`}
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    toPath(`/collection/edit?collection_id=${nft.collection}`)
+                  }}
                   className="block px-4 py-2 text-gray-800"
                 >
                   Edit
-                </Link>
+                </div>
               </li>
               <li className="flex items-center hover:bg-gray-100 pl-2">
                 <RiDeleteBin6Line className=" text-red-500" />
-                <button className="block w-full px-4 py-2 text-left text-red-500">
+                <button
+                  onClick={submitDel}
+                  className="block w-full px-4 py-2 text-left text-red-500"
+                >
                   Delete
                 </button>
               </li>
@@ -63,7 +111,12 @@ export default function NFTCard(props: any) {
         <Image src={nft.profile} defaultImage={defaultPng.src} alt="" />
       </div>
 
-      <div className="content">
+      <div
+        className="content csp"
+        onClick={() => {
+          toPath(`/collection/${nft.collection}`)
+        }}
+      >
         <div className="cover mr-2">
           <Image src={nft.cover} defaultImage={defaultPng.src} alt="" />
         </div>

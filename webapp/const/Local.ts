@@ -1,7 +1,7 @@
 
 
 export const version = "v100002"
-export const ZeroAddress = '0x0000000000000000000000000000000000000000'
+export const zeroAddress = '0x0000000000000000000000000000000000000000'
 export const IPFS_GATEWAY = 'https://aqua-adverse-coyote-886.mypinata.cloud/ipfs/'
 export const CategoryArray = [
     {

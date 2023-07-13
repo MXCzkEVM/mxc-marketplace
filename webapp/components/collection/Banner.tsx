@@ -27,11 +27,19 @@ const BannerComponent = (props: any) => {
   return (
     <div className="banner">
       <div className="coverPhoto">
-        <Image src={dta.profile} defaultImage={defaultlongPng.src} alt="" />
+        <Image
+          src={dta.profile ? dta.profile : defaultlongPng.src}
+          defaultImage={defaultlongPng.src}
+          alt=""
+        />
         <div className="profilePhoto">
           <div className="square">
             <div className="square-content">
-              <Image src={dta.cover} defaultImage={defaultPng.src} alt="" />
+              <Image
+                src={dta.cover ? dta.cover : defaultPng.src}
+                defaultImage={defaultPng.src}
+                alt=""
+              />
             </div>
           </div>
         </div>
@@ -77,8 +85,8 @@ const BannerComponent = (props: any) => {
           <div className={`introduceword`}>
             <p>
               {dta.description}
-              <Link href={""}>Wannsee </Link>
-              <Link href={""}>Wiew drop details</Link>
+              {/* <Link href={""}>Wannsee </Link>
+              <Link href={""}>Wiew drop details</Link> */}
             </p>
           </div>
         </div>

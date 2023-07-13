@@ -11,8 +11,9 @@ require("@openzeppelin/hardhat-upgrades")
 // require("hardhat-storage-layout")
 // require("@nomicfoundation/hardhat-toolbox")
 
-const PRIVATE_KEY_ADMIN = process.env.PRIVATE_KEY_ADMIN
-const PRIVATE_KEY_MAIN = process.env.PRIVATE_KEY_MAIN
+const PRIVATE_KEY_01 = process.env.PRIVATE_KEY_01
+const PRIVATE_KEY_02 = process.env.PRIVATE_KEY_02
+const PRIVATE_KEY_00 = process.env.PRIVATE_KEY_00
 
 module.exports = {
     defaultNetwork: "hardhat",
@@ -52,7 +53,7 @@ module.exports = {
         arbiture_goerli: {
             url: "https://goerli-rollup.arbitrum.io/rpc",
             chainId: 421613,
-            accounts: [PRIVATE_KEY_ADMIN],
+            accounts: [PRIVATE_KEY_01],
             saveDeployments: true,
         },
         wannsee: {
@@ -60,11 +61,18 @@ module.exports = {
             // url: "http://207.246.99.8:8545",
             url: "http://144.202.111.198:8545",
             chainId: 5167003,
-            accounts: [PRIVATE_KEY_ADMIN, PRIVATE_KEY_MAIN],
+            accounts: [PRIVATE_KEY_01, PRIVATE_KEY_02],
             saveDeployments: true,
             allowUnlimitedContractSize: true,
             gasLimit: 3000000,
             // gasPrice: 6000000000000,
+        },
+        wannsee_mainnet: {
+            // url: "https://rpc.mxc.com",
+            url: "http://207.246.101.30:8545",
+            chainId: 18686,
+            accounts: [PRIVATE_KEY_00],
+            saveDeployments: true,
         },
     },
     abiExporter: {

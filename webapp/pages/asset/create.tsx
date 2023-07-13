@@ -18,9 +18,8 @@ import closeIcon from "@/assets/svgs/close.svg"
 import { storeImage, storeJson } from "@/util/uploadToPinata"
 import { getCollectList } from "@/util/getNFT"
 import { CHAIN_ID, ABI } from "@/const/Network"
-import { version } from "@/const/Local"
+import { version, zeroAddress } from "@/const/Local"
 import ApiClient from "@/util/request"
-import { zeroAddress } from "viem"
 const api = new ApiClient("/")
 
 export default function AssetCrearePage() {
@@ -130,7 +129,7 @@ export default function AssetCrearePage() {
       return
     }
 
-    console.log(jsonIpfs, "jsonIpfs")
+    // console.log(jsonIpfs, "jsonIpfs")
 
     let txResult
     try {

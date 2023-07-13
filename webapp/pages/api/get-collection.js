@@ -12,17 +12,11 @@ export default async function handler(req, res) {
     return res.status(200).send({ status: 500 })
   }
 
-  let collections = await redis.hgetall(`${chainId}_collections`)
-  let ops = {}
-  for (let item in collections) {
-    let citem = collections[item]
-    if (citem.tags.length) {
-      citem.tags = JSON.parse(citem.tags)
-    }
-    if (collection_id == citem.collection) {
-      ops = citem
-    }
+  let ops = await redis.hget(`${chainId}_collections`, collection_id)
+  if (ops == null) {
+    return res.status(200).send({ code: 500, message: "Wrong collection" })
   }
+  ops.tags = JSON.parse(ops.tags)
 
   return res
     .status(200)

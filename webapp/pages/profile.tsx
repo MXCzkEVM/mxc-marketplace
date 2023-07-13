@@ -1,4 +1,4 @@
-import { useAddress, useContract, useContractRead } from "@thirdweb-dev/react"
+import { useAddress } from "@thirdweb-dev/react"
 import React, { useState, useEffect } from "react"
 import Container from "@/components/Container/Container"
 import Skeleton from "@/components/Skeleton/Skeleton"
@@ -6,12 +6,10 @@ import NFTCard from "@/components/NFTCard"
 import Router from "next/router"
 import styles from "@/styles/Profile.module.css"
 import randomColor from "@/util/randomColor"
-import { CONTRACTS_MAP, ABI, CHAIN_ID } from "@/const/Network"
-import { zeroAddress } from "viem"
+import { CHAIN_ID } from "@/const/Network"
+import { zeroAddress } from "@/const/Local"
 import MyNFTS from "@/components/MyNFTs"
 import { getCollectList } from "@/util/getNFT"
-import axios from "axios"
-import { toast } from "react-toastify"
 import ApiClient from "@/util/request"
 const api = new ApiClient("/")
 
@@ -30,6 +28,7 @@ export default function ProfilePage() {
   >("mycollections")
 
   const [userCollections, setUserCollections] = useState<any>([])
+  const [update, setUpdate] = useState(false)
   const [collections, setCollections] = useState<any>([])
   const [isLoading, setLoading] = useState(false)
 
@@ -58,7 +57,7 @@ export default function ProfilePage() {
     if (address !== zeroAddress) {
       fetchData()
     }
-  }, [address])
+  }, [address, update])
 
   const toPath = (link: string) => {
     Router.push(link)
@@ -134,7 +133,7 @@ export default function ProfilePage() {
                 onClick={() => toPath("/asset/create")}
                 className="create_btn"
               >
-                Create a item
+                Create an item
               </button>
             </div>
 
@@ -145,7 +144,12 @@ export default function ProfilePage() {
                 ) : (
                   (userCollections.length &&
                     (userCollections as any).map((nft: any, index: number) => (
-                      <NFTCard nft={nft} key={index} />
+                      <NFTCard
+                        nft={nft}
+                        key={index}
+                        setUpdate={setUpdate}
+                        update={update}
+                      />
                     ))) ||
                   ""
                 )}

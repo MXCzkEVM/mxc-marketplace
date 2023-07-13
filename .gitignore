@@ -8,6 +8,7 @@ contracts/cache
 contracts/node_modules
 
 webapp/.vercel
+webapp/vercel.*
 webapp/.next
 webapp/.env
 webapp/.env.local

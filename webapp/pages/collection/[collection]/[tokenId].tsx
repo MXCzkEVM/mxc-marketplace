@@ -11,11 +11,12 @@ import {
 import { useRouter } from "next/router"
 import { Toaster } from "react-hot-toast"
 import { ABI, CONTRACTS_MAP, CHAIN_ID } from "@/const/Network"
+import { zeroAddress } from "@/const/Local"
+
 import Container from "@/components/Container/Container"
 import randomColor from "@/util/randomColor"
 import Link from "next/link"
 import { BigNumber, ethers } from "ethers"
-import { zeroAddress } from "viem"
 import Skeleton from "@/components/Skeleton/Skeleton"
 import PriceInput from "@/components/PriceInput"
 import { toast } from "react-toastify"

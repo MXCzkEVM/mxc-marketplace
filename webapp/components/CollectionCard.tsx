@@ -29,7 +29,11 @@ export default function CollectionCard(props: any) {
   return (
     <div className="nft_item csp" onClick={() => toDetail(nft.collection)}>
       <div className="image">
-        <Image src={nft.profile} defaultImage={defaultPng.src} alt="" />
+        <Image
+          src={nft.profile ? nft.profile : defaultPng.src}
+          defaultImage={defaultPng.src}
+          alt=""
+        />
       </div>
 
       <div className="content">

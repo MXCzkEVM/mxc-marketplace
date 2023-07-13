@@ -1,17 +1,19 @@
 
 import { ThirdwebSDK } from "@thirdweb-dev/sdk"
 import { getJsonFromIPFS } from "./uploadToPinata"
-import { IPFS_GATEWAY } from "@/const/Local"
-import { NETWORK } from "@/const/Network"
+import { IPFS_GATEWAY, zeroAddress } from "@/const/Local"
+import { storageInterface } from "./thirdwebStorage"
+import { NETWORK, instanceCollection } from "@/const/Network"
 import { ABI } from "@/const/Network"
-import { zeroAddress } from "viem"
 
-export const getNFTList = async (nftLis: any) => {
+
+export const getThirdWebNFTList = async (nftLis: any) => {
     return nftLis?.filter((item: any) => item.owner !== zeroAddress)
 }
 
 export const getNFTDetail = async (collection: string, tokenId: string) => {
     try {
+        // const sdk = new ThirdwebSDK(NETWORK, {}, storageInterface)
         const sdk = new ThirdwebSDK(NETWORK)
         const contract = await sdk.getContract(collection, ABI.collection)
 
@@ -27,8 +29,8 @@ export const getNFTDetail = async (collection: string, tokenId: string) => {
 
 export const getCollectInfo = async (collectionInfo: any) => {
     try {
-        collectionInfo.cover = `${IPFS_GATEWAY}${collectionInfo.cover}`
-        collectionInfo.profile = `${IPFS_GATEWAY}${collectionInfo.profile}`
+        collectionInfo.cover = collectionInfo.cover ? `${IPFS_GATEWAY}${collectionInfo.cover}` : ''
+        collectionInfo.profile = collectionInfo.profile ? `${IPFS_GATEWAY}${collectionInfo.profile}` : ''
         return collectionInfo
     } catch (error) {
         console.error(error, "getCollectInfo")
@@ -39,8 +41,8 @@ export const getCollectInfo = async (collectionInfo: any) => {
 export const getCollectList = async (collectionsData: any) => {
     try {
         const collections = collectionsData.map((item: any) => {
-            item.cover = `${IPFS_GATEWAY}${item.cover.replace("ipfs://", "")}`
-            item.profile = `${IPFS_GATEWAY}${item.profile.replace("ipfs://", "")}`
+            item.cover = item.cover ? `${IPFS_GATEWAY}${item.cover.replace("ipfs://", "")}` : ''
+            item.profile = item.profile ? `${IPFS_GATEWAY}${item.profile.replace("ipfs://", "")}` : ''
             return item
         })
         return collections

@@ -5,8 +5,8 @@ import Container from "@/components/Container/Container"
 import BannerComponent from "@/components/collection/Banner"
 import CollectionCard from "@/components/collection/CollectionCard"
 import { CHAIN_ID, ABI } from "@/const/Network"
-import { getCollectInfo, getNFTList } from "@/util/getNFT"
-import { zeroAddress } from "viem"
+import { zeroAddress } from "@/const/Local"
+import { getCollectInfo, getThirdWebNFTList } from "@/util/getNFT"
 import ApiClient from "@/util/request"
 const api = new ApiClient("/")
 
@@ -33,7 +33,7 @@ export default function CollectPage() {
       let collection = collectionsItem?.collection || {}
       let nwData = await getCollectInfo(collection)
       setCollectionDta(nwData)
-      let nftList = await getNFTList(nftLis)
+      let nftList = await getThirdWebNFTList(nftLis)
       setNFTS(nftList)
     }
     fetchData()

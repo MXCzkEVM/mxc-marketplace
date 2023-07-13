@@ -9,7 +9,8 @@ import {
   useContractRead,
 } from "@thirdweb-dev/react"
 import { CONTRACTS_MAP, ABI } from "@/const/Network"
-import { zeroAddress } from "viem"
+import { zeroAddress } from "@/const/Local"
+
 import NFTCard from "@/components/collection/MyNFTCard"
 
 export default function CollectionNFTS(props: any) {

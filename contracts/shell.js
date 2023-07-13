@@ -27,8 +27,8 @@ await network.provider.send("eth_blockNumber", [])
 deploy
 /* 
 hh deploy --network ganache
-hh deploy --tags marketplace --network wannsee
-hh deploy --tags collections --network wannsee
+hh deploy --tags marketplace --network wannsee_mainnet
+hh deploy --tags collections --network wannsee_mainnet
 */
 
 /* 

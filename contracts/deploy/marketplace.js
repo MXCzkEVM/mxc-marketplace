@@ -8,7 +8,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deployer } = await getNamedAccounts()
 
     const MXCMarketplaceUpgradeFactory = await ethers.getContractFactory(
-        "MXCMarketplaceUpgrade"
+        "MXCMarketplaceUpgradeV2"
     )
     const marketPlaceProxy = await upgrades.deployProxy(
         MXCMarketplaceUpgradeFactory,
