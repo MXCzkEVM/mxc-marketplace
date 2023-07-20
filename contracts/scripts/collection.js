@@ -1,6 +1,6 @@
 const { ethers, getNamedAccounts, deployments, network } = require("hardhat")
 const { networkConfig } = require("../helper-hardhat-config.js")
-const { getDeployments, contractAttach } = require("../config/address.js")
+const { getDeployments, contractAttach } = require("./address.js")
 
 const parseEther = ethers.utils.parseEther
 const formatEther = ethers.utils.formatEther

@@ -3,8 +3,8 @@ import { ThirdwebSDK } from "@thirdweb-dev/sdk"
 import { getJsonFromIPFS } from "./uploadToPinata"
 import { IPFS_GATEWAY, zeroAddress } from "@/const/Local"
 import { storageInterface } from "./thirdwebStorage"
-import { NETWORK, instanceCollection } from "@/const/Network"
-import { ABI } from "@/const/Network"
+import { NETWORK, } from "@/const/Network"
+import { ABI, instanceCollection } from "@/const/Address"
 
 
 export const getThirdWebNFTList = async (nftLis: any) => {

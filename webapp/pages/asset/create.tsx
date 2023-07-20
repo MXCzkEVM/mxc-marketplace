@@ -17,7 +17,9 @@ import plusIcon from "@/assets/svgs/plus.svg"
 import closeIcon from "@/assets/svgs/close.svg"
 import { storeImage, storeJson } from "@/util/uploadToPinata"
 import { getCollectList } from "@/util/getNFT"
-import { CHAIN_ID, ABI } from "@/const/Network"
+import { CHAIN_ID } from "@/const/Network"
+import { ABI } from "@/const/Address"
+
 import { version, zeroAddress } from "@/const/Local"
 import ApiClient from "@/util/request"
 const api = new ApiClient("/")
@@ -34,7 +36,36 @@ export default function AssetCrearePage() {
   const [collection_address, setCollection] = useState("")
   const [isRealWorldNFT, setSwitch] = useState(false)
   // traits
-  const [traits, setTraits] = useState<any>([])
+  const [traits, setTraits] = useState<any>([
+    {
+      trait_type: "Year",
+      value: "2023",
+    },
+    {
+      trait_type: "Producer",
+      value: "MXC DAO",
+    },
+    {
+      trait_type: "Tag",
+      value: "MXC loT Tag",
+    },
+    {
+      trait_type: "Network",
+      value: "NEO and M2Pro",
+    },
+    {
+      trait_type: "Social Handle",
+      value: "@MXCFoundation",
+    },
+    {
+      trait_type: "Location Proofs",
+      value: "MEP-1002",
+    },
+    {
+      trait_type: "Source",
+      value: "MXC Community Design",
+    },
+  ])
   const [editingIndex, setEditingIndex] = useState(null)
   const [trait_type, setTraitType] = useState("")
   const [value, setValue] = useState("")

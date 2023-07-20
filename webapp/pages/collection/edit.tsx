@@ -2,7 +2,7 @@ import CollectionDetail from "@/components/CollectionDetail"
 import { useRouter } from "next/router"
 import { zeroAddress } from "@/const/Local"
 import React, { useState, useEffect, useRef } from "react"
-import { CHAIN_ID, ABI } from "@/const/Network"
+import { CHAIN_ID } from "@/const/Network"
 import { getCollectInfo } from "@/util/getNFT"
 import ApiClient from "@/util/request"
 const api = new ApiClient("/")

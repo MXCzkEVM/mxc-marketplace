@@ -3,7 +3,7 @@ import { IPFS_GATEWAY } from "@/const/Local"
 import Router from "next/router"
 import defaultCover from "@/assets/placeholder.png"
 import { useContract, useContractRead } from "@thirdweb-dev/react"
-import { ABI, CONTRACTS_MAP } from "@/const/Network"
+import { ABI, CONTRACTS_MAP } from "@/const/Address"
 import { ethers } from "ethers"
 import Image from "@/components/Image"
 import defaultPng from "@/assets/placeholder.png"
@@ -47,7 +47,8 @@ const CollectionCard = (props: any) => {
       <div className="content">
         <div className="title">
           <span className="name text-xs">
-            {item.metadata.name} #{item?.metadata?.id}
+            {item.metadata.name}
+            {/*  #{item?.metadata?.id} */}
           </span>
           {/* <div className="raritylevel">{"#" + item.rarityLevel}</div> */}
         </div>

@@ -8,9 +8,9 @@ import {
   useContractWrite,
 } from "@thirdweb-dev/react"
 import { toast } from "react-toastify"
-import { ChainId, ThirdwebSDK } from "@thirdweb-dev/sdk"
+// import { ChainId, ThirdwebSDK } from "@thirdweb-dev/sdk"
 import { storeImage } from "@/util/uploadToPinata"
-import { NETWORK } from "@/const/Network"
+// import { NETWORK } from "@/const/Network"
 import FormData from "form-data"
 import axios from "axios"
 
@@ -23,15 +23,11 @@ import closeIcon from "@/assets/svgs/close.svg"
 import ApiClient from "@/util/request"
 const api = new ApiClient("/")
 
-import {
-  CONTRACTS_MAP,
-  ABI,
-  instanceCollectionFactory,
-  CHAIN_ID,
-} from "@/const/Network"
+import { CHAIN_ID } from "@/const/Network"
+import { CONTRACTS_MAP, ABI, instanceCollectionFactory } from "@/const/Address"
 import {
   CategoryArray,
-  CategoryMap,
+  // CategoryMap,
   version,
   IPFS_GATEWAY,
 } from "@/const/Local"

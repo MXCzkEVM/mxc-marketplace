@@ -10,40 +10,36 @@ import {
 
 import { useRouter } from "next/router"
 import { Toaster } from "react-hot-toast"
-import { CHAIN_ID } from "@/const/Network"
 import { ABI, CONTRACTS_MAP } from "@/const/Address"
-
 import { zeroAddress } from "@/const/Local"
-
 import Container from "@/components/Container/Container"
-import { randomColor } from "@/util/randomColor"
+import { randomColor, getColorFromH3Id } from "@/util/randomColor"
 import Link from "next/link"
 import { BigNumber, ethers } from "ethers"
 import Skeleton from "@/components/Skeleton/Skeleton"
 import PriceInput from "@/components/PriceInput"
 import { toast } from "react-toastify"
-import Image from "@/components/Image"
-import defaultPng from "@/assets/placeholder.png"
-import { getNFTDetail, getCollectInfo } from "@/util/getNFT"
-const [randomColor1, randomColor2] = [randomColor(), randomColor()]
+import { getNFTDetail } from "@/util/getNFT"
+import HexagonLogo from "@/components/HexagonLogo"
 import ApiClient from "@/util/request"
-const api = new ApiClient("/")
+
+const [randomColor1, randomColor2] = [randomColor(), randomColor()]
 
 export default function TokenPage() {
-  const [collectionDta, setCollectionDta] = useState<any>({})
+  //   const [collectionDta, setCollectionDta] = useState<any>({})
   const [nft, SetNFT] = useState<any>({ metadata: {}, owner: null })
   const [nftPrice, setNftPrice] = useState<BigNumber>(BigNumber.from(0))
   const [inputPrice, setInputPrice] = useState<any>("")
   const router = useRouter()
   const address = useAddress() || zeroAddress
+  const collection = CONTRACTS_MAP.MEP1002Name
 
-  const { collection = zeroAddress, tokenId = "0" } = router.query as {
+  const { tokenId = "0" } = router.query as {
     tokenId: string
-    collection: string
   }
 
   // get nft info
-  const { contract: nftContract } = useContract(collection, ABI.collection)
+  const { contract: nftContract } = useContract(collection, ABI.mep1002Name)
   const { data: isApproved } = useContractRead(nftContract, "getApproved", [
     tokenId,
   ])
@@ -75,30 +71,21 @@ export default function TokenPage() {
     mkpContract,
     "cancelOrder"
   )
-  const { mutateAsync: executeOrder } = useContractWrite(
+  const { mutateAsync: executeNameOrder } = useContractWrite(
     mkpContract,
-    "executeOrder"
+    "executeNameOrder"
   )
 
   useEffect(() => {
-    if (collection == zeroAddress) {
+    if (tokenId == "0") {
       return
     }
     const fetchData = async () => {
-      let collectionsItem: any = await api.post("/api/get-collection", {
-        chainId: CHAIN_ID,
-        collection_id: collection,
-      })
-      let collectionDta = collectionsItem?.collection || {}
-      let nwData = await getCollectInfo(collectionDta)
-      setCollectionDta(nwData)
-
-      let id = tokenId as string
-      let nft = await getNFTDetail(collection, id)
+      let nft = await getNFTDetail(collection, tokenId)
       SetNFT(nft)
     }
     fetchData()
-  }, [tokenId, collection, mkp_info])
+  }, [tokenId, mkp_info])
 
   useEffect(() => {
     if (!mkp_info) {
@@ -108,35 +95,11 @@ export default function TokenPage() {
     setNftPrice(price)
   }, [mkp_info])
 
-  const clickAttr = async (item: any) => {
-    // if (item.trait_type == "Location Proofs") {
-    //   const contract = new ethers.Contract(
-    //     MEP1004ContractAddr,
-    //     mep1004abi,
-    //     provider
-    //   )
-    //   let { MEP1002TokenId } = await contract.latestLocationProofs(tokenId)
-    //   let hexId = MEP1002TokenId._hex.replace("0x", "")
-    //   window.open(
-    //     `https://wannsee-explorer.mxc.com/mapper?hexid=${hexId}`,
-    //     "_blank"
-    //   )
-    // }
-  }
-
-  const getAttrCss = (item: any) => {
-    if (item.trait_type == "Location Proofs") {
-      return "csp"
-    }
-    return ""
-  }
-
   const approveForSale = async () => {
     if (nft.owner !== address) {
       toast.warn("You are not the nft owner.")
       return
     }
-
     let txResult
     try {
       txResult = await setApprovalForAll({
@@ -148,7 +111,6 @@ export default function TokenPage() {
       console.log(error)
       toast.error(`Approve for sale failed`)
     }
-
     return txResult
   }
 
@@ -165,18 +127,16 @@ export default function TokenPage() {
       toast.warn("Please input your nft price.")
       return
     }
-
     let date = new Date()
     date.setMonth(date.getMonth() + 6)
     let expiresAt = Math.floor(date.getTime() / 1000)
-
     let txResult
     try {
       // Simple one-liner for buying the NFT
       txResult = await createOrder({
         args: [
           collection,
-          tokenId,
+          ethers.BigNumber.from(tokenId),
           ethers.utils.parseEther(inputPrice),
           expiresAt,
         ],
@@ -187,7 +147,6 @@ export default function TokenPage() {
       console.log(error)
       toast.error(`List for sale failed`)
     }
-
     return txResult
   }
 
@@ -208,7 +167,6 @@ export default function TokenPage() {
       console.log(error)
       toast.error(`Cancel list for sale failed`)
     }
-
     return txResult
   }
 
@@ -220,8 +178,8 @@ export default function TokenPage() {
     let txResult
     try {
       // Simple one-liner for buying the NFT
-      txResult = await executeOrder({
-        args: [collection, tokenId],
+      txResult = await executeNameOrder({
+        args: [ethers.BigNumber.from(tokenId)],
         overrides: {
           value: nftPrice,
           gasLimit: 300000, // override default gas limit
@@ -233,7 +191,6 @@ export default function TokenPage() {
       console.log(error)
       toast.error(`Purchase failed`)
     }
-
     return txResult
   }
 
@@ -245,46 +202,20 @@ export default function TokenPage() {
           <div className="container">
             <div className="metadataContainer">
               <div className="token_image">
-                <Image src={nft.image} defaultImage={defaultPng.src} alt="" />
+                {/* <Image src={nft.image} defaultImage={defaultPng.src} alt="" /> */}
+                <HexagonLogo fill={getColorFromH3Id(tokenId)} />
               </div>
-              <h3 className="descriptionTitle">Description</h3>
+              {/* <h3 className="descriptionTitle">Description</h3>
               <p className="description">{nft.metadata.description}</p>
 
               <h3 className="descriptionTitle">Traits</h3>
               <div className="traitsContainer">
-                {nft?.metadata?.attributes?.map((item: any, index: number) => (
-                  <div
-                    onClick={() => clickAttr(item)}
-                    className={`traitContainer ${getAttrCss(item)}`}
-                    key={index}
-                  >
-                    <p className="traitName text-xs">{item.trait_type}</p>
-                    <p className="traitValue text-sm">
-                      {item.value?.toString() || ""}
-                    </p>
-                  </div>
-                ))}
-              </div>
+              </div> */}
             </div>
 
             <div className="listingContainer">
-              {collectionDta && (
-                <div className="flexbox mb-3">
-                  <div className="collectionImg">
-                    <Image
-                      src={collectionDta.cover}
-                      defaultImage={defaultPng.src}
-                      alt=""
-                    />
-                  </div>
-
-                  <div className="collectionName text-base">
-                    {collectionDta.name}
-                  </div>
-                </div>
-              )}
               <div className="title">
-                {nft.metadata.name}
+                Hexagon Naming NFT
                 <div> Token ID #{nft.metadata.id}</div>
               </div>
 
@@ -331,6 +262,24 @@ export default function TokenPage() {
                 </div>
               </div>
 
+              {/* 自己的nft 并且还没授权给市场 */}
+              {isApproved == zeroAddress &&
+              isApproved !== CONTRACTS_MAP.MARKETPLACE &&
+              !isApprovedForAll &&
+              nft.owner == address ? (
+                <>
+                  <h4 className="formSectionTitle mb-2">Approve</h4>
+                  <Web3Button
+                    contractAddress={collection}
+                    contractAbi={ABI.mep1002Name}
+                    action={async () => await approveForSale()}
+                    className="list_btn"
+                  >
+                    Approve item for marketplace
+                  </Web3Button>
+                </>
+              ) : null}
+
               {address !== zeroAddress &&
               nft.owner == address &&
               nftPrice.eq(0) ? (
@@ -359,24 +308,6 @@ export default function TokenPage() {
                     List for sale
                   </Web3Button>
                 </div>
-              ) : null}
-
-              {/* 自己的nft 并且还没授权给市场 */}
-              {isApproved == zeroAddress &&
-              isApproved !== CONTRACTS_MAP.MARKETPLACE &&
-              !isApprovedForAll &&
-              nft.owner == address ? (
-                <>
-                  <h4 className="formSectionTitle mb-2">Approve</h4>
-                  <Web3Button
-                    contractAddress={collection}
-                    contractAbi={ABI.collection}
-                    action={async () => await approveForSale()}
-                    className="list_btn"
-                  >
-                    Approve item for marketplace
-                  </Web3Button>
-                </>
               ) : null}
 
               {address !== zeroAddress &&

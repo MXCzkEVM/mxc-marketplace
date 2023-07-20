@@ -33,12 +33,12 @@ export function Navbar() {
               <Link href="/collections" className="link">
                 Collections
               </Link>
-              {/* <Link href="/hexagons" className="link">
+              <Link href="/hexagons" className="link">
                 Hexagon
               </Link>
               <Link href="/domains" className="link">
                 Domains
-              </Link> */}
+              </Link>
             </div>
           </div>
         </div>

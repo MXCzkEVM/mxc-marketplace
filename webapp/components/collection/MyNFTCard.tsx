@@ -3,7 +3,7 @@ import { IPFS_GATEWAY } from "@/const/Local"
 import Router from "next/router"
 import defaultCover from "@/assets/placeholder.png"
 import { useContract, useContractRead } from "@thirdweb-dev/react"
-import { ABI, CONTRACTS_MAP } from "@/const/Network"
+import { ABI, CONTRACTS_MAP } from "@/const/Address"
 import { BigNumber, ethers } from "ethers"
 
 const MyNFTCard = (props: any) => {

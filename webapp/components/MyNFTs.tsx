@@ -8,7 +8,7 @@ import {
   useNFTs,
   useContractRead,
 } from "@thirdweb-dev/react"
-import { CONTRACTS_MAP, ABI } from "@/const/Network"
+import { ABI } from "@/const/Address"
 import NFTCard from "@/components/collection/MyNFTCard"
 
 export default function CollectionNFTS(props: any) {
