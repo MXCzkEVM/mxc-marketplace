@@ -7,6 +7,7 @@ import mnsClient from "@/util/apolloClient"
 import { FaArrowDown, FaSpinner } from "react-icons/fa"
 import Router from "next/router"
 import SkeletonList from "@/components/Skeleton/SkeletonList"
+import MoreBtn from "@/components/Button/more"
 
 export default function Domains() {
   // const arr = Array.from({ length: 24 }, (_, i) => i)
@@ -133,24 +134,7 @@ export default function Domains() {
             : isLoading && <SkeletonList />}
         </div>
         {hasNext && !isLoading && currentMns.length && (
-          <div className="loadmore flex_c mt-3">
-            <button
-              disabled={loadmore}
-              onClick={loadMoreData}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded flex items-center space-x-2"
-            >
-              {loadmore ? (
-                <>
-                  <FaSpinner className="animate-spin" /> <span>Loading...</span>
-                </>
-              ) : (
-                <>
-                  <span>More</span>
-                  <FaArrowDown />
-                </>
-              )}
-            </button>
-          </div>
+          <MoreBtn loadmore={loadmore} loadMoreData={loadMoreData} />
         )}
       </Container>
     </div>

@@ -1,7 +1,7 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from 'i18next-browser-languagedetector'
-
+import { locales, browserLangToLocaleKey } from './i18nLocal'
 
 import de from "../locales/de";
 import en from "../locales/en";
@@ -20,7 +20,19 @@ import vi from "../locales/vi";
 import zh_CN from "../locales/zh_CN";
 import zh_TW from "../locales/zh_TW";
 
+const customDetector = {
+    name: 'customDetector',
+    lookup() {
+        const detectedLang = typeof window !== 'undefined' ? navigator.language : 'en';
+        return browserLangToLocaleKey(detectedLang);
+    }
+};
+
+const languageDetectorCls = new LanguageDetector();
+languageDetectorCls.addDetector(customDetector);
+
 i18n
+    .use(languageDetectorCls)
     .use(initReactI18next)
     .init({
         resources: {
@@ -73,10 +85,21 @@ i18n
                 translation: zh_TW
             }
         },
-        lng: "en",
+        // lng: "en",
         fallbackLng: "en",
+        whitelist: Object.keys(locales),
         interpolation: {
             escapeValue: false
+        },
+        detection: {
+            order: ['customDetector', 'querystring', 'cookie', 'localStorage', 'navigator', 'htmlTag'],
+            lookupQuerystring: 'lng',
+            lookupCookie: 'i18next',
+            lookupLocalStorage: 'i18nextLng',
+            lookupFromPathIndex: 0,
+            lookupFromSubdomainIndex: 0,
+            checkWhitelist: true,
+            checkForSimilarInWhitelist: true,
         }
     });
 

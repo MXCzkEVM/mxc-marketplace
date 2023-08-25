@@ -12,6 +12,7 @@ import { FaArrowDown, FaSpinner } from "react-icons/fa"
 import Router, { useRouter } from "next/router"
 import SkeletonList from "@/components/Skeleton/SkeletonList"
 import { useTranslation } from "react-i18next"
+import MoreBtn from "@/components/Button/more"
 
 export default function Hexagons() {
   const hexsgonsRef = useRef<any[]>([])
@@ -135,25 +136,7 @@ export default function Hexagons() {
         {currenthexsgons.length &&
           !isLoading &&
           currenthexsgons.length < targetLen && (
-            <div className="loadmore flex_c mt-3">
-              <button
-                disabled={loadmore}
-                onClick={loadMoreData}
-                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded flex items-center space-x-2"
-              >
-                {loadmore ? (
-                  <>
-                    <FaSpinner className="animate-spin" />{" "}
-                    <span>Loading...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>{t("More")}</span>
-                    <FaArrowDown />
-                  </>
-                )}
-              </button>
-            </div>
+            <MoreBtn loadmore={loadmore} loadMoreData={loadMoreData} />
           )}
       </Container>
     </div>

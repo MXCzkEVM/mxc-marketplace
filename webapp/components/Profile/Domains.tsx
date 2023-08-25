@@ -4,9 +4,9 @@ import Router, { useRouter } from "next/router"
 import { zeroAddress } from "@/const/Local"
 import { getMnsDomainWithAddress } from "@/graphql/mns"
 import mnsClient from "@/util/apolloClient"
-import { FaArrowDown, FaSpinner } from "react-icons/fa"
 import SkeletonList from "@/components/Skeleton/SkeletonList"
 import { useTranslation } from "react-i18next"
+import MoreBtn from "@/components/Button/more"
 
 const ProfileHexagons: NextPage = () => {
   const [page, setPage] = useState(1)
@@ -97,24 +97,7 @@ const ProfileHexagons: NextPage = () => {
           : isLoading && <SkeletonList />}
       </div>
       {hasNext && !isLoading && currentMns.length && (
-        <div className="loadmore flex_c mt-3">
-          <button
-            disabled={loadmore}
-            onClick={loadMoreData}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded flex items-center space-x-2"
-          >
-            {loadmore ? (
-              <>
-                <FaSpinner className="animate-spin" /> <span>Loading...</span>
-              </>
-            ) : (
-              <>
-                <span>{t("More")}</span>
-                <FaArrowDown />
-              </>
-            )}
-          </button>
-        </div>
+        <MoreBtn loadmore={loadmore} loadMoreData={loadMoreData} />
       )}
     </div>
   )

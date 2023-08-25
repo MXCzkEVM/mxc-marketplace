@@ -2,12 +2,10 @@ import React from "react"
 import { X, Check } from "react-feather"
 import { locales } from "@/util/i18nLocal"
 import { useTranslation } from "react-i18next"
-import localforage from "localforage"
 
 export default function LanguageModal(props: any) {
   const { i18n, t } = useTranslation()
   const switchLang = async (value: string) => {
-    await localforage.setItem("i18nextLng", value)
     ;(i18n as any).changeLanguage(value)
     props.setLangVisible(false)
   }

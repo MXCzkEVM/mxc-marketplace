@@ -10,3 +10,29 @@
 @import "./navbar";
 @import "./language";
 
+
+
+.loadmore {
+    button {
+        color: #fff;
+        background-color: #6300ff;
+        border-radius: 0.5rem;
+        padding: 8px 30px;
+    }
+}
+
+button.tw-connect-wallet {
+    background-color: #f43178;
+    color: #fff;
+    font-size: 15px;;
+    font-weight: 400;
+    border-radius: 0.5rem;
+}
+
+button.tw-web3button {
+    background-color: #6300ff;
+    color: #fff;
+    font-size: 15px;;
+    font-weight: 400;
+    border-radius: 0.5rem;
+}

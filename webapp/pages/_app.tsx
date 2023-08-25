@@ -4,14 +4,13 @@ import { Navbar } from "@/components/Navbar"
 import NextNProgress from "nextjs-progressbar"
 import { NETWORK } from "@/const/Network"
 import { storageInterface } from "@/util/thirdwebStorage"
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 
 import { StateContextProvider } from "../context"
 import Head from "next/head"
 import { ToastContainer } from "react-toastify"
 import LanguageModal from "@/components/Language"
-import { defaultLocale } from "@/util/i18nLocal"
-import localforage from "localforage"
+import { useTranslation } from "react-i18next"
 import "@/util/i18n"
 
 import "../styles/globals.css"
@@ -22,14 +21,7 @@ import "react-toastify/dist/ReactToastify.css"
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [showModal, setShowLangModal] = useState(false)
-  const [currentLanguage, setCurrentLang] = useState<any>("")
-  useEffect(() => {
-    const fetchData = async () => {
-      let lang = (await localforage.getItem("i18nextLng")) || defaultLocale
-      setCurrentLang(lang)
-    }
-    fetchData()
-  }, [showModal])
+  const { i18n } = useTranslation()
 
   return (
     <ThirdwebProvider
@@ -72,7 +64,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       </StateContextProvider>
       {showModal && (
         <LanguageModal
-          currentLanguage={currentLanguage}
+          currentLanguage={(i18n as any).language}
           setLangVisible={setShowLangModal}
         />
       )}
