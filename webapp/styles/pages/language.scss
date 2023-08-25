@@ -1,0 +1,46 @@
+.language_modal {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 100;
+    background: #000000e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .language_modal .inner {
+    width: 320px;
+    background-color: #16182e;
+    border-radius: 4px;
+  }
+  .language_modal .Modal-header-wrapper {
+    margin: 10px 15px;
+  }
+  .language_modal .Modal-title-bar {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+  }
+  .language_modal .Modal-title {
+    font-size: 15px;
+    line-height: 1;
+    text-align: left;
+  }
+  .language_modal .Modal-close-button {
+    text-align: right;
+  }
+  .language_modal .languagebox {
+    padding: 15px;
+    grid-gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .language_modal .menu-item {
+    border: 1px solid #ffffff29;
+    cursor: pointer;
+    justify-content: space-between;
+    padding: 5px 8px;
+  }
+  

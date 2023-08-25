@@ -21,13 +21,17 @@ import uploadIcon from "@/assets/imgs/upload.png"
 import plusIcon from "@/assets/svgs/plus.svg"
 import closeIcon from "@/assets/svgs/close.svg"
 import ApiClient from "@/util/request"
+import mnsClient from "@/util/apolloClient"
+import { getMnsDomainWithAddress } from "@/graphql/mns"
+import { useTranslation } from "react-i18next"
+
 const api = new ApiClient("/")
 
 import { CHAIN_ID } from "@/const/Network"
 import { CONTRACTS_MAP, ABI, instanceCollectionFactory } from "@/const/Address"
 import {
   CategoryArray,
-  // CategoryMap,
+  zeroAddress,
   version,
   IPFS_GATEWAY,
 } from "@/const/Local"
@@ -56,12 +60,14 @@ const CollectDetail = (props: any) => {
   const [inputValue, setInputValue] = useState("")
   const [royalty, setRoyalty] = useState<any>("")
   const [royaltyRecipient, setRoyaltyRecipient] = useState("")
+  const [domains, setDomins] = useState<any>([])
 
   const [editLoading, setEditLoading] = useState(false)
 
   const address = useAddress()
   // "Techcode.MXC", "HelloWorld.MXC"
-  const domains: any = []
+  // const domains: any = []
+  const nftUri = process.env.NEXT_PUBLIC_NFTURL
 
   const { contract } = useContract(
     CONTRACTS_MAP.COLLECTION_FACTORY,
@@ -71,6 +77,8 @@ const CollectDetail = (props: any) => {
     contract,
     "createCollection"
   )
+
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (isEdit && Object.keys(collectionDta).length) {
@@ -84,6 +92,7 @@ const CollectDetail = (props: any) => {
       setRoyaltyRecipient(collectionDta.royaltyRecipient)
       setRoyalty(collectionDta.royaltiesCutPerMillion)
       setTags(collectionDta.tags)
+      setDomainValue(collectionDta.url)
     }
   }, [collectionDta])
 
@@ -94,10 +103,24 @@ const CollectDetail = (props: any) => {
   }, [])
 
   useEffect(() => {
-    if (address && !royaltyRecipient) {
-      setRoyaltyRecipient(address)
+    const fetchDomains = async () => {
+      const result = await mnsClient.query({
+        query: getMnsDomainWithAddress(1000, 1, address),
+      })
+      let domains = result?.data?.domains || []
+      domains = domains.map((item: any) => {
+        return {
+          id: item.id,
+          name: item.name,
+          owner: item.wrappedDomain.owner.id,
+        }
+      })
+      setDomins(domains)
     }
-  }, [])
+    if (address !== zeroAddress) {
+      fetchDomains()
+    }
+  }, [address])
 
   const onChangeDomain = (e: any) => {
     setDomainValue(e.target.value as string)
@@ -149,7 +172,7 @@ const CollectDetail = (props: any) => {
 
   const validateName = () => {
     if (name.length === 0) {
-      setNameError("This field is required")
+      setNameError(t("This field is required"))
     } else {
       setNameError(null)
     }
@@ -157,7 +180,7 @@ const CollectDetail = (props: any) => {
 
   const validateDescription = () => {
     if (description.length === 0) {
-      setDescriptionError("This field is required")
+      setDescriptionError(t("This field is required"))
     } else {
       setDescriptionError(null)
     }
@@ -192,19 +215,19 @@ const CollectDetail = (props: any) => {
   async function editCollection() {
     setEditLoading(true)
     if (!name) {
-      toast.warn("Please type your collection name.")
+      toast.warn(t("Please type your collection name"))
       return
     }
     if (!description) {
-      toast.warn("Please type your collection description.")
+      toast.warn(t("Please type your collection description"))
       return
     }
     if (!royaltyRecipient) {
-      toast.warn("Please type your collection royalty recipient.")
+      toast.warn(t("Please type your collection royalty recipient"))
       return
     }
     if (!ethers.utils.isAddress(royaltyRecipient)) {
-      toast.warn("Please type a correct address.")
+      toast.warn(t("Please type a correct address"))
       return
     }
     let cover_ipfs: any = ""
@@ -233,11 +256,11 @@ const CollectDetail = (props: any) => {
     }
 
     if (!cover_ipfs) {
-      toast.warn("Please upload a cover image.")
+      toast.warn(t("Please upload a cover image"))
       return
     }
     if (!profile_ipfs) {
-      toast.warn("Please upload a profile image.")
+      toast.warn(t("Please upload a profile image"))
       return
     }
 
@@ -267,8 +290,8 @@ const CollectDetail = (props: any) => {
     })
 
     if (res.status) {
-      toast.success("NFT Collection modify successfully!")
-      Router.push(`/profile`)
+      toast.success(t("NFT Collection modify successfully"))
+      Router.push(`/profile/${address}`)
     }
 
     setEditLoading(false)
@@ -276,20 +299,30 @@ const CollectDetail = (props: any) => {
 
   async function saveCollection() {
     if (!name) {
-      toast.warn("Please type your collection name.")
+      toast.warn(t("Please type your collection name"))
       return
     }
     if (!description) {
-      toast.warn("Please type your collection description.")
+      toast.warn(t("Please type your collection description"))
       return
     }
     if (!royaltyRecipient) {
-      toast.warn("Please type your collection royalty recipient.")
+      toast.warn(t("Please type your collection royalty recipient"))
       return
     }
     if (!ethers.utils.isAddress(royaltyRecipient)) {
-      toast.warn("Please type a correct address.")
+      toast.warn(t("Please type a correct address"))
       return
+    }
+
+    // if want to bind domain, need to signature
+    let signedMessage: string = ""
+    if (domainValue) {
+      const web3 = require("web3")
+      signedMessage = await window.ethereum.request({
+        method: "personal_sign",
+        params: [web3.utils.utf8ToHex(domainValue), address],
+      })
     }
 
     let cover_ipfs: any = ""
@@ -314,11 +347,11 @@ const CollectDetail = (props: any) => {
     }
 
     if (!cover_ipfs) {
-      toast.warn("Please upload a cover image.")
+      toast.warn(t("Please upload a cover image"))
       return
     }
     if (!profile_ipfs) {
-      toast.warn("Please upload a profile image.")
+      toast.warn(t("Please upload a profile image"))
       return
     }
 
@@ -352,15 +385,16 @@ const CollectDetail = (props: any) => {
             formData.collection = collectionAddress
 
             let res = await axios.post("/api/create-collection", {
-              data: formData,
+              formData,
+              signedMessage,
             })
             if (res.data.status !== 200) {
-              toast.error("API call failed!")
+              toast.error(t("API call failed"))
               return
             }
 
-            toast.success("NFT Collection create successfully!")
-            Router.push(`/profile`)
+            toast.success(t("NFT Collection create successfully"))
+            Router.push(`/profile/${address}`)
           }
         }
       )
@@ -377,20 +411,54 @@ const CollectDetail = (props: any) => {
     } catch (error) {
       // console.error(error)
       console.log(error)
-      toast.error(`NFT Collection create failed`)
+      toast.error(t(`NFT Collection create failed`))
     }
 
     return txResult
+  }
+
+  const saveCollectionMock = async () => {
+    let signedMessage: string = ""
+    if (domainValue) {
+      const web3 = require("web3")
+      signedMessage = await window.ethereum.request({
+        method: "personal_sign",
+        params: [web3.utils.utf8ToHex(domainValue), address],
+      })
+    }
+    let formData: any = {
+      cover: "",
+      profile: "",
+      name,
+      description,
+      royaltyRecipient,
+      royaltiesCutPerMillion: royalty * 100,
+      url: domainValue || "",
+      category: categoryValue,
+      tags: JSON.stringify(tags),
+      site,
+      social,
+      chainId: CHAIN_ID,
+      creator: address,
+    }
+    let res = await axios.post("/api/create-collection", {
+      formData,
+      signedMessage,
+    })
+    if (res.data.status !== 200) {
+      toast.error(t("API call failed"))
+      return
+    }
   }
 
   return (
     <Container maxWidth="lg">
       <div className="create_page">
         <div className="inner">
-          <div className="title">Collection Detail</div>
+          <div className="title">{t("Collection Detail")}</div>
 
           <div className="inputGroup">
-            <div className="inputTitle">Name *</div>
+            <div className="inputTitle">{t("Colllection Name")} *</div>
             <div className="inputWrapper">
               <input
                 className={`input ${nameError && "hasError"}`}
@@ -410,9 +478,9 @@ const CollectDetail = (props: any) => {
           </div>
 
           <div className="inputGroup">
-            <div className="inputTitle">Cover Image *</div>
+            <div className="inputTitle">{t("Cover Image")} *</div>
             <div className="inputSubTitle">
-              This image will be used for navigation. 300x300 recommended.
+              {t("This image will be used for navigation")}
             </div>
             <div className="inputWrapper">
               <div className="uploadBox">
@@ -454,8 +522,7 @@ const CollectDetail = (props: any) => {
           <div className="inputGroup">
             <div className="inputTitle">Profile Image *</div>
             <div className="inputSubTitle">
-              This image will also be used for collection detail. 1200x300
-              recommended.
+              {t("This image will also be used for collection detail")}
             </div>
             <div className="inputWrapper">
               <div className="uploadBox">
@@ -500,7 +567,7 @@ const CollectDetail = (props: any) => {
               <textarea
                 className={`input longInput ${descriptionError && "hasError"}`}
                 maxLength={1000}
-                placeholder="Provide your description for your collection"
+                placeholder={t("Provide your description for your collection")}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 onBlur={validateDescription}
@@ -517,10 +584,9 @@ const CollectDetail = (props: any) => {
           <div className="inputGroup">
             <div className="inputTitle">URL</div>
             <div className="inputSubTitle">
-              <p>Customize your URL on MXC loT NFT Marketplace.</p>
-              <p>You must have MXC Domains to assign to the URL.</p>
-              {/* <p>https://wannsee-nft.mxc.com/collections/domain.mxc</p> */}
-              <p>https://nft.mxc.com/collections/domain.mxc</p>
+              <p>{t("Customize your URL on MXC loT NFT Marketplace")}</p>
+              <p>{t("You must have MXC Domains to assign to the URL")}</p>
+              <p>{`${nftUri}/collections/domain.mxc`}</p>
             </div>
             <div className="inputWrapper">
               <select
@@ -528,10 +594,10 @@ const CollectDetail = (props: any) => {
                 onChange={onChangeDomain}
                 className={`block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500`}
               >
-                <option value="">Select domains</option>
+                <option value="">{t("Select domains")}</option>
                 {domains.map((option: any) => (
-                  <option key={option} value={option}>
-                    {option}
+                  <option key={option.id} value={option.name}>
+                    {option.name}
                   </option>
                 ))}
               </select>
@@ -539,10 +605,11 @@ const CollectDetail = (props: any) => {
           </div>
 
           <div className="inputGroup">
-            <div className="inputTitle">Category and tags</div>
+            <div className="inputTitle">{t("Category and tags")}</div>
             <div className="inputSubTitle">
-              Make your items more discoverable on Marketplace by adding tags
-              and a category.
+              {t(
+                "Make your items more discoverable on Marketplace by adding tags and a category"
+              )}
             </div>
             <div className="inputWrapper">
               <select
@@ -550,7 +617,7 @@ const CollectDetail = (props: any) => {
                 onChange={onChangeCategory}
                 className={`block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500`}
               >
-                <option value="">Select a category</option>
+                <option value="">{t("Select a category")}</option>
                 {CategoryArray.map((option) => (
                   <option key={option.label} value={option.value}>
                     {option.label}
@@ -591,11 +658,9 @@ const CollectDetail = (props: any) => {
           </div>
 
           <div className="inputGroup">
-            <div className="inputTitle">Creator Earnings(%) *</div>
+            <div className="inputTitle">{t("Creator Earnings")} *</div>
             <div className="inputSubTitle">
-              Collection owners can colelct creator earnings when a user
-              re-sells an item they created. Contract the collection onwer to
-              change the collection earnings percentage or the payout address
+              {t("Collection owners can colelct creator earnings")}
             </div>
             <div className="inputWrapper flex_c">
               <input
@@ -611,7 +676,7 @@ const CollectDetail = (props: any) => {
               <PriceInput
                 disabled={isEdit}
                 className="priceInput w-2/12"
-                placeholder="Collection Royalty"
+                placeholder={t("Collection Royalty")}
                 decimals={2}
                 value={"" + royalty}
                 onChange={(val: any) =>
@@ -625,7 +690,7 @@ const CollectDetail = (props: any) => {
           </div>
 
           <div className="inputGroup">
-            <div className="inputTitle">Your site</div>
+            <div className="inputTitle">{t("Your site")}</div>
             <div className="inputWrapper">
               <input
                 className={`input`}
@@ -638,7 +703,7 @@ const CollectDetail = (props: any) => {
           </div>
 
           <div className="inputGroup">
-            <div className="inputTitle">Socials</div>
+            <div className="inputTitle">{t("Socials")}</div>
             <div className="inputWrapper">
               <input
                 className={`input`}
@@ -668,7 +733,7 @@ const CollectDetail = (props: any) => {
                   editLoading ? "opacity-50 cursor-not-allowed" : ""
                 }`}
               >
-                {editLoading ? "Wait..." : "Edit Collection"}
+                {editLoading ? t("Wait") : t("Edit Collection")}
               </button>
             )}
           </div>

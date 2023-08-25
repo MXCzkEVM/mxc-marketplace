@@ -1,19 +1,21 @@
 import { ConnectWallet, useAddress } from "@thirdweb-dev/react"
 import Image from "next/image"
 import Link from "next/link"
-// import styles from "./Navbar.module.css"
 
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu"
 import "@szhsin/react-menu/dist/index.css"
 import "@szhsin/react-menu/dist/transitions/slide.css"
 import { AiOutlineMenu } from "react-icons/ai"
+import { HiLanguage } from "react-icons/hi2"
+import { useTranslation } from "react-i18next"
 
 /**
  * Navigation bar that shows up on all pages.
  * Rendered in _app.tsx file above the page content.
  */
-export function Navbar() {
+export function Navbar(props: any) {
   const address = useAddress()
+  const { t } = useTranslation()
 
   return (
     <div className="navContainer">
@@ -31,13 +33,13 @@ export function Navbar() {
 
             <div className="navMiddle">
               <Link href="/collections" className="link">
-                Collections
+                {t("Collections")}
               </Link>
               <Link href="/hexagons" className="link">
-                Hexagon
+                {t("Hexagon")}
               </Link>
               <Link href="/domains" className="link">
-                Domains
+                {t("Domains")}
               </Link>
             </div>
           </div>
@@ -51,9 +53,9 @@ export function Navbar() {
               </MenuButton>
             }
           >
-            <MenuItem href="/collections">Collections</MenuItem>
-            {/* <MenuItem href="/hexagons">Hexagon</MenuItem>
-            <MenuItem href="/domains">Domains</MenuItem> */}
+            <MenuItem href="/collections">{t("Collections")}</MenuItem>
+            <MenuItem href="/hexagons">{t("Hexagon")}</MenuItem>
+            <MenuItem href="/domains">{t("Domains")}</MenuItem>
           </Menu>
         </div>
 
@@ -62,7 +64,7 @@ export function Navbar() {
             <ConnectWallet theme="dark" btnTitle="Connect Wallet" />
           </div>
           {address && (
-            <Link className={"link"} href={`/profile`}>
+            <Link className={"link"} href={`/profile/${address}`}>
               <Image
                 className={"profileImage"}
                 src="/user-icon.png"
@@ -72,6 +74,9 @@ export function Navbar() {
               />
             </Link>
           )}
+          <div className="more csp" onClick={() => props.setLangVisible(true)}>
+            <HiLanguage size="22px" />
+          </div>
         </div>
       </nav>
     </div>

@@ -40,6 +40,12 @@
   cursor: pointer;
   transition: color 0.1s ease-in-out;
 }
+/* Less than 600 */
+@media (max-width: 400px) {
+  .tab {
+    padding: 10px;
+  }
+}
 
 .tab:hover {
   color: rgba(255, 255, 255, 0.8);
@@ -56,10 +62,4 @@
   height: 0px;
   opacity: 0;
   transition: all 0.1s linear;
-}
-
-.activeTabContent {
-  /* display: flex;
-  flex-direction: row; */
-  opacity: 1;
 }

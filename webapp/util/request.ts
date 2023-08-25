@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import localforage from 'localforage'
 
 interface ApiError {
     code: number;
@@ -15,9 +16,12 @@ class ApiClient {
         });
 
         this.axiosInstance.interceptors.request.use(
-            (config: any) => {
+            async (config: any) => {
                 // Modify the request config before sending
                 // config.headers['Authorization'] = `Bearer ${token}`;
+
+                let locale = await localforage.getItem('i18nextLng') || 'en'
+                config.headers['Accept-Language'] = locale;
                 return config;
             },
             (error: AxiosError) => {

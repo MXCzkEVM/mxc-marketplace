@@ -8,8 +8,10 @@ import defaultPng from "@/assets/placeholder.png"
 import { CHAIN_ID } from "@/const/Network"
 import { useAddress } from "@thirdweb-dev/react"
 import { toast } from "react-toastify"
+import { zeroAddress } from "@/const/Local"
 import { confirmAlert } from "react-confirm-alert" // Import
 import "react-confirm-alert/src/react-confirm-alert.css" // Import css
+import { useTranslation } from "react-i18next"
 
 import ApiClient from "@/util/request"
 const api = new ApiClient("/")
@@ -19,18 +21,17 @@ export default function NFTCard(props: any) {
 
   const [isHovered, setIsHovered] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
-  const router = useRouter()
-  const address = useAddress()
 
-  const toPath = (path: string) => {
-    Router.push(path)
-  }
+  const address = props.user || zeroAddress
+  const my_address = useAddress()
+  const isOwner = address !== zeroAddress && my_address == address
+  const { t } = useTranslation()
 
   const submitDel = () => {
     const web3 = require("web3")
     confirmAlert({
-      title: "Confirm to delete this collection",
-      message: "Are you sure to do this.",
+      title: t("Confirm to delete this collection"),
+      message: t("Are you sure to do this"),
       buttons: [
         {
           label: "Confilm",
@@ -47,16 +48,14 @@ export default function NFTCard(props: any) {
             })
 
             if (res.status) {
-              toast.success("NFT Collection delete successfully!"),
-                setUpdate(!update)
+              toast.success(t("NFT Collection delete successfully"))
+              setUpdate(!update)
             }
           },
         },
         {
           label: "Cancel",
-          onClick: () => {
-            // console.log("noe")
-          },
+          onClick: () => {},
         },
       ],
     })
@@ -71,7 +70,7 @@ export default function NFTCard(props: any) {
         setShowMenu(false)
       }}
     >
-      {isHovered && (
+      {isHovered && isOwner && (
         <div className="absolute top-0 right-0 mt-2 mr-2">
           <RiMore2Fill
             onClick={(e) => {
@@ -87,7 +86,9 @@ export default function NFTCard(props: any) {
                 <div
                   onClick={(e) => {
                     e.stopPropagation()
-                    toPath(`/collection/edit?collection_id=${nft.collection}`)
+                    Router.push(
+                      `/collection/edit?collection_id=${nft.collection}`
+                    )
                   }}
                   className="block px-4 py-2 text-gray-800"
                 >
@@ -114,7 +115,7 @@ export default function NFTCard(props: any) {
       <div
         className="content csp"
         onClick={() => {
-          toPath(`/collection/${nft.collection}`)
+          Router.push(`/collection/${nft.collection}`)
         }}
       >
         <div className="cover mr-2">

@@ -15,22 +15,47 @@ const api = new ApiClient("/")
 export default function CollectPage() {
   const [collectionDta, setCollectionDta] = useState(null)
   const [nfts, setNFTS] = useState<any>([])
+  const [collectionAddress, setCollectionAddress] = useState(zeroAddress)
 
   const router = useRouter()
   const collectionId: any = router.query.collection || zeroAddress
 
-  const { contract: nftContract } = useContract(collectionId, ABI.collection)
+  const { contract: nftContract } = useContract(
+    collectionAddress,
+    ABI.collection
+  )
   const { data: nftLis } = useNFTs(nftContract)
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!collectionId) {
+      if (collectionId == zeroAddress) {
         return
       }
 
+      if (collectionId.toLowerCase().includes("mxc")) {
+        let mapResult: any = await api.post("/api/get-collection-map", {
+          chainId: CHAIN_ID,
+          domain: collectionId,
+        })
+        if (mapResult.collection) {
+          setCollectionAddress(mapResult.collection)
+        }
+        return
+      }
+      setCollectionAddress(collectionId)
+    }
+    fetchData()
+  }, [collectionId])
+
+  //
+  useEffect(() => {
+    const fetchData = async () => {
+      if (collectionAddress == zeroAddress) {
+        return
+      }
       let collectionsItem: any = await api.post("/api/get-collection", {
         chainId: CHAIN_ID,
-        collection_id: collectionId,
+        collection_id: collectionAddress,
       })
       let collection = collectionsItem?.collection || {}
       let nwData = await getCollectInfo(collection)
@@ -39,7 +64,7 @@ export default function CollectPage() {
       setNFTS(nftList)
     }
     fetchData()
-  }, [collectionId, nftLis])
+  }, [collectionAddress, nftLis])
 
   return (
     <Container maxWidth="lg">
@@ -55,7 +80,7 @@ export default function CollectPage() {
                   <CollectionCard
                     key={index}
                     item={item}
-                    collection_id={collectionId}
+                    collection_id={collectionAddress}
                   />
                 )
               })}

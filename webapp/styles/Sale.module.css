@@ -32,5 +32,4 @@
 .activeTabContent {
   display: flex;
   flex-direction: column;
-  opacity: 1;
 }

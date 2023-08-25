@@ -27,6 +27,8 @@ import defaultPng from "@/assets/placeholder.png"
 import { getNFTDetail, getCollectInfo } from "@/util/getNFT"
 const [randomColor1, randomColor2] = [randomColor(), randomColor()]
 import ApiClient from "@/util/request"
+import { useTranslation } from "react-i18next"
+
 const api = new ApiClient("/")
 
 export default function TokenPage() {
@@ -36,6 +38,7 @@ export default function TokenPage() {
   const [inputPrice, setInputPrice] = useState<any>("")
   const router = useRouter()
   const address = useAddress() || zeroAddress
+  const { t } = useTranslation()
 
   const { collection = zeroAddress, tokenId = "0" } = router.query as {
     tokenId: string
@@ -133,7 +136,7 @@ export default function TokenPage() {
 
   const approveForSale = async () => {
     if (nft.owner !== address) {
-      toast.warn("You are not the nft owner.")
+      toast.warn(t("You are not the nft owner"))
       return
     }
 
@@ -142,11 +145,11 @@ export default function TokenPage() {
       txResult = await setApprovalForAll({
         args: [CONTRACTS_MAP.MARKETPLACE, true],
       })
-      toast.success("Approve successfully. Now you can List for sale!")
+      toast.success(t("Approve successfully Now you can List for sale"))
     } catch (error) {
       // console.error(error)
       console.log(error)
-      toast.error(`Approve for sale failed`)
+      toast.error(t("Approve for sale failed"))
     }
 
     return txResult
@@ -154,15 +157,15 @@ export default function TokenPage() {
 
   const listForSale = async () => {
     if (!nftPrice.eq(0)) {
-      toast.warn("This NFT not for sale.")
+      toast.warn(t("This NFT not for sale"))
       return
     }
     if (nft.owner !== address) {
-      toast.warn("You are not the nft owner.")
+      toast.warn(t("You are not the nft owner"))
       return
     }
     if (!inputPrice || parseFloat(inputPrice) == 0) {
-      toast.warn("Please input your nft price.")
+      toast.warn(t("Please input your nft price"))
       return
     }
 
@@ -181,11 +184,11 @@ export default function TokenPage() {
           expiresAt,
         ],
       })
-      toast.success("List for sale successfully!")
+      toast.success(t("List for sale successfully"))
     } catch (error) {
       // console.error(error)
       console.log(error)
-      toast.error(`List for sale failed`)
+      toast.error(t("List for sale failed"))
     }
 
     return txResult
@@ -193,7 +196,7 @@ export default function TokenPage() {
 
   const cancelMakeOrder = async () => {
     if (nft.owner !== address) {
-      toast.warn("You are not the nft owner.")
+      toast.warn(t("You are not the nft owner"))
       return
     }
     let txResult
@@ -202,11 +205,11 @@ export default function TokenPage() {
       txResult = await cancelOrder({
         args: [collection, tokenId],
       })
-      toast.success("Cancel list for sale successfully!")
+      toast.success(t("Cancel list for sale successfully"))
     } catch (error) {
       // console.error(error)
       console.log(error)
-      toast.error(`Cancel list for sale failed`)
+      toast.error(t("Cancel list for sale failed"))
     }
 
     return txResult
@@ -214,7 +217,7 @@ export default function TokenPage() {
 
   const buyMakeOrder = async () => {
     if (nft.owner == address) {
-      toast.warn("You cannot buy your self nft.")
+      toast.warn(t("You cannot buy your self nft"))
       return
     }
     let txResult
@@ -228,10 +231,10 @@ export default function TokenPage() {
         },
       })
       setInputPrice("")
-      toast.success("Purchase success!")
+      toast.success(t("Purchase success"))
     } catch (error) {
       console.log(error)
-      toast.error(`Purchase failed`)
+      toast.error(t("Purchase failed"))
     }
 
     return txResult
@@ -247,10 +250,10 @@ export default function TokenPage() {
               <div className="token_image">
                 <Image src={nft.image} defaultImage={defaultPng.src} alt="" />
               </div>
-              <h3 className="descriptionTitle">Description</h3>
+              <h3 className="descriptionTitle">{t("Description")}</h3>
               <p className="description">{nft.metadata.description}</p>
 
-              <h3 className="descriptionTitle">Traits</h3>
+              <h3 className="descriptionTitle">{t("Traits")}</h3>
               <div className="traitsContainer">
                 {nft?.metadata?.attributes?.map((item: any, index: number) => (
                   <div
@@ -300,7 +303,7 @@ export default function TokenPage() {
                     }}
                   />
                   <div className="nftOwnerInfo">
-                    <p className="label">Current Owner</p>
+                    <p className="label">{t("Current Owner")}</p>
                     <p className="nftOwnerAddress">
                       {nft.owner.slice(0, 8)}...
                       {nft.owner.slice(-4)}
@@ -311,7 +314,7 @@ export default function TokenPage() {
 
               <div className="pricingContainer">
                 <div className="pricingInfo">
-                  <p>Price</p>
+                  <p>{t("Price")}</p>
                   <div className="pricingValue">
                     {mkpLoading ? (
                       <Skeleton width="120" height="24" />
@@ -323,7 +326,7 @@ export default function TokenPage() {
                             {"  MXC"}
                           </>
                         ) : (
-                          "Not for sale"
+                          t("Not for sale")
                         )}
                       </>
                     )}
@@ -335,7 +338,7 @@ export default function TokenPage() {
               nft.owner == address &&
               nftPrice.eq(0) ? (
                 <div className="sell_info">
-                  <h4 className="formSectionTitle">Price </h4>
+                  <h4 className="formSectionTitle">{t("Price")} </h4>
 
                   <PriceInput
                     className="input"
@@ -356,7 +359,7 @@ export default function TokenPage() {
                     action={async () => await listForSale()}
                     className="list_btn"
                   >
-                    List for sale
+                    {t("List for sale")}
                   </Web3Button>
                 </div>
               ) : null}
@@ -367,14 +370,14 @@ export default function TokenPage() {
               !isApprovedForAll &&
               nft.owner == address ? (
                 <>
-                  <h4 className="formSectionTitle mb-2">Approve</h4>
+                  <h4 className="formSectionTitle mb-2">{t("Approve")} </h4>
                   <Web3Button
                     contractAddress={collection}
                     contractAbi={ABI.collection}
                     action={async () => await approveForSale()}
                     className="list_btn"
                   >
-                    Approve item for marketplace
+                    {t("Approve item for marketplace")}
                   </Web3Button>
                 </>
               ) : null}
@@ -383,14 +386,14 @@ export default function TokenPage() {
               nft.owner == address &&
               !nftPrice.eq(0) ? (
                 <div className="sell_info">
-                  <h4 className="formSectionTitle">Cancel Order </h4>
+                  <h4 className="formSectionTitle">{t("Cancel Order")} </h4>
                   <Web3Button
                     contractAddress={CONTRACTS_MAP.MARKETPLACE}
                     contractAbi={ABI.marketplace}
                     action={async () => await cancelMakeOrder()}
                     className="list_btn"
                   >
-                    Cancel list for sale
+                    {t("Cancel list for sale")}
                   </Web3Button>
                 </div>
               ) : null}
@@ -399,7 +402,7 @@ export default function TokenPage() {
               nft.owner !== address &&
               !nftPrice.eq(0) ? (
                 <div className="sell_info">
-                  <h4 className="formSectionTitle">Excute Order </h4>
+                  <h4 className="formSectionTitle">{t("Excute Order")} </h4>
 
                   <Web3Button
                     contractAddress={CONTRACTS_MAP.MARKETPLACE}
@@ -407,7 +410,7 @@ export default function TokenPage() {
                     action={async () => await buyMakeOrder()}
                     className="list_btn"
                   >
-                    Buy at asking price
+                    {t("Buy at asking price")}
                   </Web3Button>
                 </div>
               ) : null}

@@ -19,7 +19,7 @@
     .token_image {
         border-radius: 8px;
         background-color: #1a1d1e;
-        img,svg {
+        img,svg{
             width: 100%;
             height: auto;
             object-fit: cover;
@@ -28,6 +28,17 @@
             min-height: 445px;
             overflow: hidden;
             visibility: visible;
+        }
+        .nft_image {
+            width: 80%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 8px;
+            position: relative;
+            min-height: 445px;
+            overflow: hidden;
+            visibility: visible;
+            background-size: 100% 100%;
         }
     }
 

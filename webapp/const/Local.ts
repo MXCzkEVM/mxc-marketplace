@@ -2,7 +2,7 @@
 
 export const version = "v100002"
 export const zeroAddress = '0x0000000000000000000000000000000000000000'
-export const IPFS_GATEWAY = 'https://aqua-adverse-coyote-886.mypinata.cloud/ipfs/'
+export const IPFS_GATEWAY = 'https://ipfs.io/ipfs/'
 export const CategoryArray = [
     {
         label: "Winery",
@@ -31,6 +31,11 @@ export const CategoryArray = [
 ]
 export const CategoryMap = CategoryArray.reduce((map: any, item) => {
     map[item.value] = item.label;
+    return map;
+}, {});
+
+export const CategoryLabelMap = CategoryArray.reduce((map: any, item) => {
+    map[item.label] = item.value;
     return map;
 }, {});
 

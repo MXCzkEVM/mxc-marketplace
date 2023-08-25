@@ -18,59 +18,89 @@ async function main() {
     const chainId = network.config.chainId
 
     // await upgradeMarketPlace()
-    await mkpV3Test()
+    await mkpV4Test()
 }
 
-async function mkpV3Test() {
+async function mkpV4Test() {
     let marketplace = await contractAttach(
-        "MXCMarketplaceUpgradeV3",
+        "MXCMarketplaceUpgradeV4",
         contracts.mkp
     )
 
+    const gasPrice = await ethers.provider.getGasPrice()
     // set nameToken
-    // await marketplace.setNameToken(contracts.nameToken)
+    // await marketplace.setNameToken(contracts.nameToken, {
+    //     gasPrice: gasPrice.mul(5),
+    //     nonce: 151,
+    // })
+    // set mnsToken
+    // await marketplace.setDoaminToken(contracts.nameWrapper, {
+    //     gasPrice: gasPrice.mul(5),
+    //     nonce: 152,
+    // })
 
-    // let nameToken = await marketplace.nameToken()
-    // console.log(nameToken)
+    let nameToken = await marketplace.nameToken()
+    console.log(nameToken)
+    let domainToken = await marketplace.domainToken()
+    console.log(domainToken)
 
-    // createOrder
-    // await marketplace.createOrder(
+    // createOrder - nameToken
+    // await marketplace.callStatic.createOrder(
     //     contracts.nameToken,
     //     ethers.BigNumber.from("0x0870134a4dffffff"),
     //     parseEther("100"),
     //     getExpire()
     // )
 
+    // createOrder - mns
+    // await marketplace.callStatic.createOrder(
+    //     contracts.nameWrapper,
+    //     ethers.BigNumber.from(
+    //         "0x0ae65b25be8177a9c2c63fed034d54cffe6096cdc7389943def9743f30c25716"
+    //     ),
+    //     parseEther("100"),
+    //     getExpire()
+    // )
+
     // executeOrder
-    let res = await marketplace.callStatic.executeNameOrder(
-        ethers.BigNumber.from("0x0870134a4dffffff"),
-        {
-            value: parseEther("100"),
-        }
-    )
-    console.log(res)
+    // let res = await marketplace.callStatic.executeNameOrder(
+    //     ethers.BigNumber.from("0x0870134a4dffffff"),
+    //     {
+    //         value: parseEther("100"),
+    //     }
+    // )
+    // console.log(res)
 }
 
 async function upgradeMarketPlace() {
     const mkpContractV1 = await ethers.getContractFactory(
         "MXCMarketplaceUpgrade"
     )
+    const mkpContractV2 = await ethers.getContractFactory(
+        "MXCMarketplaceUpgradeV2"
+    )
     const mkpContractV3 = await ethers.getContractFactory(
         "MXCMarketplaceUpgradeV3"
     )
+    const mkpContractV4 = await ethers.getContractFactory(
+        "MXCMarketplaceUpgradeV4"
+    )
 
-    // let instance = mkpContractV1.attach(contracts.mkp)
-    // let owner = await instance.admin()
-    // console.log(owner)
+    // console.log(contracts.mkp)
+    let instance = mkpContractV3.attach(contracts.mkp)
+    let owner = await instance.admin()
+    console.log(owner)
 
     // get marketplace logic
-    // const implement = await upgrades.erc1967.getImplementationAddress(
-    //     contracts.mkp
-    // )
-    // console.log(implement)
+    const implement = await upgrades.erc1967.getImplementationAddress(
+        contracts.mkp
+    )
+    console.log(implement)
 
     // upgrade
-    // await upgrades.upgradeProxy(instance, mkpContractV3)
+    // await upgrades.upgradeProxy(contracts.mkp, mkpContractV4)
+    // let res = await upgrades.prepareUpgrade(contracts.mkp, mkpContractV4)
+    // console.log(res)
 }
 
 main().catch((error) => {

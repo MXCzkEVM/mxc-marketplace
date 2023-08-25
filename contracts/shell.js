@@ -10,9 +10,9 @@ scripts
 hh run scripts/index.js --network localhost
 hh run scripts/upgrade.js --network wannsee
 hh run scripts/index.js --network wannsee
-hh run scripts/mkpUpgrade.js --network wannsee
+hh run scripts/mkpUpgrade.js --network wannsee_mainnet
 hh run scripts/nft_uri.js --network wannsee_mainnet
-
+hh console --network wannsee_mainnet
 
 */
 

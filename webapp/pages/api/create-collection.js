@@ -1,4 +1,11 @@
 import { Redis } from "@upstash/redis"
+import { ethers } from "ethers"
+import { instanceNameWrapper } from "../../const/Address"
+import i18n from "../../util/i18n"
+
+// @ts-ignore
+import namehash from "eth-ens-namehash"
+
 require("dotenv").config()
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL,
@@ -6,14 +13,60 @@ const redis = new Redis({
 })
 
 export default async function handler(req, res) {
-  let { data } = req.body
+  const locale = req.headers["accept-language"] || "en"
+  i18n.changeLanguage(locale)
 
-  const chainId = data.chainId
-  const collection = data.collection
-  data.timestamp = new Date().getTime()
+  let { formData, signedMessage } = req.body
 
-  const target = JSON.stringify(data)
+  const chainId = formData.chainId
 
+  if (!chainId || !formData.creator) {
+    return res.status(200).send({ code: 500, message: i18n.t("Wrong params") })
+  }
+
+  if (formData.url) {
+    if (!signedMessage) {
+      return res
+        .status(200)
+        .send({ code: 500, message: i18n.t("Sign message is need") })
+    }
+    const messageHash = ethers.utils.hashMessage(
+      ethers.utils.arrayify(ethers.utils.toUtf8Bytes(formData.url))
+    )
+    const recoveredAddress = ethers.utils.recoverAddress(
+      messageHash,
+      signedMessage
+    )
+    // check owner
+    if (formData.creator !== recoveredAddress) {
+      return res
+        .status(200)
+        .send({
+          code: 500,
+          message: i18n.t("You are not the collection owner"),
+        })
+    }
+
+    // check domain
+    const nameWrapper = await instanceNameWrapper()
+    let nameOwner = await nameWrapper.ownerOf(
+      ethers.BigNumber.from(namehash.hash(formData.url))
+    )
+    if (formData.creator !== nameOwner.toString()) {
+      return res
+        .status(200)
+        .send({ code: 500, message: i18n.t("You are not the domain owner") })
+    }
+
+    await redis.hset(`${chainId}_collections_map`, {
+      [formData.url]: collection,
+    })
+  }
+
+  const collection = formData.collection
+  formData.timestamp = new Date().getTime()
+
+  const target = JSON.stringify(formData)
   await redis.hset(`${chainId}_collections`, {
     [collection]: target,
   })

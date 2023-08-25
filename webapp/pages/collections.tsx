@@ -7,7 +7,7 @@ import Router from "next/router"
 import { useContract, useContractRead } from "@thirdweb-dev/react"
 import { CHAIN_ID } from "@/const/Network"
 import { getCollectList } from "@/util/getNFT"
-import Skeleton from "@/components/Skeleton/Skeleton"
+import SkeletonList from "@/components/Skeleton/SkeletonList"
 import ApiClient from "@/util/request"
 const api = new ApiClient("/")
 
@@ -15,8 +15,8 @@ export default function Overview() {
   const [collections, setCollections] = useState<any>([])
   const [isLoading, setLoading] = useState(false)
 
-  const namesArr = Array.from({ length: 5 }, (_, i) => i)
-  const hexagonArr = Array.from({ length: 5 }, (_, i) => i)
+  // const namesArr = Array.from({ length: 5 }, (_, i) => i)
+  // const hexagonArr = Array.from({ length: 5 }, (_, i) => i)
 
   const getColor = () => {
     const r = Math.floor(Math.random() * 256)
@@ -40,9 +40,7 @@ export default function Overview() {
     fetchData()
   }, [])
 
-  const toPath = (link: string) => {
-    Router.push(link)
-  }
+  const toPath = (link: string) => {}
 
   return (
     <div className="collections_page">
@@ -51,20 +49,18 @@ export default function Overview() {
           <h1>Featured NFTs</h1>
           <p>Discover the most outstanding NFTs in all topics of life.</p>
           <div className="nfts_feature">
-            {collections && !isLoading ? (
-              (collections as any).map((nft: any, index: number) => (
-                <CollectionCard nft={nft} key={index} />
-              ))
-            ) : (
-              <Skeleton width="17.5%" height="250px" />
-            )}
+            {collections && !isLoading
+              ? (collections as any).map((nft: any, index: number) => (
+                  <CollectionCard nft={nft} key={index} />
+                ))
+              : isLoading && <SkeletonList />}
           </div>
         </div>
 
         {/* <div className="hexgon mb-10">
           <div className="flex justify-between items-center">
             <h1 className="title">Hexagon</h1>
-            <div className="more csp pr-10" onClick={() => toPath("/hexagons")}>
+            <div className="more csp pr-10" onClick={() => Router.push(("/hexagons"))}>
               View More
             </div>
           </div>
@@ -86,7 +82,7 @@ export default function Overview() {
         {/* <div className="names">
           <div className="flex justify-between items-center">
             <h1 className="title">MXC domains</h1>
-            <div className="more csp pr-10" onClick={() => toPath("/domains")}>
+            <div className="more csp pr-10" onClick={() => Router.push(("/domains")}>
               View More
             </div>
           </div>

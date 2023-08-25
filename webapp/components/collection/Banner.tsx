@@ -4,6 +4,7 @@ import Link from "next/link"
 import Image from "@/components/Image"
 import defaultPng from "@/assets/placeholder.png"
 import defaultlongPng from "@/assets/placeholder_long.png"
+import { CategoryMap } from "@/const/Local"
 
 const BannerComponent = (props: any) => {
   let dta = props.collectionDta
@@ -78,7 +79,7 @@ const BannerComponent = (props: any) => {
           &nbsp;&nbsp;&middot;&nbsp;&nbsp;
           <div className="category">
             <span className="text"> Category</span>
-            <span>{dta.category}</span>
+            <span>{CategoryMap[dta.category]}</span>
           </div>
         </div>
         <div className="introduce">

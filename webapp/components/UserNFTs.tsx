@@ -1,13 +1,5 @@
-import React, { useState, useEffect } from "react"
-import { getCollectInfo } from "@/util/getNFT"
-
-import {
-  useOwnedNFTs,
-  useContract,
-  useAddress,
-  useNFTs,
-  useContractRead,
-} from "@thirdweb-dev/react"
+import React from "react"
+import { useOwnedNFTs, useContract } from "@thirdweb-dev/react"
 import { ABI } from "@/const/Address"
 import { zeroAddress } from "@/const/Local"
 

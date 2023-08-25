@@ -18,7 +18,7 @@ async function main() {
     // let uri = await nft.tokenURI(4)
     let res = await nft.callStatic.setTokenURI(
         4,
-        "QmaQ8AGQVGh55CH4Z1x1ptPLByRyVycvEtmWxuMikMMj7S"
+        "ipfs://QmaQ8AGQVGh55CH4Z1x1ptPLByRyVycvEtmWxuMikMMj7S"
     )
     console.log(res)
 

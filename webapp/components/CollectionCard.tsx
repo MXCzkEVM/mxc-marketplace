@@ -1,5 +1,4 @@
 import React from "react"
-import Link from "next/link"
 import Router from "next/router"
 import verify from "@/assets/verify.svg"
 import { useContract, useContractRead } from "@thirdweb-dev/react"

@@ -42,3 +42,8 @@ export const getHexagon = async () => {
     return hexagons;
 }
 
+export const getHexagonWithAddress = async (address: any) => {
+    let hexagons = await getHexagon()
+    hexagons = hexagons.filter((item: any) => item.owner == address)
+    return hexagons;
+}

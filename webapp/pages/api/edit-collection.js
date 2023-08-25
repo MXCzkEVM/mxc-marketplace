@@ -1,5 +1,9 @@
 import { Redis } from "@upstash/redis"
 import { ethers } from "ethers"
+import { instanceNameWrapper } from "../../const/Address"
+// @ts-ignore
+import namehash from "eth-ens-namehash"
+import i18n from "../../util/i18n"
 
 require("dotenv").config()
 const redis = new Redis({
@@ -12,7 +16,12 @@ export default async function handler(req, res) {
 
   // const newData = data.newData
   if (!chainId) {
-    return res.status(200).send({ code: 500, message: "Wrong chainId" })
+    return res.status(200).send({ code: 500, message: i18n.t("Wrong chainId") })
+  }
+  if (!signedMessage) {
+    return res
+      .status(200)
+      .send({ code: 500, message: i18n.t("Sign message is need") })
   }
 
   const messageHash = ethers.utils.hashMessage(
@@ -26,15 +35,35 @@ export default async function handler(req, res) {
 
   const target = await redis.hget(`${chainId}_collections`, collection)
   if (target == null) {
-    return res.status(200).send({ code: 500, message: "Wrong collection" })
+    return res
+      .status(200)
+      .send({ code: 500, message: i18n.t("Wrong collection") })
   }
   if (target.collection !== collection) {
-    return res.status(200).send({ code: 500, message: "Wrong collection id" })
+    return res
+      .status(200)
+      .send({ code: 500, message: i18n.t("Wrong collection id") })
   }
   if (target.creator !== recoveredAddress) {
     return res
       .status(200)
-      .send({ code: 500, message: "You are not the collection owner" })
+      .send({ code: 500, message: i18n.t("You are not the collection owner") })
+  }
+
+  if (formData.url) {
+    // check domain
+    const nameWrapper = await instanceNameWrapper()
+    let nameOwner = await nameWrapper.ownerOf(
+      ethers.BigNumber.from(namehash.hash(formData.url))
+    )
+    if (target.creator !== nameOwner.toString()) {
+      return res
+        .status(200)
+        .send({ code: 500, message: i18n.t("You are not the domain owner") })
+    }
+    await redis.hset(`${chainId}_collections_map`, {
+      [formData.url]: collection,
+    })
   }
 
   let newData = Object.assign({}, target, {
@@ -55,5 +84,5 @@ export default async function handler(req, res) {
 
   return res
     .status(200)
-    .send({ code: 200, data: { status: 1 }, message: "success" })
+    .send({ code: 200, data: { status: 1 }, message: i18n.t("success") })
 }

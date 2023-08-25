@@ -1,25 +1,28 @@
-import {
-  useAddress,
-  useContract,
-  useContractRead,
-  useOwnedNFTs,
-} from "@thirdweb-dev/react"
-import { useRouter } from "next/router"
+// import {
+//   useAddress,
+//   useContract,
+//   useContractRead,
+//   useOwnedNFTs,
+// } from "@thirdweb-dev/react"
+// import Router from "next/router"
+
+import Router, { useRouter } from "next/router"
 import React, { useState, useEffect } from "react"
 import Container from "@/components/Container/Container"
 import Skeleton from "@/components/Skeleton/Skeleton"
-import NFTCard from "@/components/NFTCard"
-import Router from "next/router"
+
 import styles from "@/styles/Profile.module.css"
 import { randomColor } from "@/util/randomColor"
-import { CHAIN_ID } from "@/const/Network"
 import { zeroAddress } from "@/const/Local"
-import UserNFTS from "@/components/UserNFTs"
-import { getCollectList } from "@/util/getNFT"
-import ApiClient from "@/util/request"
-const api = new ApiClient("/")
+import dynamic from "next/dynamic"
+import { useTranslation } from "react-i18next"
 
-// import CollectionCard from "@/components/collection/CollectionCard"
+const ProfileCollections = dynamic(
+  () => import("@/components/Profile/Collections")
+)
+const ProfileNFTs = dynamic(() => import("@/components/Profile/Nfts"))
+const ProfileHexagons = dynamic(() => import("@/components/Profile/Hexagons"))
+const ProfileDomains = dynamic(() => import("@/components/Profile/Domains"))
 
 const [randomColor1, randomColor2, randomColor3, randomColor4] = [
   randomColor(),
@@ -29,44 +32,12 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
 ]
 
 export default function ProfilePage() {
-  const router = useRouter()
   const [tab, setTab] = useState<
-    "nfts" | "mycollections" | "mynfts" | "auctions"
-  >("mycollections")
-  const [userCollections, setUserCollections] = useState<any>([])
-  const [collections, setCollections] = useState<any>([])
-  const [isLoading, setLoading] = useState(false)
-
+    "nfts" | "collections" | "hexagons" | "domains"
+  >("collections")
+  const router = useRouter()
   const address = router.query.address || zeroAddress
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true)
-      let myCollections: any = await api.post("/api/get-collections", {
-        chainId: CHAIN_ID,
-        creator: address,
-      })
-      let userCollections = myCollections?.collections || []
-      userCollections = await getCollectList(userCollections)
-      setUserCollections(userCollections)
-
-      setLoading(false)
-
-      let collectionsAll: any = await api.post("/api/get-collections", {
-        chainId: CHAIN_ID,
-      })
-      let collections = collectionsAll?.collections || []
-      collections = await getCollectList(collections)
-      setCollections(collections)
-    }
-    if (address !== zeroAddress) {
-      fetchData()
-    }
-  }, [address])
-
-  const toPath = (link: string) => {
-    Router.push(link)
-  }
+  const { t } = useTranslation()
 
   return (
     <div className="profile_page">
@@ -85,10 +56,10 @@ export default function ProfilePage() {
             }}
           />
           <h1 className={styles.profileName}>
-            {router.query.address ? (
-              router.query.address.toString().substring(0, 4) +
+            {address ? (
+              address.toString().substring(0, 4) +
               "..." +
-              router.query.address.toString().substring(38, 42)
+              address.toString().substring(38, 42)
             ) : (
               <Skeleton width="320" />
             )}
@@ -99,63 +70,41 @@ export default function ProfilePage() {
         <div className={styles.tabs}>
           <h3
             className={`${styles.tab} 
-            ${tab === "mycollections" ? styles.activeTab : ""}`}
-            onClick={() => setTab("mycollections")}
+            ${tab === "collections" ? styles.activeTab : ""}`}
+            onClick={() => setTab("collections")}
           >
-            Collections
+            {t("Collections")}
           </h3>
 
           <h3
             className={`${styles.tab} 
-            ${tab === "mynfts" ? styles.activeTab : ""}`}
-            onClick={() => setTab("mynfts")}
+            ${tab === "nfts" ? styles.activeTab : ""}`}
+            onClick={() => setTab("nfts")}
           >
-            NFTS
+            Nfts
+          </h3>
+
+          <h3
+            className={`${styles.tab} 
+            ${tab === "hexagons" ? styles.activeTab : ""}`}
+            onClick={() => setTab("hexagons")}
+          >
+            {t("Hexagons")}
+          </h3>
+
+          <h3
+            className={`${styles.tab} 
+            ${tab === "domains" ? styles.activeTab : ""}`}
+            onClick={() => setTab("domains")}
+          >
+            {t("Domains")}
           </h3>
         </div>
 
-        {/* mycollections */}
-        <div
-          className={`${
-            tab === "mycollections"
-              ? styles.activeTabContent
-              : styles.tabContent
-          }`}
-        >
-          <div>
-            <div className="feature mb-10">
-              <div className="nfts_collection">
-                {isLoading ? (
-                  <Skeleton width="17.8%" height="250px" />
-                ) : (
-                  (userCollections.length &&
-                    (userCollections as any).map((nft: any, index: number) => (
-                      <NFTCard nft={nft} key={index} />
-                    ))) ||
-                  ""
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* mynfts */}
-        <div
-          className={`${
-            tab === "mynfts" ? styles.activeTabContent : styles.tabContent
-          }`}
-        >
-          <div className="cardsection">
-            {collections &&
-              collections.map((collection: any, index: string) => (
-                <UserNFTS
-                  {...collection}
-                  key={index}
-                  user={router.query.address}
-                />
-              ))}
-          </div>
-        </div>
+        {tab == "collections" && <ProfileCollections />}
+        {tab == "nfts" && <ProfileNFTs />}
+        {tab == "hexagons" && <ProfileHexagons />}
+        {tab == "domains" && <ProfileDomains />}
       </Container>
     </div>
   )

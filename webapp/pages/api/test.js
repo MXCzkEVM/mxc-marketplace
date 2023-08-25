@@ -1,6 +1,9 @@
 import { Redis } from "@upstash/redis"
-require("dotenv").config()
 import { NETWORK } from "@/const/Network"
+import { CategoryLabelMap } from "@/const/Local"
+
+require("dotenv").config()
+
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL,
   token: process.env.UPSTASH_REDIS_REST_TOKEN,
@@ -38,9 +41,24 @@ export default async function handler(req, res) {
   //   "0x331b5BDDb75505AE2832e203A811CE981a4f1ad0"
   // )
 
-  // await redis.hset(`5167003_collections`, {
-  //   ["0x331b5BDDb75505AE2832e203A811CE981a4f1ad0"]: data,
-  // })
+  // const collections = await redis.hgetall(`5167003_collections`)
+  // for (let item in collections) {
+  //   let tgt = collections[item].category
+  //   if (tgt.length > 2) {
+  //     let currentItem = collections[item]
+  //     let collection = currentItem.collection
+  //     currentItem["category"] = CategoryLabelMap[tgt]
+  //     // console.log(currentItem)
+
+  //     await redis.hset(`5167003_collections`, {
+  //       [collection]: currentItem,
+  //     })
+  //   }
+  // }
+
+  await redis.hset(`5167003_collections_map`, {
+    ["chris.mxc"]: "0x588Fd9832f03545775966513597ebC6b2a1B3685",
+  })
   // console.log(target)
 
   return res.status(200).send({ status: 200, data: "hello" })

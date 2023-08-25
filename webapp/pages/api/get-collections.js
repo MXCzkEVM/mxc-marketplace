@@ -1,4 +1,6 @@
 import { Redis } from "@upstash/redis"
+import i18n from "../../util/i18n"
+
 require("dotenv").config()
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL,
@@ -33,5 +35,5 @@ export default async function handler(req, res) {
 
   return res
     .status(200)
-    .send({ code: 200, data: { collections: ops }, message: "success" })
+    .send({ code: 200, data: { collections: ops }, message: i18n.t("success") })
 }

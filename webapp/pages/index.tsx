@@ -3,18 +3,20 @@ import Link from "next/link"
 import Image from "next/image"
 import styles from "../styles/Home.module.css"
 import { SupportButton } from "../components/SupportButton"
+import { useTranslation } from "react-i18next"
 
 /**
  * Landing page with a simple gradient background and a hero asset.
  * Free to customize as you see fit.
  */
 const Home: NextPage = () => {
+  const { t } = useTranslation()
   return (
     <>
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.hero}>
-            <div className={styles.heroBackground}>
+            {/* <div className={styles.heroBackground}>
               <div className={styles.heroBackgroundInner}>
                 <Image
                   src="/hero-gradient.png"
@@ -25,7 +27,7 @@ const Home: NextPage = () => {
                   className={styles.gradient}
                 />
               </div>
-            </div>
+            </div> */}
             <div className={styles.heroAssetFrame}>
               <Image
                 src="/hero-asset.webp"
@@ -40,9 +42,9 @@ const Home: NextPage = () => {
               <div className={styles.heroBody}>
                 <h1 className={styles.heroTitle}>
                   {/* <span className={styles.heroTitleGradient}></span> */}
-                  Connect and Certify
+                  {t("Connect and Certify")}
                   <br />
-                  Real-world Collectables
+                  {t("Real-world Collectables")}
                 </h1>
                 <p className={styles.heroSubtitle}>
                   <Link
@@ -52,8 +54,7 @@ const Home: NextPage = () => {
                   >
                     MXC zkEVM
                   </Link>{" "}
-                  uses LPWAN and NFC technology to track authenticate, and
-                  submit location proofs for the real world collectables.
+                  {t("uses LPWAN and NFC technology to track")}
                 </p>
 
                 <div className={styles.heroCtaContainer}>

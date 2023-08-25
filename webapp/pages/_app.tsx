@@ -1,13 +1,18 @@
 import type { AppProps } from "next/app"
 import { ThirdwebProvider } from "@thirdweb-dev/react"
-import { Navbar } from "../components/Navbar/Navbar"
+import { Navbar } from "@/components/Navbar"
 import NextNProgress from "nextjs-progressbar"
 import { NETWORK } from "@/const/Network"
 import { storageInterface } from "@/util/thirdwebStorage"
+import React, { useState, useEffect } from "react"
 
 import { StateContextProvider } from "../context"
 import Head from "next/head"
 import { ToastContainer } from "react-toastify"
+import LanguageModal from "@/components/Language"
+import { defaultLocale } from "@/util/i18nLocal"
+import localforage from "localforage"
+import "@/util/i18n"
 
 import "../styles/globals.css"
 import "../styles/index.css"
@@ -16,11 +21,21 @@ import "../styles/collection/style.scss"
 import "react-toastify/dist/ReactToastify.css"
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [showModal, setShowLangModal] = useState(false)
+  const [currentLanguage, setCurrentLang] = useState<any>("")
+  useEffect(() => {
+    const fetchData = async () => {
+      let lang = (await localforage.getItem("i18nextLng")) || defaultLocale
+      setCurrentLang(lang)
+    }
+    fetchData()
+  }, [showModal])
+
   return (
     <ThirdwebProvider
       activeChain={NETWORK}
       supportedChains={[NETWORK]}
-      // storageInterface={storageInterface}
+      storageInterface={storageInterface}
     >
       <ToastContainer />
       <Head>
@@ -28,7 +43,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta
           name="description"
-          content="MXC zkEVM uses LPWAN and NFC technology to track authenticate, and submit location proofs for the real world collectables."
+          content="MXC zkEVM uses LPWAN and NFC technology to track, authenticate, and submit location proofs for the real world collectables."
         />
         <meta
           name="keywords"
@@ -50,11 +65,17 @@ function MyApp({ Component, pageProps }: AppProps) {
       />
 
       {/* Render the navigation menu above each component */}
-      <Navbar />
+      <Navbar setLangVisible={setShowLangModal} />
       {/* Render the actual component (page) */}
       <StateContextProvider>
         <Component {...pageProps} />
       </StateContextProvider>
+      {showModal && (
+        <LanguageModal
+          currentLanguage={currentLanguage}
+          setLangVisible={setShowLangModal}
+        />
+      )}
     </ThirdwebProvider>
   )
 }

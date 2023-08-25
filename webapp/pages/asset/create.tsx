@@ -19,6 +19,7 @@ import { storeImage, storeJson } from "@/util/uploadToPinata"
 import { getCollectList } from "@/util/getNFT"
 import { CHAIN_ID } from "@/const/Network"
 import { ABI } from "@/const/Address"
+import { useTranslation } from "react-i18next"
 
 import { version, zeroAddress } from "@/const/Local"
 import ApiClient from "@/util/request"
@@ -31,10 +32,13 @@ export default function AssetCrearePage() {
   const [nameError, setNameError] = useState<any>(null)
   const [nftImage, setImage] = useState(null)
   const [nftImageFile, setImageFile] = useState<any>(null)
-  const [external_link, setExternal] = useState("")
+  // const [external_link, setExternal] = useState("")
   const [description, setDescription] = useState("")
   const [collection_address, setCollection] = useState("")
   const [isRealWorldNFT, setSwitch] = useState(false)
+
+  const { t } = useTranslation()
+
   // traits
   const [traits, setTraits] = useState<any>([
     {
@@ -122,7 +126,7 @@ export default function AssetCrearePage() {
 
   const createItem = async () => {
     if (!name) {
-      toast.warn("Please type your collection name.")
+      toast.warn(t("Please type your collection name"))
       return
     }
 
@@ -140,7 +144,7 @@ export default function AssetCrearePage() {
     const formData = {
       image: image_ipfs,
       name,
-      external_link,
+      // external_link,
       description,
       attributes: traits,
       isRealWorldNFT,
@@ -156,7 +160,7 @@ export default function AssetCrearePage() {
 
     let jsonIpfs = await storeJson(json_data)
     if (!jsonIpfs) {
-      toast.error("Upload json to ipfs failed.")
+      toast.error(t("Upload json to ipfs failed"))
       return
     }
 
@@ -173,7 +177,7 @@ export default function AssetCrearePage() {
     } catch (error) {
       // console.error(error)
       console.log(error)
-      toast.error(`NFT item create failed`)
+      toast.error(t("NFT item create failed"))
     }
 
     return txResult
@@ -213,7 +217,7 @@ export default function AssetCrearePage() {
 
   const validateName = () => {
     if (name.length === 0) {
-      setNameError("This field is required")
+      setNameError(t("This field is required"))
     } else {
       setNameError(null)
     }
@@ -226,12 +230,12 @@ export default function AssetCrearePage() {
           <div className="title">Create New Item</div>
 
           <div className="inputGroup">
-            <div className="inputTitle">Name *</div>
+            <div className="inputTitle">{t("Item Name")} *</div>
             <div className="inputWrapper">
               <input
                 className={`input ${nameError && "hasError"}`}
                 maxLength={30}
-                placeholder="Item Name"
+                placeholder={t("Item Name")}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 onBlur={validateName}
@@ -246,9 +250,9 @@ export default function AssetCrearePage() {
           </div>
 
           <div className="inputGroup">
-            <div className="inputTitle">NFT Image</div>
+            <div className="inputTitle">{t("NFT Image")}</div>
             <div className="inputSubTitle">
-              This image will also be used for navigation. 300x300 recommended.
+              {t("This image will also be used for navigation")}
             </div>
             <div className="inputWrapper">
               <div className="uploadBox">
@@ -287,7 +291,7 @@ export default function AssetCrearePage() {
             </div>
           </div>
 
-          <div className="inputGroup">
+          {/* <div className="inputGroup">
             <div className="inputTitle">External link</div>
             <div className="inputSubTitle">
               MXC loT NFT marketplace will include a link to this URL on this
@@ -304,13 +308,12 @@ export default function AssetCrearePage() {
                 onChange={(e) => setExternal(e.target.value)}
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="inputGroup">
-            <div className="inputTitle">Description</div>
+            <div className="inputTitle">{t("Description")}</div>
             <div className="inputSubTitle">
-              The description will be inclueded on the item&apos;s detail page
-              unserneath its image.
+              {t("The description will be inclueded on the item")}
             </div>
             <div className="inputWrapper">
               <textarea
@@ -326,13 +329,13 @@ export default function AssetCrearePage() {
           <div className="inputGroup">
             <div className="inputTitle">Collection *</div>
             <div className="inputSubTitle">
-              This is the collection where your item will appear.
+              {t("This is the collection where your item will appear")}
             </div>
             <div className="inputWrapper">
               <Select
                 options={userCollections}
                 isClearable
-                isSearchable
+                // isSearchable
                 defaultInputValue={collection_address}
                 placeholder="Select your collection"
                 onChange={onChangeCollection}
@@ -353,7 +356,7 @@ export default function AssetCrearePage() {
           <div className="inputGroup">
             <div className="inputTitle">Traits</div>
             <div className="inputSubTitle">
-              Textual traits that show up as rectangles
+              {t("Textual traits that show up as rectangles")}
             </div>
             <div className="inputWrapper">
               <div className="p-4 bg-black text-white shadow-md rounded">
@@ -368,13 +371,13 @@ export default function AssetCrearePage() {
                         className="mr-2 text-yellow-500"
                         onClick={() => handleEditTrait(i)}
                       >
-                        Edit
+                        {t("Edit")}
                       </button>
                       <button
                         className="text-red-500"
                         onClick={() => handleDeleteTrait(i)}
                       >
-                        Delete
+                        {t("Delete")}
                       </button>
                     </div>
                   </div>
@@ -384,7 +387,7 @@ export default function AssetCrearePage() {
                   <div className="flex gap-2 mb-2">
                     <input
                       type="text"
-                      placeholder="Trait Key"
+                      placeholder={t("Trait Key")}
                       value={trait_type}
                       onChange={(e) => setTraitType(e.target.value)}
                       className="p-2 bg-gray-800 text-white border rounded w-1/2"
@@ -392,7 +395,7 @@ export default function AssetCrearePage() {
                     />
                     <input
                       type="text"
-                      placeholder="Trait Value"
+                      placeholder={t("Trait Value")}
                       value={value}
                       onChange={(e) => setValue(e.target.value)}
                       className="p-2 bg-gray-800 text-white border rounded w-1/2"
@@ -414,7 +417,7 @@ export default function AssetCrearePage() {
 
           <div className="inputGroup">
             <div className="inputTitle flex_sc">
-              <div className="t">Real-World Collectables</div>
+              <div className="t">{t("Real-World Collectables")}</div>
               <div className="flex items-center justify-start">
                 <label
                   htmlFor="toggle"
@@ -438,18 +441,14 @@ export default function AssetCrearePage() {
               </div>
             </div>
             <div className="inputSubTitle">
-              The proofs of location for IoT NFTs will be prominently displayed
-              on the dedicated product exhibition page for each device. For the
-              purpose of provisioning a tag, an MXC N3XUS is necessary. You can
-              find more details on the provisioning process by visiting this
-              link:
+              {t("The proofs of location for IoT NFTs")} :
               <Link
                 href={`https://www.youtube.com/watch?v=AcJp5PE4TDg`}
                 passHref
                 legacyBehavior
               >
                 <a target="_blank" rel="noopener noreferrer">
-                  MXC N3XUS Provisioning Guide.
+                  {t("MXC N3XUS Provisioning Guide")}
                 </a>
               </Link>
             </div>
@@ -463,7 +462,7 @@ export default function AssetCrearePage() {
                 action={async () => await createItem()}
                 className="px-4 py-2 bg-blue-600 text-white"
               >
-                Create item
+                {t("Create item")}
               </Web3Button>
             </div>
           )}

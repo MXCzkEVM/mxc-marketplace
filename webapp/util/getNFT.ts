@@ -13,8 +13,8 @@ export const getThirdWebNFTList = async (nftLis: any) => {
 
 export const getNFTDetail = async (collection: string, tokenId: string) => {
     try {
-        // const sdk = new ThirdwebSDK(NETWORK, {}, storageInterface)
-        const sdk = new ThirdwebSDK(NETWORK)
+        const sdk = new ThirdwebSDK(NETWORK, {}, storageInterface)
+        // const sdk = new ThirdwebSDK(NETWORK)
         const contract = await sdk.getContract(collection, ABI.collection)
 
         let nft: any = await contract.erc721.get(tokenId)

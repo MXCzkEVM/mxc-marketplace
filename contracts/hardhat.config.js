@@ -14,6 +14,8 @@ require("@openzeppelin/hardhat-upgrades")
 const PRIVATE_KEY_MXCADMIN1 = process.env.PRIVATE_KEY_MXCADMIN1
 const PRIVATE_KEY_DOUGHNUT = process.env.PRIVATE_KEY_DOUGHNUT
 
+const PRIVATE_KEY = process.env.PRIVATE_KEY
+
 module.exports = {
     defaultNetwork: "hardhat",
     namedAccounts: {
@@ -60,7 +62,7 @@ module.exports = {
             // url: "http://207.246.99.8:8545",
             url: "http://144.202.111.198:8545",
             chainId: 5167003,
-            accounts: [PRIVATE_KEY_DOUGHNUT, PRIVATE_KEY_MXCADMIN1],
+            accounts: [PRIVATE_KEY_MXCADMIN1, PRIVATE_KEY_DOUGHNUT],
             saveDeployments: true,
             allowUnlimitedContractSize: true,
             gasLimit: 3000000,
@@ -72,6 +74,9 @@ module.exports = {
             chainId: 18686,
             accounts: [PRIVATE_KEY_DOUGHNUT],
             saveDeployments: true,
+            allowUnlimitedContractSize: true,
+            gasLimit: 30000000,
+            gasPrice: 100000000000000,
         },
     },
     abiExporter: {
