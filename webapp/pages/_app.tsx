@@ -1,11 +1,17 @@
 import type { AppProps } from "next/app"
-import { ThirdwebProvider } from "@thirdweb-dev/react"
 import { Navbar } from "@/components/Navbar"
 import NextNProgress from "nextjs-progressbar"
 import { NETWORK } from "@/const/Network"
 import { storageInterface } from "@/util/thirdwebStorage"
 import React, { useState } from "react"
 import NoSSR from "@/components/NoSSR"
+import { ThirdwebProvider,
+  metamaskWallet,
+  coinbaseWallet,
+  WalletOptions,
+  walletConnectV1, } from "@thirdweb-dev/react"
+import {WalletConfig} from "@thirdweb-dev/react-core"
+import { InjectedWallet } from "@thirdweb-dev/wallets"
 
 import { StateContextProvider } from "../context"
 import Head from "next/head"
@@ -20,12 +26,32 @@ import "../styles/pages/index.scss"
 import "../styles/collection/style.scss"
 import "react-toastify/dist/ReactToastify.css"
 
+function axsWallet(): WalletConfig<InjectedWallet> {
+  return {
+    id: "axs",
+    meta: {
+      name: "AXS Wallet",
+      iconURL: "/axs.svg",
+    },
+    create: (options: WalletOptions) => {
+      return new InjectedWallet(options)
+    },
+  }
+}
+        
+
 function MyApp({ Component, pageProps }: AppProps) {
   const [showModal, setShowLangModal] = useState(false)
   const { i18n } = useTranslation()
 
   return (
     <ThirdwebProvider
+    supportedWallets={[
+      axsWallet(),
+      metamaskWallet(),
+      coinbaseWallet(),
+      walletConnectV1(),
+    ]}
       activeChain={NETWORK}
       supportedChains={[NETWORK]}
       storageInterface={storageInterface}
