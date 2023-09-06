@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-button.tw-connect-wallet {
-  background-color: #fff;
-}
-
 html,
 body {
   padding: 0;

@@ -5,6 +5,7 @@ import NextNProgress from "nextjs-progressbar"
 import { NETWORK } from "@/const/Network"
 import { storageInterface } from "@/util/thirdwebStorage"
 import React, { useState } from "react"
+import NoSSR from "@/components/NoSSR"
 
 import { StateContextProvider } from "../context"
 import Head from "next/head"
@@ -57,10 +58,14 @@ function MyApp({ Component, pageProps }: AppProps) {
       />
 
       {/* Render the navigation menu above each component */}
-      <Navbar setLangVisible={setShowLangModal} />
+      <NoSSR>
+        <Navbar setLangVisible={setShowLangModal} />
+      </NoSSR>
       {/* Render the actual component (page) */}
       <StateContextProvider>
-        <Component {...pageProps} />
+        <NoSSR>
+          <Component {...pageProps} />
+        </NoSSR>
       </StateContextProvider>
       {showModal && (
         <LanguageModal

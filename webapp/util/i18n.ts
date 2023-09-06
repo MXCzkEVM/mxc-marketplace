@@ -1,7 +1,7 @@
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
+import i18n from "i18next"
+import { initReactI18next } from "react-i18next"
 import LanguageDetector from 'i18next-browser-languagedetector'
-import { locales, browserLangToLocaleKey } from './i18nLocal'
+import { browserLangToLocaleKey } from './i18nLocal'
 
 import de from "../locales/de";
 import en from "../locales/en";
@@ -24,83 +24,77 @@ const customDetector = {
     name: 'customDetector',
     lookup() {
         const detectedLang = typeof window !== 'undefined' ? navigator.language : 'en';
-        return browserLangToLocaleKey(detectedLang);
+        return browserLangToLocaleKey[detectedLang];
     }
 };
 
 const languageDetectorCls = new LanguageDetector();
 languageDetectorCls.addDetector(customDetector);
 
-i18n
-    .use(languageDetectorCls)
-    .use(initReactI18next)
-    .init({
-        resources: {
-            "de": {
-                translation: de
-            },
-            "en": {
-                translation: en
-            },
-            "es": {
-                translation: es
-            },
-            "fr": {
-                translation: fr
-            },
-            "id": {
-                translation: id
-            },
-            "it": {
-                translation: it
-            },
-            "ja": {
-                translation: ja
-            },
-            "ko": {
-                translation: ko
-            },
-            "nl": {
-                translation: nl
-            },
-            "pt": {
-                translation: pt
-            },
-            "ro": {
-                translation: ro
-            },
-            "ru": {
-                translation: ru
-            },
-            "tr": {
-                translation: tr
-            },
-            "vi": {
-                translation: vi
-            },
-            "zh_CN": {
-                translation: zh_CN
-            },
-            "zh_TW": {
-                translation: zh_TW
-            }
+i18n.use(languageDetectorCls).use(initReactI18next).init({
+    // lng: "en",
+    fallbackLng: "en",
+    resources: {
+        "de": {
+            translation: de
         },
-        // lng: "en",
-        fallbackLng: "en",
-        whitelist: Object.keys(locales),
-        interpolation: {
-            escapeValue: false
+        "en": {
+            translation: en
         },
-        detection: {
-            order: ['customDetector', 'querystring', 'cookie', 'localStorage', 'navigator', 'htmlTag'],
-            lookupQuerystring: 'lng',
-            lookupCookie: 'i18next',
-            lookupLocalStorage: 'i18nextLng',
-            lookupFromPathIndex: 0,
-            lookupFromSubdomainIndex: 0,
-            checkWhitelist: true,
-            checkForSimilarInWhitelist: true,
+        "es": {
+            translation: es
+        },
+        "fr": {
+            translation: fr
+        },
+        "id": {
+            translation: id
+        },
+        "it": {
+            translation: it
+        },
+        "ja": {
+            translation: ja
+        },
+        "ko": {
+            translation: ko
+        },
+        "nl": {
+            translation: nl
+        },
+        "pt": {
+            translation: pt
+        },
+        "ro": {
+            translation: ro
+        },
+        "ru": {
+            translation: ru
+        },
+        "tr": {
+            translation: tr
+        },
+        "vi": {
+            translation: vi
+        },
+        "zh_CN": {
+            translation: zh_CN
+        },
+        "zh_TW": {
+            translation: zh_TW
         }
-    });
+    },
+    interpolation: {
+        escapeValue: false,
+    },
+    detection: {
+        order: ['customDetector', 'querystring', 'cookie', 'localStorage', 'navigator', 'htmlTag'],
+        lookupQuerystring: 'lng',
+        lookupCookie: 'i18next',
+        lookupLocalStorage: 'i18nextLng',
+        lookupFromPathIndex: 0,
+        lookupFromSubdomainIndex: 0,
+    }
+})
 
 export default i18n;
