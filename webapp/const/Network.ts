@@ -1,7 +1,7 @@
 
 import { ethers } from 'ethers'
 
-export const CHAIN_ID = process.env.NEXT_PUBLIC_CHAINID || ""
+export const CHAIN_ID = process.env.NEXT_PUBLIC_CHAINID || "5167003"
 
 const networks: any = {
   "5167003": {
