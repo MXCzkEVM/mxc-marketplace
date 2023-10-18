@@ -37,7 +37,7 @@ const networks: any = {
     },
     shortName: "zkEVM Mainnet",
     slug: "zkEVM Mainnet",
-    testnet: true,
+    testnet: false,
     chain: "Wannsee",
     name: "zkEVM Mainnet",
     icon: {
@@ -105,8 +105,8 @@ export const gatewayUrls = {
   "ipfs://": [
     "https://ipfs.io/ipfs/",
     "https://ipfs.thirdwebstorage.com/ipfs/",
-    "https://ipfs.w3s.link",
     "https://gateway.ipfscdn.io/ipfs/",
+    "https://ipfs.w3s.link",
     "https://cloudflare-ipfs.com/ipfs/",
     // "https://aqua-adverse-coyote-886.mypinata.cloud/ipfs/",
   ],

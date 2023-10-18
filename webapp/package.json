@@ -24,6 +24,7 @@
     "@thirdweb-dev/sdk": "^3.10.29",
     "@types/styled-components": "5.1.0",
     "@upstash/redis": "^1.21.0",
+    "antd": "^5.10.1",
     "autoprefixer": "^10.4.14",
     "axios": "^1.4.0",
     "dotenv": "^16.3.1",

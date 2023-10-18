@@ -48,7 +48,7 @@ const CollectionCard = (props: any) => {
         <div className="title">
           <span className="name text-xs">
             {item.metadata.name}
-            {/*  #{item?.metadata?.id} */}
+            {item.metadata.name.includes("#") ? "" : ` #${item?.metadata?.id}`}
           </span>
           {/* <div className="raritylevel">{"#" + item.rarityLevel}</div> */}
         </div>

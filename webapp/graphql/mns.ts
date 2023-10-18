@@ -5,7 +5,16 @@ export const getMnsDomain = (pageSize: number = 30, page: number = 1) => {
   const skip = (page - 1) * pageSize
   return gql`
     {
-      domains(first: ${pageSize}, skip: ${skip}, orderBy: createdAt, orderDirection: desc, where: {id_gt: 0, name_not: null}) {
+      domains(
+        first: ${pageSize}, 
+        skip: ${skip}, 
+        orderBy: createdAt, 
+        orderDirection: desc, 
+        where: {
+          id_gt: 0, 
+          name_not: null
+        }
+      ) {
         id
         name
         wrappedDomain {

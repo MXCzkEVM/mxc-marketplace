@@ -1,0 +1,29 @@
+
+.collection_detail {
+    
+    .pagination {
+        padding: 15px 0;
+    }
+
+    .ant-pagination {
+        justify-content: center;
+    }
+    .ant-pagination-item a {
+        color: #f43178;
+    }
+    .ant-pagination-item-link svg {
+        color: #f43178;
+    }
+    .ant-pagination-item-active:hover {
+        border-color: none;
+        a {
+            color: #f43178;
+        }
+    }
+    .ant-pagination-item-ellipsis {
+        color: #f43178 !important;
+    }
+    .ant-pagination .ant-pagination-item-active {
+        border: none;
+    }
+}

@@ -240,6 +240,9 @@ export default function TokenPage() {
     return txResult
   }
 
+  let attributes = nft?.metadata?.attributes || []
+  attributes = attributes.filter((item:any)=>item.trait_type!=='Social Handle')
+
   return (
     <div className="nft_detail">
       <Toaster position="bottom-center" reverseOrder={false} />
@@ -255,7 +258,7 @@ export default function TokenPage() {
 
               <h3 className="descriptionTitle">{t("Traits")}</h3>
               <div className="traitsContainer">
-                {nft?.metadata?.attributes?.map((item: any, index: number) => (
+                {attributes.map((item: any, index: number) => (
                   <div
                     onClick={() => clickAttr(item)}
                     className={`traitContainer ${getAttrCss(item)}`}

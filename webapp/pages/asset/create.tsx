@@ -57,10 +57,10 @@ export default function AssetCrearePage() {
       trait_type: "Network",
       value: "NEO and M2Pro",
     },
-    {
-      trait_type: "Social Handle",
-      value: "@MXCFoundation",
-    },
+    // {
+    //   trait_type: "Social Handle",
+    //   value: "@MXCFoundation",
+    // },
     {
       trait_type: "Location Proofs",
       value: "MEP-1002",

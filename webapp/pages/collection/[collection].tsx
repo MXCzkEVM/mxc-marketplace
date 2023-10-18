@@ -1,11 +1,18 @@
 import { useRouter } from "next/router"
 import React, { useState, useEffect } from "react"
-import { useNFTs, useContract, useContractRead } from "@thirdweb-dev/react"
+import {
+  useNFTs,
+  useContract,
+  useContractRead,
+  useTotalCount,
+} from "@thirdweb-dev/react"
 import Container from "@/components/Container/Container"
 import BannerComponent from "@/components/collection/Banner"
 import CollectionCard from "@/components/collection/CollectionCard"
 import { CHAIN_ID } from "@/const/Network"
 import { ABI } from "@/const/Address"
+import { Pagination } from "antd"
+import SkeletonList from "@/components/Skeleton/SkeletonList"
 
 import { zeroAddress } from "@/const/Local"
 import { getCollectInfo, getThirdWebNFTList } from "@/util/getNFT"
@@ -14,6 +21,7 @@ const api = new ApiClient("/")
 
 export default function CollectPage() {
   const [collectionDta, setCollectionDta] = useState(null)
+  const [page, setPage] = useState(1)
   const [nfts, setNFTS] = useState<any>([])
   const [collectionAddress, setCollectionAddress] = useState(zeroAddress)
 
@@ -24,7 +32,14 @@ export default function CollectPage() {
     collectionAddress,
     ABI.collection
   )
-  const { data: nftLis } = useNFTs(nftContract)
+
+  const { data: nftCounter } = useTotalCount(nftContract)
+  let nftCounterNumber = nftCounter ? parseInt(nftCounter?.toString()) : 0
+
+  const { data: nftLis, isLoading } = useNFTs(nftContract, {
+    count: 20,
+    start: (page - 1) * 20,
+  })
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,27 +81,51 @@ export default function CollectPage() {
     fetchData()
   }, [collectionAddress, nftLis])
 
+  const onChange = (getPage: number) => {
+    if (getPage == page) {
+      return
+    }
+    setPage(getPage)
+  }
+
   return (
-    <Container maxWidth="lg">
-      <div className="w-full">
-        {collectionDta && (
-          <BannerComponent nfts={nfts?.length} collectionDta={collectionDta} />
-        )}
-        {collectionDta && (
-          <div className="cardsection">
-            {nfts &&
-              nfts.map((item: any, index: number) => {
-                return (
-                  <CollectionCard
-                    key={index}
-                    item={item}
-                    collection_id={collectionAddress}
-                  />
-                )
-              })}
-          </div>
-        )}
-      </div>
-    </Container>
+    <div className="collection_detail">
+      <Container maxWidth="lg">
+        <div className="w-full">
+          {isLoading && <SkeletonList />}
+          {!isLoading && collectionDta && (
+            <BannerComponent
+              nfts={nftCounterNumber}
+              collectionDta={collectionDta}
+            />
+          )}
+          {collectionDta && (
+            <div className="cardsection">
+              {nfts &&
+                nfts.map((item: any, index: number) => {
+                  return (
+                    <CollectionCard
+                      key={index}
+                      item={item}
+                      collection_id={collectionAddress}
+                    />
+                  )
+                })}
+            </div>
+          )}
+          {!isLoading && (
+            <div className="pagination flex_c">
+              <Pagination
+                pageSize={20}
+                current={page}
+                onChange={onChange}
+                total={nftCounterNumber}
+                showSizeChanger={false}
+              />
+            </div>
+          )}
+        </div>
+      </Container>
+    </div>
   )
 }
