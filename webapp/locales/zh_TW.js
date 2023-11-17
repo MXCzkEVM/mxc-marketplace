@@ -88,4 +88,6 @@ export default {
   "Wrong collection id": "錯誤的收藏品編號",
   "success": "成功",
   "Wrong chainId": "錯誤的鏈ID",
+  "Verified": "由MXC基金會發行並驗證",
+  "Caution": "社區建設的項目。這是一個去中心化的平台，DYOR。",
 }

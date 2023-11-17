@@ -88,4 +88,6 @@ export default {
   "Wrong collection id": "Неверный идентификатор коллекции",
   "success": "Успех",
   "Wrong chainId": "Неверный chainId",
+  "Verified": "Выдано и проверено Фондом MXC",
+  "Caution": "Проект, созданный сообществом. Это децентрализованная платформа, DYOR.",
 }

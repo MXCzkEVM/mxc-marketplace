@@ -88,4 +88,6 @@ export default {
   "Wrong collection id": "Identificación de colección incorrecta",
   "success": "Éxito",
   "Wrong chainId": "CadenaId incorrecta",
+  "Verified": "Emitido y verificado por la Fundación MXC",
+  "Caution": "Proyecto construido por la comunidad. Esta es una plataforma descentralizada, DYOR.",
 }

@@ -88,4 +88,6 @@ export default {
   "Wrong collection id": "ID-ul colecției greșit",
   "success": "Succes",
   "Wrong chainId": "LanțId greșit",
+  "Verified": "Emis și verificat de Fundația MXC",
+  "Caution": "Proiect construit de comunitate. Aceasta este o platformă descentralizată, DYOR.",
 }

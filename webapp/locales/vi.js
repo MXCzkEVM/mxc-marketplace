@@ -88,4 +88,6 @@ export default {
   "Wrong collection id": "ID bộ sưu tập sai",
   "success": "Thành công",
   "Wrong chainId": "Sai chainId",
+  "Verified": "Được phát hành và xác minh bởi Quỹ MXC",
+  "Caution": "Dự án được xây dựng bởi cộng đồng. Đây là một nền tảng phi tập trung, DYOR.",
 }

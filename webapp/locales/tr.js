@@ -88,4 +88,6 @@ export default {
   "Wrong collection id": "Yanlış koleksiyon id",
   "success": "Başarı",
   "Wrong chainId": "Yanlış zincirId",
+  "Verified": "MXC Vakfı tarafından verildi ve doğrulandı",
+  "Caution": "Topluluk tarafından oluşturulan proje. Bu Merkeziyetsiz bir platform, DYOR.",
 }

@@ -88,4 +88,6 @@ export default {
   "Wrong collection id": "ID koleksi salah",
   "success": "Sukses",
   "Wrong chainId": "Salah chainId",
+  "Verified": "Diterbitkan dan diverifikasi oleh Yayasan MXC",
+  "Caution": "Proyek dibangun oleh komunitas. Ini adalah platform Desentralisasi, DYOR.",
 }

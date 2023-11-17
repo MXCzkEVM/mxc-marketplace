@@ -88,4 +88,6 @@ export default {
   "Wrong collection id": "잘못된 컬렉션 ID",
   "success": "성공",
   "Wrong chainId": "잘못된 체인Id",
+  "Verified": "MXC 재단에서 발행 및 검증",
+  "Caution": "커뮤니티가 만든 프로젝트. 이것은 분산형 플랫폼입니다, DYOR.",
 }

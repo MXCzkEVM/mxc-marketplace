@@ -110,4 +110,6 @@ export default {
   "Wrong collection id": "Wrong collection id",
   success: "Success",
   "Wrong chainId": "Wrong chainId",
+  "Verified": "Issued and verified by MXC Foundation",
+  "Caution": "Community built project. This is a Decentralized platform, DYOR.",
 }
