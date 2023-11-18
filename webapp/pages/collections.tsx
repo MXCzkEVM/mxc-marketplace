@@ -10,6 +10,7 @@ import { getCollectList } from "@/util/getNFT"
 import SkeletonList from "@/components/Skeleton/SkeletonList"
 import ApiClient from "@/util/request"
 const api = new ApiClient("/")
+import { Toaster } from "react-hot-toast"
 
 export default function Overview() {
   const [collections, setCollections] = useState<any>([])
@@ -44,6 +45,7 @@ export default function Overview() {
 
   return (
     <div className="collections_page">
+      <Toaster></Toaster>
       <Container maxWidth="lg">
         <div className="feature mb-10">
           <h1>Featured NFTs</h1>

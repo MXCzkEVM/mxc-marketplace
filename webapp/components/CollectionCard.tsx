@@ -8,6 +8,7 @@ import { ethers } from "ethers"
 import Image from "@/components/Image"
 import defaultPng from "@/assets/placeholder.png"
 import { useTranslation } from "react-i18next"
+import toast from "react-hot-toast"
 
 export default function CollectionCard(props: any) {
   let { nft } = props
@@ -51,11 +52,17 @@ export default function CollectionCard(props: any) {
 
       <div className="content">
         <div className="contentTop break_ellipsis mb-5">
-          <span className="title text-sm " style={{ display: 'flex', alignItems: 'center' }}>
+          <span className="title text-sm " style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
             <span style={{ flexGrow: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{nft.name} </span>
             <img
               src={isOfficalNft ? verify.src : attention.src}
               title={isOfficalNft ? t("Verified") : t("Caution")}
+              onClick={(e) => {
+                e.stopPropagation()
+                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                  toast(isOfficalNft ? t("Verified") : t("Caution"))
+                }
+              }}
             />
           </span>
         </div>
