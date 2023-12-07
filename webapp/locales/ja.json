@@ -1,4 +1,4 @@
-export default {
+{
   "Create a collection": "コレクションを作成する",
   "Create an item": "アイテムを作成する",
   "Name": "名前",
@@ -90,4 +90,11 @@ export default {
   "Wrong chainId": "誤ったchainId",
   "Verified": "MXC財団により発行および検証されました",
   "Caution": "コミュニティによって構築されたプロジェクト。これは分散型プラットフォームです、DYOR。",
+  "Created": "作成する",
+  "Cancelled": "キャンセル",
+  "Transfer": "移行",
+  "Event": "イベント",
+  "From": "から",
+  "To": "に",
+  "Date": "日付"
 }

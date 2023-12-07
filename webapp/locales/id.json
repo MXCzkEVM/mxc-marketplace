@@ -1,4 +1,4 @@
-export default {
+{
   "Create a collection": "Buat koleksi",
   "Create an item": "Buat item",
   "Name": "Nama",
@@ -90,4 +90,11 @@ export default {
   "Wrong chainId": "Salah chainId",
   "Verified": "Diterbitkan dan diverifikasi oleh Yayasan MXC",
   "Caution": "Proyek dibangun oleh komunitas. Ini adalah platform Desentralisasi, DYOR.",
+  "Created": "Membuat",
+  "Cancelled": "Dibatalkan",
+  "Transfer": "Transfer",
+  "Event": "Peristiwa",
+  "From": "Dari",
+  "To": "Ke",
+  "Date": "Tanggal"
 }

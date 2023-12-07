@@ -1,4 +1,4 @@
-export default {
+{
   "Create a collection": "Crea una colección",
   "Create an item": "Crea un artículo",
   "Name": "Nombre",
@@ -90,4 +90,11 @@ export default {
   "Wrong chainId": "CadenaId incorrecta",
   "Verified": "Emitido y verificado por la Fundación MXC",
   "Caution": "Proyecto construido por la comunidad. Esta es una plataforma descentralizada, DYOR.",
+  "Created": "Crear",
+  "Cancelled": "Cancelado",
+  "Transfer": "Transferir",
+  "Event": "Evento",
+  "From": "De",
+  "To": "A",
+  "Date": "Fecha"
 }

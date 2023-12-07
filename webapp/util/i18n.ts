@@ -3,22 +3,22 @@ import { initReactI18next } from "react-i18next"
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { browserLangToLocaleKey } from './i18nLocal'
 
-import de from "../locales/de";
-import en from "../locales/en";
-import es from "../locales/es";
-import fr from "../locales/fr";
-import id from "../locales/id";
-import it from "../locales/it";
-import ja from "../locales/ja";
-import ko from "../locales/ko";
-import nl from "../locales/nl";
-import pt from "../locales/pt";
-import ro from "../locales/ro";
-import ru from "../locales/ru";
-import tr from "../locales/tr";
-import vi from "../locales/vi";
-import zh_CN from "../locales/zh_CN";
-import zh_TW from "../locales/zh_TW";
+import de from "../locales/de.json";
+import en from "../locales/en.json";
+import es from "../locales/es.json";
+import fr from "../locales/fr.json";
+import id from "../locales/id.json";
+import it from "../locales/it.json";
+import ja from "../locales/ja.json";
+import ko from "../locales/ko.json";
+import nl from "../locales/nl.json";
+import pt from "../locales/pt.json";
+import ro from "../locales/ro.json";
+import ru from "../locales/ru.json";
+import tr from "../locales/tr.json";
+import vi from "../locales/vi.json";
+import zh_CN from "../locales/zh_CN.json";
+import zh_TW from "../locales/zh_TW.json";
 
 const customDetector = {
     name: 'customDetector',

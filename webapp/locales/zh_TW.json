@@ -1,4 +1,4 @@
-export default {
+{
   "Create a collection": "創建一個收藏集",
   "Create an item": "創建一個項目",
   "Name": "名稱",
@@ -89,5 +89,5 @@ export default {
   "success": "成功",
   "Wrong chainId": "錯誤的鏈ID",
   "Verified": "由MXC基金會發行並驗證",
-  "Caution": "社區建設的項目。這是一個去中心化的平台，DYOR。",
+  "Caution": "社區建設的項目。這是一個去中心化的平台，DYOR。"
 }

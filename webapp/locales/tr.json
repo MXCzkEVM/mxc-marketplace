@@ -1,4 +1,4 @@
-export default {
+{
   "Create a collection": "Bir koleksiyon oluşturun",
   "Create an item": "Bir öğe oluştur",
   "Name": "Ad",
@@ -90,4 +90,11 @@ export default {
   "Wrong chainId": "Yanlış zincirId",
   "Verified": "MXC Vakfı tarafından verildi ve doğrulandı",
   "Caution": "Topluluk tarafından oluşturulan proje. Bu Merkeziyetsiz bir platform, DYOR.",
+  "Created": "Oluşturuldu",
+  "Cancelled": "İptal edildi",
+  "Transfer": "Aktar",
+  "Event": "Etkinlik",
+  "From": "İtibaren",
+  "To": "İle",
+  "Date": "Tarih"
 }

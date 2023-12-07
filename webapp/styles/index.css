@@ -17,7 +17,9 @@
   -webkit-line-clamp: 2;
   overflow: hidden;
 }
-
+th {
+  text-align: left;
+}
 .usn {
   user-select: none;
 }

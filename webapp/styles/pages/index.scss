@@ -36,3 +36,26 @@ button.tw-web3button {
     font-weight: 400;
     border-radius: 0.5rem;
 }
+
+:where(.css-dev-only-do-not-override-6j9yrn).ant-table-wrapper .ant-table {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+:where(.css-dev-only-do-not-override-6j9yrn).ant-table-wrapper .ant-table-thead >tr>th, :where(.css-dev-only-do-not-override-6j9yrn).ant-table-wrapper .ant-table-thead >tr>td {
+  color: #fff;
+  background-color: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+:where(.css-dev-only-do-not-override-6j9yrn).ant-table-wrapper .ant-table-thead >tr>th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before, :where(.css-dev-only-do-not-override-6j9yrn).ant-table-wrapper .ant-table-thead >tr>td:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+:where(.css-dev-only-do-not-override-6j9yrn).ant-table-wrapper .ant-table-tbody >tr >th, :where(.css-dev-only-do-not-override-6j9yrn).ant-table-wrapper .ant-table-tbody >tr >td {
+  border-bottom: 1px solid transparent;
+}
+
+:where(.css-dev-only-do-not-override-6j9yrn).ant-table-wrapper .ant-table-tbody .ant-table-row >.ant-table-cell-row-hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}

@@ -1,4 +1,4 @@
-export default {
+{
   "Create a collection": "Creează o colecție",
   "Create an item": "Creează un articol",
   "Name": "Nume",
@@ -90,4 +90,11 @@ export default {
   "Wrong chainId": "LanțId greșit",
   "Verified": "Emis și verificat de Fundația MXC",
   "Caution": "Proiect construit de comunitate. Aceasta este o platformă descentralizată, DYOR.",
+  "Created": "Crea",
+  "Cancelled": "Anulat",
+  "Transfer": "Transfer",
+  "Event": "Eveniment",
+  "From": "Din",
+  "To": "La",
+  "Date": "Data"
 }

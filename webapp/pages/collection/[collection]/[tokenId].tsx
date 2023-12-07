@@ -18,21 +18,28 @@ import { zeroAddress } from "@/const/Local"
 import Container from "@/components/Container/Container"
 import { randomColor } from "@/util/randomColor"
 import Link from "next/link"
+
 import { BigNumber, ethers } from "ethers"
 import Skeleton from "@/components/Skeleton/Skeleton"
 import PriceInput from "@/components/PriceInput"
 import { toast } from "react-toastify"
 import Image from "@/components/Image"
 import defaultPng from "@/assets/placeholder.png"
+import { searchNftOrders } from '@/graphql/nft'
 import { getNFTDetail, getCollectInfo } from "@/util/getNFT"
 const [randomColor1, randomColor2] = [randomColor(), randomColor()]
 import ApiClient from "@/util/request"
 import { useTranslation } from "react-i18next"
+import { nftClient } from "@/util/apolloClient"
+import { Table } from 'antd'
+import { ColumnsType } from "antd/es/table"
+
 
 const api = new ApiClient("/")
 
 export default function TokenPage() {
   const [collectionDta, setCollectionDta] = useState<any>({})
+  const [orderInfos, setOrderInfos] = useState<any>([])
   const [nft, SetNFT] = useState<any>({ metadata: {}, owner: null })
   const [nftPrice, setNftPrice] = useState<BigNumber>(BigNumber.from(0))
   const [inputPrice, setInputPrice] = useState<any>("")
@@ -240,8 +247,92 @@ export default function TokenPage() {
     return txResult
   }
 
+  const executeSearch = async () => {
+    if (collection === zeroAddress)
+      return
+    const result = await nftClient.query({
+      query: searchNftOrders(collection, tokenId),
+    })
+    setOrderInfos(result.data.marketplaceOrderInfos)
+  }
+
+  useEffect(() => {
+    executeSearch()
+  }, [collection])
+
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ]
+  const columns: ColumnsType<any> = [
+    {
+      title: t('Event'),
+      dataIndex: 'event',
+      key: 'event',
+      render(value) {
+        const texts: Record<string, any> = {
+          created: t('Created'),
+          cancelled: t('Cancelled'),
+          successful: t('Transfer')
+        }
+        return texts[value]
+      },
+    },
+    {
+      title: t('Price'),
+      dataIndex: 'totalPrice',
+      key: 'totalPrice',
+      render(value) {
+        return value || '-'
+      },
+    },
+    {
+      title: t('From'),
+      dataIndex: 'seller',
+      key: 'seller',
+      render(value) {
+        if (!value) return '-'
+        return <p className="nftOwnerAddress">
+          {value.slice(0, 8)}...
+          {value.slice(-4)}
+        </p>
+      },
+    },
+    {
+      title: t('To'),
+      dataIndex: 'buyer',
+      key: 'buyer',
+      render(value) {
+        if (!value) return '-'
+        return <p className="nftOwnerAddress">
+          {value.slice(0, 8)}...
+          {value.slice(-4)}
+        </p>
+      },
+    },
+    {
+      title: t('Date'),
+      dataIndex: 'blockTimestamp',
+      key: 'blockTimestamp',
+      render(value) {
+        const d = new (Date as any)(value * 1000)
+        return `${monthNames[d.getMonth()]} ${d.getFullYear()}`
+      },
+    },
+  ];
+
   let attributes = nft?.metadata?.attributes || []
-  attributes = attributes.filter((item:any)=>item.trait_type!=='Social Handle')
+  attributes = attributes.filter((item: any) => item.trait_type !== 'Social Handle')
 
   return (
     <div className="nft_detail">
@@ -338,8 +429,8 @@ export default function TokenPage() {
               </div>
 
               {address !== zeroAddress &&
-              nft.owner == address &&
-              nftPrice.eq(0) ? (
+                nft.owner == address &&
+                nftPrice.eq(0) ? (
                 <div className="sell_info">
                   <h4 className="formSectionTitle">{t("Price")} </h4>
 
@@ -369,9 +460,9 @@ export default function TokenPage() {
 
               {/* 自己的nft 并且还没授权给市场 */}
               {isApproved == zeroAddress &&
-              isApproved !== CONTRACTS_MAP.MARKETPLACE &&
-              !isApprovedForAll &&
-              nft.owner == address ? (
+                isApproved !== CONTRACTS_MAP.MARKETPLACE &&
+                !isApprovedForAll &&
+                nft.owner == address ? (
                 <>
                   <h4 className="formSectionTitle mb-2">{t("Approve")} </h4>
                   <Web3Button
@@ -386,8 +477,8 @@ export default function TokenPage() {
               ) : null}
 
               {address !== zeroAddress &&
-              nft.owner == address &&
-              !nftPrice.eq(0) ? (
+                nft.owner == address &&
+                !nftPrice.eq(0) ? (
                 <div className="sell_info">
                   <h4 className="formSectionTitle">{t("Cancel Order")} </h4>
                   <Web3Button
@@ -402,8 +493,8 @@ export default function TokenPage() {
               ) : null}
 
               {address !== zeroAddress &&
-              nft.owner !== address &&
-              !nftPrice.eq(0) ? (
+                nft.owner !== address &&
+                !nftPrice.eq(0) ? (
                 <div className="sell_info">
                   <h4 className="formSectionTitle">{t("Excute Order")} </h4>
 
@@ -417,6 +508,10 @@ export default function TokenPage() {
                   </Web3Button>
                 </div>
               ) : null}
+              <h4 style={{ fontWeight: 600, fontSize: '18px', marginBottom: '1rem' }}>
+                Events
+              </h4>
+              <Table pagination={false} dataSource={orderInfos} columns={columns} />
             </div>
           </div>
         </Container>

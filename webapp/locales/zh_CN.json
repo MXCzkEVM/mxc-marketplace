@@ -1,4 +1,4 @@
-export default {
+{
   "Create a collection": "创建一个集合",
   "Create an item": "创建一个项目",
   "Name": "名称",
@@ -90,4 +90,11 @@ export default {
   "Wrong chainId": "错误的链ID",
   "Verified": "由MXC基金会发行并验证",
   "Caution": "社区建设的项目。这是一个去中心化的平台，DYOR。",
+  "Created": "创建",
+  "Cancelled": "取消",
+  "Transfer": "转移",
+  "Event": "事件",
+  "From": "自",
+  "To": "到",
+  "Date": "日期"
 }

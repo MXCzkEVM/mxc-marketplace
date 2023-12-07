@@ -1,4 +1,4 @@
-export default {
+{
   "Create a collection": "Tạo một bộ sưu tập",
   "Create an item": "Tạo một mục",
   "Name": "Tên",
@@ -90,4 +90,11 @@ export default {
   "Wrong chainId": "Sai chainId",
   "Verified": "Được phát hành và xác minh bởi Quỹ MXC",
   "Caution": "Dự án được xây dựng bởi cộng đồng. Đây là một nền tảng phi tập trung, DYOR.",
+  "Created": "Tạo nên",
+  "Cancelled": "Đã hủy",
+  "Transfer": "Chuyển khoản",
+  "Event": "Sự kiện",
+  "From": "Từ",
+  "To": "ĐẾN",
+  "Date": "Ngày"
 }

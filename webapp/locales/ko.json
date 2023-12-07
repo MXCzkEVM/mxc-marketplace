@@ -1,4 +1,4 @@
-export default {
+{
   "Create a collection": "컬렉션 생성",
   "Create an item": "항목 생성",
   "Name": "이름",
@@ -90,4 +90,11 @@ export default {
   "Wrong chainId": "잘못된 체인Id",
   "Verified": "MXC 재단에서 발행 및 검증",
   "Caution": "커뮤니티가 만든 프로젝트. 이것은 분산형 플랫폼입니다, DYOR.",
+  "Created": "만들다",
+  "Cancelled": "취소 된",
+  "Transfer": "옮기다",
+  "Event": "이벤트",
+  "From": "에서",
+  "To": "에게",
+  "Date": "날짜"
 }
