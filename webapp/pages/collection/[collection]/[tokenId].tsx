@@ -524,7 +524,7 @@ export default function TokenPage() {
               <h4 style={{ fontWeight: 600, fontSize: '18px', marginBottom: '1rem' }}>
                 Events
               </h4>
-              <Table pagination={false} dataSource={orderInfos} columns={columns} />
+              <Table scroll={{ x: 620 }} pagination={false} dataSource={orderInfos} columns={columns} />
             </div>
           </div>
         </Container>
