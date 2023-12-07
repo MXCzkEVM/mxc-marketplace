@@ -36,6 +36,7 @@ import { ColumnsType } from "antd/es/table"
 
 
 const api = new ApiClient("/")
+const explorerUrl = process.env.NEXT_PUBLIC_EXPLORER
 
 export default function TokenPage() {
   const [collectionDta, setCollectionDta] = useState<any>({})
@@ -302,10 +303,10 @@ export default function TokenPage() {
       key: 'seller',
       render(value) {
         if (!value) return '-'
-        return <p className="nftOwnerAddress">
-          {value.slice(0, 8)}...
-          {value.slice(-4)}
-        </p>
+        return <Link target="_blank" href={`${explorerUrl}/address/${value}`}>
+        {value.slice(0, 4)}...
+        {value.slice(-4)}
+      </Link>
       },
     },
     {
@@ -314,10 +315,22 @@ export default function TokenPage() {
       key: 'buyer',
       render(value) {
         if (!value) return '-'
-        return <p className="nftOwnerAddress">
+        return <Link target="_blank" href={`${explorerUrl}/address/${value}`}>
+        {value.slice(0, 4)}...
+        {value.slice(-4)}
+      </Link>
+      },
+    },
+    {
+      title: t('Hash'),
+      dataIndex: 'transactionHash',
+      key: 'transactionHash',
+      render(value) {
+        if (!value) return '-'
+        return <Link target="_blank" href={`${explorerUrl}/tx/${value}`}>
           {value.slice(0, 8)}...
           {value.slice(-4)}
-        </p>
+        </Link>
       },
     },
     {

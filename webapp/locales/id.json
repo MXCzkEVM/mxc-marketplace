@@ -96,5 +96,6 @@
   "Event": "Peristiwa",
   "From": "Dari",
   "To": "Ke",
-  "Date": "Tanggal"
+  "Date": "Tanggal",
+  "Hash": "hash"
 }

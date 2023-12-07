@@ -59,3 +59,9 @@ button.tw-web3button {
 :where(.css-dev-only-do-not-override-6j9yrn).ant-table-wrapper .ant-table-tbody .ant-table-row >.ant-table-cell-row-hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
+:where(.css-dev-only-do-not-override-6j9yrn).ant-table-wrapper .ant-table-tbody>tr.ant-table-placeholder:hover>th, :where(.css-dev-only-do-not-override-6j9yrn).ant-table-wrapper .ant-table-tbody>tr.ant-table-placeholder:hover>td, :where(.css-dev-only-do-not-override-6j9yrn).ant-table-wrapper .ant-table-tbody>tr.ant-table-placeholder {
+  background: transparent;
+}
+:where(.css-dev-only-do-not-override-6j9yrn).ant-empty-normal .ant-empty-description {
+  color: #fff;
+}

@@ -96,5 +96,6 @@
   "Event": "Eveniment",
   "From": "Din",
   "To": "La",
-  "Date": "Data"
+  "Date": "Data",
+  "Hash": "Hash"
 }

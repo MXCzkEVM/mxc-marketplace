@@ -97,5 +97,6 @@
   "Event": "Event",
   "From": "From",
   "To": "To",
-  "Date": "Date"
+  "Date": "Date",
+  "Hash": "Hash"
 }

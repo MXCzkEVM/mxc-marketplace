@@ -96,5 +96,6 @@
   "Event": "Evenement",
   "From": "Van",
   "To": "Naar",
-  "Date": "Datum"
+  "Date": "Datum",
+  "Hash": "Hasj"
 }

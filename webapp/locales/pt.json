@@ -96,5 +96,6 @@
   "Event": "Evento",
   "From": "De",
   "To": "Para",
-  "Date": "Data"
+  "Date": "Data",
+  "Hash": "Cerquilha"
 }

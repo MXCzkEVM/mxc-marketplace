@@ -12,7 +12,7 @@ export const mnsClient = new ApolloClient({
 
 export const nftClient = new ApolloClient({
   link: new HttpLink({
-    uri: `http://45.63.52.231:8000/subgraphs/name/nft-mxc`,
+    uri: `${graphNode}/subgraphs/name/nft-mxc`,
   }),
   cache: new InMemoryCache(),
 })

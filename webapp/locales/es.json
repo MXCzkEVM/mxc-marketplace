@@ -96,5 +96,6 @@
   "Event": "Evento",
   "From": "De",
   "To": "A",
-  "Date": "Fecha"
+  "Date": "Fecha",
+  "Hash": "Picadillo"
 }
