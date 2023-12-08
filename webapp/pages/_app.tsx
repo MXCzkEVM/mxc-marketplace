@@ -5,13 +5,16 @@ import { NETWORK } from "@/const/Network"
 import { storageInterface } from "@/util/thirdwebStorage"
 import React, { useState } from "react"
 import NoSSR from "@/components/NoSSR"
-import { ThirdwebProvider,
+import {
+  ThirdwebProvider,
   metamaskWallet,
   coinbaseWallet,
   WalletOptions,
-  walletConnectV1, } from "@thirdweb-dev/react"
-import {WalletConfig} from "@thirdweb-dev/react-core"
+  walletConnectV1,
+} from "@thirdweb-dev/react"
+import { WalletConfig } from "@thirdweb-dev/react-core"
 import { InjectedWallet } from "@thirdweb-dev/wallets"
+import { SessionProvider } from "next-auth/react"
 
 import { StateContextProvider } from "../context"
 import Head from "next/head"
@@ -38,68 +41,71 @@ function axsWallet(): WalletConfig<InjectedWallet> {
     },
   }
 }
-        
+
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [showModal, setShowLangModal] = useState(false)
   const { i18n } = useTranslation()
 
   return (
-    <ThirdwebProvider
-    supportedWallets={[
-      axsWallet(),
-      metamaskWallet(),
-      coinbaseWallet(),
-      walletConnectV1(),
-    ]}
-      activeChain={NETWORK}
-      supportedChains={[NETWORK]}
-      storageInterface={storageInterface}
-    >
-      <ToastContainer />
-      <Head>
-        <title>MXC NFT Marketplaces</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta
-          name="description"
-          content="MXC zkEVM uses LPWAN and NFC technology to track, authenticate, and submit location proofs for the real world collectables."
+    <SessionProvider session={pageProps.session}>
+      <ThirdwebProvider
+        supportedWallets={[
+          axsWallet(),
+          metamaskWallet(),
+          coinbaseWallet(),
+          walletConnectV1(),
+        ]}
+        activeChain={NETWORK}
+        supportedChains={[NETWORK]}
+        storageInterface={storageInterface}
+      >
+        <ToastContainer />
+        <Head>
+          <title>MXC NFT Marketplaces</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <meta
+            name="description"
+            content="MXC zkEVM uses LPWAN and NFC technology to track, authenticate, and submit location proofs for the real world collectables."
+          />
+          <meta
+            name="keywords"
+            content="MXC, zkEVM, NFT, LPWAN, NFC, technology, track, authenticate, location proofs, real world, collectables"
+          ></meta>
+          {/* This script will check all MXC operations and if the system experiences any downtime It will notify with a small notification*/}
+          <script
+            src="https://mxc.instatus.com/en/13076080/widget/script.js"
+            async
+          ></script>
+        </Head>
+        {/* Progress bar when navigating between pages */}
+        <NextNProgress
+          color="var(--color-tertiary)"
+          startPosition={0.3}
+          stopDelayMs={200}
+          height={3}
+          showOnShallow={true}
         />
-        <meta
-          name="keywords"
-          content="MXC, zkEVM, NFT, LPWAN, NFC, technology, track, authenticate, location proofs, real world, collectables"
-        ></meta>
-        {/* This script will check all MXC operations and if the system experiences any downtime It will notify with a small notification*/}
-        <script
-          src="https://mxc.instatus.com/en/13076080/widget/script.js"
-          async
-        ></script>
-      </Head>
-      {/* Progress bar when navigating between pages */}
-      <NextNProgress
-        color="var(--color-tertiary)"
-        startPosition={0.3}
-        stopDelayMs={200}
-        height={3}
-        showOnShallow={true}
-      />
 
-      {/* Render the navigation menu above each component */}
-      <NoSSR>
-        <Navbar setLangVisible={setShowLangModal} />
-      </NoSSR>
-      {/* Render the actual component (page) */}
-      <StateContextProvider>
+        {/* Render the navigation menu above each component */}
         <NoSSR>
-          <Component {...pageProps} />
+          <Navbar setLangVisible={setShowLangModal} />
         </NoSSR>
-      </StateContextProvider>
-      {showModal && (
-        <LanguageModal
-          currentLanguage={(i18n as any).language}
-          setLangVisible={setShowLangModal}
-        />
-      )}
-    </ThirdwebProvider>
+        {/* Render the actual component (page) */}
+        <StateContextProvider>
+          <NoSSR>
+            <Component {...pageProps} />
+          </NoSSR>
+        </StateContextProvider>
+        {showModal && (
+          <LanguageModal
+            currentLanguage={(i18n as any).language}
+            setLangVisible={setShowLangModal}
+          />
+        )}
+      </ThirdwebProvider>
+    </SessionProvider>
+
   )
 }
 
