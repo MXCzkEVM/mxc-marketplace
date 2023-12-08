@@ -8,6 +8,7 @@ import "@szhsin/react-menu/dist/transitions/slide.css"
 import { AiOutlineMenu } from "react-icons/ai"
 import { HiLanguage } from "react-icons/hi2"
 import { useTranslation } from "react-i18next"
+import CartButton from "./CartButton"
 
 /**
  * Navigation bar that shows up on all pages.
@@ -63,7 +64,7 @@ export function Navbar(props: any) {
           <div className={"navConnect"}>
             <ConnectWallet theme="dark" btnTitle="Connect Wallet" />
           </div>
-          {address && (
+          {address && (<>
             <Link className={"link"} href={`/profile/${address}`}>
               <Image
                 className={"profileImage"}
@@ -73,7 +74,8 @@ export function Navbar(props: any) {
                 alt="Profile"
               />
             </Link>
-          )}
+            <CartButton />
+          </>)}
           <div className="more csp" onClick={() => props.setLangVisible(true)}>
             <HiLanguage size="22px" />
           </div>

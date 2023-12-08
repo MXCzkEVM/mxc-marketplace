@@ -1,12 +1,9 @@
-import React, { useContext, createContext } from "react"
+import React, { useContext, createContext, useState } from "react"
 
 import {
   useAddress,
-  useContract,
   useMetamask,
-  useContractWrite,
 } from "@thirdweb-dev/react"
-import { ethers } from "ethers"
 
 const StateContext = createContext({})
 
@@ -14,12 +11,15 @@ const StateContext = createContext({})
 export const StateContextProvider = ({ children }) => {
   const address = useAddress()
   const connect = useMetamask()
+  const [showCartDrawer, setShowCartDrawer] = useState(false)
 
   return (
     <StateContext.Provider
       value={{
         address,
         connect,
+        showCartDrawer,
+        setShowCartDrawer
       }}
     >
       {children}
@@ -27,4 +27,4 @@ export const StateContextProvider = ({ children }) => {
   )
 }
 
-export const useStateContext = () => useContext(StateContext)
+export const useStateContext = () => useContext(StateContext) as any
