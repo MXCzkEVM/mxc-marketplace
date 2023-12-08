@@ -3,7 +3,6 @@ import { CartItem as _CartItem } from '@/store'
 
 interface CartItemProps {
   item: _CartItem
-  onRemove: Function
 }
 
 function CartItem(props: CartItemProps) {

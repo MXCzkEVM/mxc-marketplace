@@ -1,26 +1,26 @@
-import CartStore, { CartItem } from "@/store";
-import IconCart from "./IconCart";
+import { CartItem } from "@/store";
 import { useMemo } from "react";
 import useCartStore from "@/store";
+import IconCartMinus from "./IconCartMinus";
+import IconCartPlus from "./IconCartPlus";
 
 export interface AddCartButtonProps {
-
+  item: CartItem
 }
 
-export function AddCartButton(item: CartItem) {
+export function AddCartButton(props: AddCartButtonProps) {
   const cartStore = useCartStore()
   const isAdded = useMemo(() => {
-    const { carts } = cartStore
-     return carts.some(c => c.address === item.address && c.asset === item.asset)
-  }, [item])
+     return cartStore.carts.some(c => c.address === props.item.address && c.asset === props.item.asset)
+  }, [props.item, cartStore])
 
-  function onAddCart() {
-
+  function onPlusCart() {
+    cartStore.push(props.item)
   }
-  function onRemoveCart() {
-
+  function onMinusCart() {
+    cartStore.remove(props.item.address, props.item.asset)
   }
-  return <>
-    <IconCart />
-  </>
+  return <button onClick={isAdded ? onMinusCart : onPlusCart}>
+    {isAdded ? <IconCartMinus /> : <IconCartPlus />}
+  </button>
 }

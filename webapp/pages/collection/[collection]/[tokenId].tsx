@@ -33,7 +33,7 @@ import { useTranslation } from "react-i18next"
 import { nftClient } from "@/util/apolloClient"
 import { Table } from 'antd'
 import { ColumnsType } from "antd/es/table"
-
+import { AddCartButton } from "@/components/CartButton/AddCartButton"
 
 const api = new ApiClient("/")
 const explorerUrl = process.env.NEXT_PUBLIC_EXPLORER
@@ -304,9 +304,9 @@ export default function TokenPage() {
       render(value) {
         if (!value) return '-'
         return <Link target="_blank" href={`${explorerUrl}/address/${value}`}>
-        {value.slice(0, 4)}...
-        {value.slice(-4)}
-      </Link>
+          {value.slice(0, 4)}...
+          {value.slice(-4)}
+        </Link>
       },
     },
     {
@@ -316,9 +316,9 @@ export default function TokenPage() {
       render(value) {
         if (!value) return '-'
         return <Link target="_blank" href={`${explorerUrl}/address/${value}`}>
-        {value.slice(0, 4)}...
-        {value.slice(-4)}
-      </Link>
+          {value.slice(0, 4)}...
+          {value.slice(-4)}
+        </Link>
       },
     },
     {
@@ -510,15 +510,25 @@ export default function TokenPage() {
                 !nftPrice.eq(0) ? (
                 <div className="sell_info">
                   <h4 className="formSectionTitle">{t("Excute Order")} </h4>
-
-                  <Web3Button
-                    contractAddress={CONTRACTS_MAP.MARKETPLACE}
-                    contractAbi={ABI.marketplace}
-                    action={async () => await buyMakeOrder()}
-                    className="list_btn"
-                  >
-                    {t("Buy at asking price")}
-                  </Web3Button>
+                  <div className="flex gap-3 items-center">
+                    <Web3Button
+                      contractAddress={CONTRACTS_MAP.MARKETPLACE}
+                      contractAbi={ABI.marketplace}
+                      action={async () => await buyMakeOrder()}
+                      className="list_btn"
+                    >
+                      {t("Buy at asking price")}
+                    </Web3Button>
+                    <AddCartButton
+                      item={{
+                        address: collection,
+                        asset: Number(tokenId),
+                        image: nft.image,
+                        meta: nft.metadata,
+                        owner: nft.owner
+                      }}
+                    />
+                  </div>
                 </div>
               ) : null}
               <h4 style={{ fontWeight: 600, fontSize: '18px', marginBottom: '1rem' }}>
