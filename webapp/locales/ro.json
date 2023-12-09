@@ -97,5 +97,10 @@
   "From": "Din",
   "To": "La",
   "Date": "Data",
-  "Hash": "Hash"
+  "Hash": "Hash",
+  "Enhance Trust in Your NFTs": "Creșteți încrederea în NFT-urile dvs",
+  "AuthenticateDes": "Pentru a crește credibilitatea NFT-urilor MXC și pentru a încorpora dovezi ale locației, vă invităm să vă autentificați ID-ul Twitter în timpul emiterii NFT. \nAcest pas adaugă un nivel de încredere listelor dvs.",
+  "Skip": "Ocolire",
+  "Authenticate": "Autentifica",
+  "Sold": "Vândut"
 }

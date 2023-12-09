@@ -91,11 +91,16 @@
   "Verified": "由MXC基金会发行并验证",
   "Caution": "社区建设的项目。这是一个去中心化的平台，DYOR。",
   "Created": "创建",
-  "Cancelled": "取消",
+  "Cancelled": "下架",
   "Transfer": "转移",
   "Event": "事件",
   "From": "自",
   "To": "到",
   "Date": "日期",
-  "Hash": "哈希值"
+  "Hash": "哈希值",
+  "Enhance Trust in Your NFTs": "增强对 NFT 的信任",
+  "AuthenticateDes": "为了提高 MXC极域 NFT 的可信度并纳入位置证明，我们邀请您在 NFT 发行期间验证您的 Twitter ID。\n此步骤为您的列表添加了一层信任。",
+  "Skip": "跳过",
+  "Authenticate": "认证",
+  "Sold": "上架"
 }

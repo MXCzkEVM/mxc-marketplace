@@ -97,5 +97,10 @@
   "From": "Depuis",
   "To": "À",
   "Date": "Date",
-  "Hash": "Hacher"
+  "Hash": "Hacher",
+  "Enhance Trust in Your NFTs": "Améliorez la confiance dans vos NFT",
+  "AuthenticateDes": "Pour accroître la crédibilité des MXC NFT et intégrer des preuves de localisation, nous vous invitons à authentifier votre identifiant Twitter lors de l'émission du NFT. \nCette étape ajoute une couche de confiance à vos annonces.",
+  "Skip": "Sauter",
+  "Authenticate": "Authentifier",
+  "Sold": "Vendu"
 }

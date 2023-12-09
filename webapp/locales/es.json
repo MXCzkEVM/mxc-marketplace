@@ -97,5 +97,10 @@
   "From": "De",
   "To": "A",
   "Date": "Fecha",
-  "Hash": "Picadillo"
+  "Hash": "Picadillo",
+  "Enhance Trust in Your NFTs": "Mejore la confianza en sus NFT",
+  "AuthenticateDes": "Para elevar la credibilidad de los NFT de MXC e incorporar pruebas de ubicación, lo invitamos a autenticar su ID de Twitter durante la emisión del NFT. \nEste paso agrega una capa de confianza a sus listados.",
+  "Skip": "Saltar",
+  "Authenticate": "Autenticar",
+  "Sold": "Vendido"
 }
