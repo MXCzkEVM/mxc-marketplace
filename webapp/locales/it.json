@@ -97,5 +97,10 @@
   "From": "Da",
   "To": "A",
   "Date": "Data",
-  "Hash": "Hash"
+  "Hash": "Hash",
+  "Enhance Trust in Your NFTs": "Migliora la fiducia nei tuoi NFT",
+  "AuthenticateDes": "Per aumentare la credibilità degli NFT MXC e incorporare prove di posizione, ti invitiamo ad autenticare il tuo ID Twitter durante l'emissione di NFT. \nQuesto passaggio aggiunge un livello di fiducia alle tue inserzioni.",
+  "Skip": "Saltare",
+  "Authenticate": "Autenticare",
+  "Sold": "Venduto"
 }

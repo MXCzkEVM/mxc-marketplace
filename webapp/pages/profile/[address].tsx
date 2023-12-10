@@ -16,6 +16,7 @@ import { randomColor } from "@/util/randomColor"
 import { zeroAddress } from "@/const/Local"
 import dynamic from "next/dynamic"
 import { useTranslation } from "react-i18next"
+import Modal from "@/components/Modal"
 
 const ProfileCollections = dynamic(
   () => import("@/components/Profile/Collections")

@@ -361,9 +361,10 @@ export default function TokenPage() {
                     key={index}
                   >
                     <p className="traitName text-xs">{item.trait_type}</p>
-                    <p className="traitValue text-sm">
-                      {item.value?.toString() || ""}
-                    </p>
+                    {item.trait_type !== 'Twitter'
+                      ? <p className="traitValue text-sm">{item.value?.toString() || ""}</p>
+                      : <Link className="traitValue text-sm" href={`https://twitter.com/${item.value}`}>{item.value || ""}</Link>
+                    }
                   </div>
                 ))}
               </div>
