@@ -304,9 +304,9 @@ export default function TokenPage() {
       render(value) {
         if (!value) return '-'
         return <Link target="_blank" href={`${explorerUrl}/address/${value}`}>
-        {value.slice(0, 4)}...
-        {value.slice(-4)}
-      </Link>
+          {value.slice(0, 4)}...
+          {value.slice(-4)}
+        </Link>
       },
     },
     {
@@ -316,9 +316,9 @@ export default function TokenPage() {
       render(value) {
         if (!value) return '-'
         return <Link target="_blank" href={`${explorerUrl}/address/${value}`}>
-        {value.slice(0, 4)}...
-        {value.slice(-4)}
-      </Link>
+          {value.slice(0, 4)}...
+          {value.slice(-4)}
+        </Link>
       },
     },
     {
@@ -369,9 +369,10 @@ export default function TokenPage() {
                     key={index}
                   >
                     <p className="traitName text-xs">{item.trait_type}</p>
-                    <p className="traitValue text-sm">
-                      {item.value?.toString() || ""}
-                    </p>
+                    {item.trait_type !== 'Twitter'
+                      ? <p className="traitValue text-sm">{item.value?.toString() || ""}</p>
+                      : <Link className="traitValue text-sm" href={`https://twitter.com/${item.value}`}>{item.value || ""}</Link>
+                    }
                   </div>
                 ))}
               </div>

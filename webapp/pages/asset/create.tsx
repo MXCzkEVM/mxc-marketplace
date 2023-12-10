@@ -60,7 +60,7 @@ export default function AssetCrearePage() {
       value: "NEO and M2Pro",
     },
     ...(session 
-     ? [{ trait_type: 'twitter', value: session.user?.name }]
+     ? [{ trait_type: 'Twitter', value: session.user?.name }]
      : []),
     // {
     //   trait_type: "Social Handle",
