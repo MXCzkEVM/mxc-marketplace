@@ -2,16 +2,28 @@ import { useMemo, useState } from "react";
 import { Badge, Drawer } from 'antd'
 import IconCart from './IconCart'
 import CartItem from "./CartItem";
-import useCartStore from "@/store";
+import useCartStore, { CartItem as CartItemType } from "@/store";
 import { useTranslation } from "react-i18next";
 import { BigNumber, ethers } from "ethers";
+import { useAddress, useContract, useContractWrite } from "@thirdweb-dev/react";
+import { zeroAddress } from "@/const/Local";
+import { toast } from "react-toastify"
+import { ABI, CONTRACTS_MAP } from "@/const/Address"
+import IconLoading from "./IconLoading";
 
 export default function CartButton() {
   const [showCartDrawer, setShowCartDrawer] = useState(false)
   const { t } = useTranslation()
   const cartStore = useCartStore()
   const cartLength = useMemo(() => cartStore.carts.length, [cartStore])
+  const address = useAddress() || zeroAddress
 
+  const [loading, setLoading] = useState(false)
+
+  const { contract } = useContract(
+    CONTRACTS_MAP.MARKETPLACE,
+    ABI.marketplace
+  )
   const totalPrice = useMemo(() => {
     let amount = BigInt(0)
     for (const cart of cartStore.carts) {
@@ -20,10 +32,34 @@ export default function CartButton() {
     return ethers.utils.formatEther(amount)
   }, [cartStore])
 
-  function buyAllTokens() {
-    // TODO
+  async function buyMarkOrder(nft: CartItemType) {
+    if (nft.owner == address) {
+      const errorText = 'You cannot buy your self nft'
+      toast.warn(t(errorText))
+      throw new Error(errorText)
+    }
+
+    await contract?.call('executeOrder', [nft.address, nft.asset], {
+      value: nft.price,
+      gasLimit: 300000
+    })
+
+    cartStore.remove(nft.address, nft.asset)
+  }
+  async function buyAllTokens() {
+    setLoading(true)
+    try {
+      await Promise.all(cartStore.carts.map(buyMarkOrder))
+      toast.success(t("Purchase success"))
+     setLoading(false)
+    } catch (error) {
+      console.log(error)
+      toast.error(t("Purchase failed"))
+      setLoading(false)
+    }
   }
   
+
   return <>
     <div className="mt-3 cursor-pointer" onClick={() => setShowCartDrawer(true)}>
       <Badge offset={[-5, 5]} count={cartLength}>
@@ -63,7 +99,13 @@ export default function CartButton() {
         className="tw-web3button css-1fii1tk"
         onClick={buyAllTokens}
       >
-        {t('Complete Purchase')}
+        {
+          !loading 
+          ?  <>{t('Complete Purchase')}</>
+          : <IconLoading />
+        }
+        
+        
       </button>
     </Drawer>
   </>
