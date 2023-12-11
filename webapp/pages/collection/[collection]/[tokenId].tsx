@@ -509,7 +509,7 @@ export default function TokenPage() {
                       contractAddress={CONTRACTS_MAP.MARKETPLACE}
                       contractAbi={ABI.marketplace}
                       action={async () => await buyMakeOrder()}
-                      className="list_btn"
+                      className="flex-1"
                     >
                       {t("Buy at asking price")}
                     </Web3Button>
@@ -519,7 +519,8 @@ export default function TokenPage() {
                         asset: Number(tokenId),
                         image: nft.image,
                         meta: nft.metadata,
-                        owner: nft.owner
+                        owner: nft.owner,
+                        price: nftPrice.toString()
                       }}
                     />
                   </div>

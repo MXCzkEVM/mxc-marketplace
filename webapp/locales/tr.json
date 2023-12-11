@@ -102,5 +102,13 @@
   "AuthenticateDes": "MXC NFT'lerin güvenilirliğini artırmak ve konum kanıtlarını dahil etmek için sizi NFT verilmesi sırasında Twitter Kimliğinizi doğrulamaya davet ediyoruz. \nBu adım, listelemelerinize bir güven katmanı ekler.",
   "Skip": "Atlamak",
   "Authenticate": "Kimlik doğrulama",
-  "Sold": "Satılmış"
+  "Sold": "Satılmış",
+  "Added to shopping cart": "Alışveriş sepetine eklendi",
+  "Removed from shopping cart": "Alışveriş sepetinden kaldırıldı",
+  "Complete Purchase": "Alışverişi tamamla",
+  "Add a project to get started": "Başlamak için bir proje ekleyin.",
+  "ItemCount": "{{count}} Öğe",
+  "Clear all": "Hepsini temizle",
+  "Your Cart": "Sepetiniz",
+  "Total Price": "Toplam fiyat"
 }

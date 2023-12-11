@@ -102,5 +102,13 @@
   "AuthenticateDes": "Untuk meningkatkan kredibilitas MXC NFT dan menyertakan bukti lokasi, kami mengundang Anda untuk mengautentikasi ID Twitter Anda selama penerbitan NFT. \nLangkah ini menambah lapisan kepercayaan pada listingan Anda.",
   "Skip": "Melewati",
   "Authenticate": "Otentikasi",
-  "Sold": "Terjual"
+  "Sold": "Terjual",
+  "Added to shopping cart": "Ditambahkan ke keranjang belanja",
+  "Removed from shopping cart": "Dihapus dari keranjang belanja",
+  "Complete Purchase": "Selesaikan Pembelian",
+  "Add a project to get started": "Tambahkan proyek untuk memulai.",
+  "ItemCount": "{{hitungan}} Barang",
+  "Clear all": "Bersihkan semua",
+  "Your Cart": "Keranjang Anda",
+  "Total Price": "Total harga"
 }

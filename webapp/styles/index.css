@@ -229,3 +229,6 @@ th {
   align-items: center;
 }
 /* flex  E */
+.flex-1 {
+  flex: 1 !important;
+}

@@ -102,5 +102,13 @@
   "AuthenticateDes": "Per aumentare la credibilità degli NFT MXC e incorporare prove di posizione, ti invitiamo ad autenticare il tuo ID Twitter durante l'emissione di NFT. \nQuesto passaggio aggiunge un livello di fiducia alle tue inserzioni.",
   "Skip": "Saltare",
   "Authenticate": "Autenticare",
-  "Sold": "Venduto"
+  "Sold": "Venduto",
+  "Added to shopping cart": "Aggiunto al carrello",
+  "Removed from shopping cart": "Rimosso dal carrello",
+  "Complete Purchase": "Completa l'acquisto",
+  "Add a project to get started": "Aggiungi un progetto per iniziare.",
+  "ItemCount": "{{count}} articolo",
+  "Clear all": "Cancella tutto",
+  "Your Cart": "Il tuo carrello",
+  "Total Price": "Prezzo totale"
 }

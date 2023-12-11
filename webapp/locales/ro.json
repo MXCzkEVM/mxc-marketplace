@@ -102,5 +102,13 @@
   "AuthenticateDes": "Pentru a crește credibilitatea NFT-urilor MXC și pentru a încorpora dovezi ale locației, vă invităm să vă autentificați ID-ul Twitter în timpul emiterii NFT. \nAcest pas adaugă un nivel de încredere listelor dvs.",
   "Skip": "Ocolire",
   "Authenticate": "Autentifica",
-  "Sold": "Vândut"
+  "Sold": "Vândut",
+  "Added to shopping cart": "Adăugat în coșul de cumpărături",
+  "Removed from shopping cart": "Scos din coșul de cumpărături",
+  "Complete Purchase": "Achiziția completă",
+  "Add a project to get started": "Adăugați un proiect pentru a începe.",
+  "ItemCount": "{{count}} articol",
+  "Clear all": "Curata tot",
+  "Your Cart": "Coșul dvs",
+  "Total Price": "Pretul total"
 }
