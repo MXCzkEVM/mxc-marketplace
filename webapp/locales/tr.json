@@ -97,5 +97,10 @@
   "From": "İtibaren",
   "To": "İle",
   "Date": "Tarih",
-  "Hash": "Doğramak"
+  "Hash": "Doğramak",
+  "Enhance Trust in Your NFTs": "NFT'lerinize olan güveni artırın",
+  "AuthenticateDes": "MXC NFT'lerin güvenilirliğini artırmak ve konum kanıtlarını dahil etmek için sizi NFT verilmesi sırasında Twitter Kimliğinizi doğrulamaya davet ediyoruz. \nBu adım, listelemelerinize bir güven katmanı ekler.",
+  "Skip": "Atlamak",
+  "Authenticate": "Kimlik doğrulama",
+  "Sold": "Satılmış"
 }

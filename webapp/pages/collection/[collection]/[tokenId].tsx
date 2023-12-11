@@ -34,6 +34,9 @@ import { nftClient } from "@/util/apolloClient"
 import { Table } from 'antd'
 import { ColumnsType } from "antd/es/table"
 import { AddCartButton } from "@/components/CartButton/AddCartButton"
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+dayjs.extend(relativeTime)
 
 const api = new ApiClient("/")
 const explorerUrl = process.env.NEXT_PUBLIC_EXPLORER
@@ -248,33 +251,22 @@ export default function TokenPage() {
     return txResult
   }
 
-  const executeSearch = async () => {
+  const requestNftOrders = async () => {
     if (collection === zeroAddress)
       return
     const result = await nftClient.query({
       query: searchNftOrders(collection, tokenId),
     })
-    setOrderInfos(result.data.marketplaceOrderInfos)
+    const orderInfos = [...result.data.marketplaceOrderInfos]
+    orderInfos.sort((a:any, b:any) => b.blockTimestamp - a.blockTimestamp)
+    setOrderInfos(orderInfos)
   }
 
   useEffect(() => {
-    executeSearch()
-  }, [collection])
+    requestNftOrders()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [collection, nftPrice])
 
-  const monthNames = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ]
   const columns: ColumnsType<any> = [
     {
       title: t('Event'),
@@ -282,7 +274,7 @@ export default function TokenPage() {
       key: 'event',
       render(value) {
         const texts: Record<string, any> = {
-          created: t('Created'),
+          created: t('Sold'),
           cancelled: t('Cancelled'),
           successful: t('Transfer')
         }
@@ -293,8 +285,10 @@ export default function TokenPage() {
       title: t('Price'),
       dataIndex: 'totalPrice',
       key: 'totalPrice',
-      render(value) {
-        return value || '-'
+      render(value, row) {
+        return value || row.priceInWei
+          ? `${ethers.utils.formatEther(value || row.priceInWei)} MXC`
+          : '-'
       },
     },
     {
@@ -328,7 +322,7 @@ export default function TokenPage() {
       render(value) {
         if (!value) return '-'
         return <Link target="_blank" href={`${explorerUrl}/tx/${value}`}>
-          {value.slice(0, 8)}...
+          {value.slice(0, 4)}...
           {value.slice(-4)}
         </Link>
       },
@@ -338,8 +332,7 @@ export default function TokenPage() {
       dataIndex: 'blockTimestamp',
       key: 'blockTimestamp',
       render(value) {
-        const d = new (Date as any)(value * 1000)
-        return `${monthNames[d.getMonth()]} ${d.getFullYear()}`
+        return dayjs(value * 1000).fromNow()
       },
     },
   ];
@@ -369,9 +362,10 @@ export default function TokenPage() {
                     key={index}
                   >
                     <p className="traitName text-xs">{item.trait_type}</p>
-                    <p className="traitValue text-sm">
-                      {item.value?.toString() || ""}
-                    </p>
+                    {item.trait_type !== 'Twitter'
+                      ? <p className="traitValue text-sm">{item.value?.toString() || ""}</p>
+                      : <Link className="traitValue text-sm" href={`https://twitter.com/${item.value}`}>{item.value || ""}</Link>
+                    }
                   </div>
                 ))}
               </div>
@@ -534,7 +528,7 @@ export default function TokenPage() {
               <h4 style={{ fontWeight: 600, fontSize: '18px', marginBottom: '1rem' }}>
                 Events
               </h4>
-              <Table scroll={{ x: 620 }} pagination={false} dataSource={orderInfos} columns={columns} />
+              <Table scroll={{ x: 800 }} pagination={false} dataSource={orderInfos} columns={columns} />
             </div>
           </div>
         </Container>

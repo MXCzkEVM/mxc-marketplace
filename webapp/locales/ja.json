@@ -97,5 +97,10 @@
   "From": "から",
   "To": "に",
   "Date": "日付",
-  "Hash": "ハッシュ"
+  "Hash": "ハッシュ",
+  "Enhance Trust in Your NFTs": "NFTの信頼性を高める",
+  "AuthenticateDes": "MXC NFT の信頼性を高め、位置証明を組み込むために、NFT 発行時に Twitter ID を認証することをお勧めします。\nこのステップにより、リストに信頼の層が追加されます。",
+  "Skip": "スキップ",
+  "Authenticate": "認証する",
+  "Sold": "販売済み"
 }

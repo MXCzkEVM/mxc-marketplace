@@ -23,6 +23,7 @@ import { useTranslation } from "react-i18next"
 
 import { version, zeroAddress } from "@/const/Local"
 import ApiClient from "@/util/request"
+import { useSession } from "next-auth/react"
 const api = new ApiClient("/")
 
 export default function AssetCrearePage() {
@@ -36,6 +37,7 @@ export default function AssetCrearePage() {
   const [description, setDescription] = useState("")
   const [collection_address, setCollection] = useState("")
   const [isRealWorldNFT, setSwitch] = useState(false)
+  const { data: session } = useSession()
 
   const { t } = useTranslation()
 
@@ -57,6 +59,9 @@ export default function AssetCrearePage() {
       trait_type: "Network",
       value: "NEO and M2Pro",
     },
+    ...(session 
+     ? [{ trait_type: 'Twitter', value: session.user?.name }]
+     : []),
     // {
     //   trait_type: "Social Handle",
     //   value: "@MXCFoundation",
@@ -84,10 +89,9 @@ export default function AssetCrearePage() {
   const { mutateAsync: mintNFT } = useContractWrite(collectionContract, "mint")
 
   useEffect(() => {
-    if (isRealWorldNFT) {
+    if (isRealWorldNFT)
       // 当 switch 打开时执行一些操作
       console.log("Switch is on")
-    }
   }, [isRealWorldNFT])
 
   useEffect(() => {

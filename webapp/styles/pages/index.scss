@@ -89,3 +89,18 @@ button.tw-web3button {
     }
   }
 }
+
+.ant-btn-primary {
+  background-color: #1677ff
+}
+.ant-modal .ant-modal-content {
+  background-color: rgb(33, 36, 41);
+  color: white;
+}
+
+.ant-modal .ant-modal-close {
+  color: white;
+  &:hover {
+    color: white;
+  }
+}
