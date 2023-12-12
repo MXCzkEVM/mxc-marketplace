@@ -110,5 +110,7 @@
   "ItemCount": "{{count}} Öğe",
   "Clear all": "Hepsini temizle",
   "Your Cart": "Sepetiniz",
-  "Total Price": "Toplam fiyat"
+  "Total Price": "Toplam fiyat",
+  "Transfer successful": "Aktarım başarılı",
+  "Confirm": "Onaylamak"
 }

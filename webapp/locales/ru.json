@@ -110,5 +110,7 @@
   "ItemCount": "{{count}} Товар",
   "Clear all": "Очистить все",
   "Your Cart": "Ваша корзина",
-  "Total Price": "Итоговая цена"
+  "Total Price": "Итоговая цена",
+  "Transfer successful": "Перенос успешен",
+  "Confirm": "Подтверждать"
 }

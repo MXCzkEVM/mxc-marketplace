@@ -110,5 +110,7 @@
   "ItemCount": "{{contagem}} item",
   "Clear all": "Limpar tudo",
   "Your Cart": "Seu carrinho",
-  "Total Price": "Preço total"
+  "Total Price": "Preço total",
+  "Transfer successful": "Transferência bem-sucedida",
+  "Confirm": "confirme"
 }

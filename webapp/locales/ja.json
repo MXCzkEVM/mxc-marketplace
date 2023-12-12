@@ -110,5 +110,7 @@
   "ItemCount": "{{count}} 個のアイテム",
   "Clear all": "すべてクリア",
   "Your Cart": "あなたのカート",
-  "Total Price": "合計金額"
+  "Total Price": "合計金額",
+  "Transfer successful": "転送成功",
+  "Confirm": "確認する"
 }

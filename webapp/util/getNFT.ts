@@ -16,6 +16,7 @@ export const getNFTDetail = async (collection: string, tokenId: string) => {
         const sdk = new ThirdwebSDK(NETWORK, {}, storageInterface)
         // const sdk = new ThirdwebSDK(NETWORK)
         const contract = await sdk.getContract(collection, ABI.collection)
+        
         let nft: any = await contract.erc721.get(tokenId)
         nft.image = IPFS_GATEWAY + nft.metadata.image
         return nft

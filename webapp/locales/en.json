@@ -111,5 +111,7 @@
   "ItemCount": "{{count}} Item",
   "Clear all": "Clear all",
   "Your Cart": "Your Cart",
-  "Total Price": "Total Price"
+  "Total Price": "Total Price",
+  "Transfer successful": "Transfer successful",
+  "Confirm": "Confirm"
 }

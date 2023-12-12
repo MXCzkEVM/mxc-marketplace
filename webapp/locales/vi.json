@@ -110,5 +110,7 @@
   "ItemCount": "{{count}} mục",
   "Clear all": "Làm sạch tất cả",
   "Your Cart": "Giỏ hàng của bạn",
-  "Total Price": "Tổng giá"
+  "Total Price": "Tổng giá",
+  "Transfer successful": "Chuyển thành công",
+  "Confirm": "Xác nhận"
 }

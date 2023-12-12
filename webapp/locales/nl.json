@@ -110,5 +110,7 @@
   "ItemCount": "{{count}} Artikel",
   "Clear all": "Wis alles",
   "Your Cart": "Jouw winkelwagen",
-  "Total Price": "Totale prijs"
+  "Total Price": "Totale prijs",
+  "Transfer successful": "Overdracht succesvol",
+  "Confirm": "Bevestigen"
 }

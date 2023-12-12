@@ -110,5 +110,7 @@
   "ItemCount": "{{count}}개 항목",
   "Clear all": "모두 지우기",
   "Your Cart": "장바구니",
-  "Total Price": "총 가격"
+  "Total Price": "총 가격",
+  "Transfer successful": "전송 성공",
+  "Confirm": "확인하다"
 }

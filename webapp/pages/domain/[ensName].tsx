@@ -25,6 +25,7 @@ import HexagonLogo from "@/components/HexagonLogo"
 import namehash from "eth-ens-namehash"
 import Image from "next/image"
 import { useTranslation } from "react-i18next"
+import TransferButton from "@/components/TransferButton"
 
 const [randomColor1, randomColor2] = [randomColor(), randomColor()]
 
@@ -318,6 +319,7 @@ export default function TokenPage() {
                   >
                     {t("List for sale")}
                   </Web3Button>
+                  <TransferButton address={collection} id={tokenId} />
                 </div>
               ) : null}
 

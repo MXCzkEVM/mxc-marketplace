@@ -110,5 +110,7 @@
   "ItemCount": "{{count}} 项",
   "Clear all": "全部清除",
   "Your Cart": "您的购物车",
-  "Total Price": "总价"
+  "Total Price": "总价",
+  "Transfer successful": "转账成功",
+  "Confirm": "确认"
 }

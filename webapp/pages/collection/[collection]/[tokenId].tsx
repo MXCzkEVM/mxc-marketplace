@@ -33,11 +33,12 @@ import { useTranslation } from "react-i18next"
 import { nftClient } from "@/util/apolloClient"
 import { Table } from 'antd'
 import { ColumnsType } from "antd/es/table"
-import {useInjectHolder} from '@overlays/react'
+import { useInjectHolder } from '@overlays/react'
 import { AddCartButton } from "@/components/CartButton/AddCartButton"
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import TransferToModal from "@/components/TransferToModal"
+import TransferButton from "@/components/TransferButton"
 dayjs.extend(relativeTime)
 
 const api = new ApiClient("/")
@@ -63,6 +64,7 @@ export default function TokenPage() {
   const { data: isApproved } = useContractRead(nftContract, "getApproved", [
     tokenId,
   ])
+  
   const { data: isApprovedForAll } = useContractRead(
     nftContract,
     "isApprovedForAll",
@@ -95,8 +97,6 @@ export default function TokenPage() {
     mkpContract,
     "executeOrder"
   )
-
-  const [holder, openTransferToModal] = useInjectHolder(TransferToModal)
 
   useEffect(() => {
     if (collection == zeroAddress) {
@@ -254,9 +254,6 @@ export default function TokenPage() {
 
     return txResult
   }
-  const transferNft = async () => {
-    openTransferToModal()
-  }
 
   const requestNftOrders = async () => {
     if (collection === zeroAddress)
@@ -265,13 +262,13 @@ export default function TokenPage() {
       query: searchNftOrders(collection, tokenId),
     })
     const orderInfos = [...result.data.marketplaceOrderInfos]
-    orderInfos.sort((a:any, b:any) => b.blockTimestamp - a.blockTimestamp)
+    orderInfos.sort((a: any, b: any) => b.blockTimestamp - a.blockTimestamp)
     setOrderInfos(orderInfos)
   }
 
   useEffect(() => {
     requestNftOrders()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collection, nftPrice])
 
   const columns: ColumnsType<any> = [
@@ -350,7 +347,6 @@ export default function TokenPage() {
   return (
     <div className="nft_detail">
       <Toaster position="bottom-center" reverseOrder={false} />
-      {holder}
       {nft.owner ? (
         <Container maxWidth="lg">
           <div className="container">
@@ -470,9 +466,7 @@ export default function TokenPage() {
                   >
                     {t("List for sale")}
                   </Web3Button>
-                  <button onClick={transferNft}>
-                    Transfer
-                  </button>
+                  <TransferButton address={collection} id={tokenId} />
                 </div>
               ) : null}
 

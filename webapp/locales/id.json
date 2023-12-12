@@ -110,5 +110,7 @@
   "ItemCount": "{{hitungan}} Barang",
   "Clear all": "Bersihkan semua",
   "Your Cart": "Keranjang Anda",
-  "Total Price": "Total harga"
+  "Total Price": "Total harga",
+  "Transfer successful": "Transfer berhasil",
+  "Confirm": "Mengonfirmasi"
 }

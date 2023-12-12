@@ -23,6 +23,7 @@ import { getNFTDetail } from "@/util/getNFT"
 import HexagonLogo from "@/components/HexagonLogo"
 import ApiClient from "@/util/request"
 import { useTranslation } from "react-i18next"
+import TransferButton from "@/components/TransferButton"
 
 const [randomColor1, randomColor2] = [randomColor(), randomColor()]
 
@@ -309,6 +310,7 @@ export default function TokenPage() {
                   >
                     List for sale
                   </Web3Button>
+                  <TransferButton address={collection} id={tokenId} />
                 </div>
               ) : null}
 
