@@ -267,9 +267,9 @@ export default function TokenPage() {
 
               {/* 自己的nft 并且还没授权给市场 */}
               {isApproved == zeroAddress &&
-              isApproved !== CONTRACTS_MAP.MARKETPLACE &&
-              !isApprovedForAll &&
-              nft.owner == address ? (
+                isApproved !== CONTRACTS_MAP.MARKETPLACE &&
+                !isApprovedForAll &&
+                nft.owner == address ? (
                 <>
                   <h4 className="formSectionTitle mb-2">Approve</h4>
                   <Web3Button
@@ -284,8 +284,8 @@ export default function TokenPage() {
               ) : null}
 
               {address !== zeroAddress &&
-              nft.owner == address &&
-              nftPrice.eq(0) ? (
+                nft.owner == address &&
+                nftPrice.eq(0) ? (
                 <div className="sell_info">
                   <h4 className="formSectionTitle">{t("Price")} </h4>
 
@@ -310,13 +310,17 @@ export default function TokenPage() {
                   >
                     List for sale
                   </Web3Button>
-                  <TransferButton address={collection} id={tokenId} />
+                  <TransferButton
+                    onSuccess={(owner) => SetNFT({ ...nft, owner })}
+                    address={collection}
+                    id={tokenId}
+                  />
                 </div>
               ) : null}
 
               {address !== zeroAddress &&
-              nft.owner == address &&
-              !nftPrice.eq(0) ? (
+                nft.owner == address &&
+                !nftPrice.eq(0) ? (
                 <div className="sell_info">
                   <h4 className="formSectionTitle">{t("Cancel Order")} </h4>
                   <Web3Button
@@ -331,8 +335,8 @@ export default function TokenPage() {
               ) : null}
 
               {address !== zeroAddress &&
-              nft.owner !== address &&
-              !nftPrice.eq(0) ? (
+                nft.owner !== address &&
+                !nftPrice.eq(0) ? (
                 <div className="sell_info">
                   <h4 className="formSectionTitle">{t("Excute Order")} </h4>
 

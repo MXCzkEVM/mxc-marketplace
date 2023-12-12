@@ -466,7 +466,11 @@ export default function TokenPage() {
                   >
                     {t("List for sale")}
                   </Web3Button>
-                  <TransferButton address={collection} id={tokenId} />
+                  <TransferButton
+                    onSuccess={(owner) => SetNFT({ ...nft, owner })}
+                    address={collection}
+                    id={tokenId}
+                  />
                 </div>
               ) : null}
 

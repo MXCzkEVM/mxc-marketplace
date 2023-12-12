@@ -10,7 +10,9 @@ import { ABI } from '@/const/Address'
 import IconLoading from './CartButton/IconLoading'
 
 export interface TransferToModalProps {
-  address: string, id: string
+  type?: 'erc721' | 'erc1155'
+  address: string;
+  id: string;
 }
 
 function TransferToModal(props: PropsWidthOverlays<TransferToModalProps>) {
@@ -23,7 +25,7 @@ function TransferToModal(props: PropsWidthOverlays<TransferToModalProps>) {
 
   const [toAddress, setToAddress] = useState('')
 
-  const { contract } = useContract(props.address, ABI.collection)
+  const { contract } = useContract(props.address, [])
 
   async function transferNft() {
     setLoading(true)
@@ -32,9 +34,13 @@ function TransferToModal(props: PropsWidthOverlays<TransferToModalProps>) {
         toast.warn(t("Please type a correct address"))
         return
       }
-      await contract?.erc721.transfer(toAddress, props.id)
-      resolve()
+      props.type === 'erc1155'
+        ? await contract?.erc1155.transfer(toAddress, props.id, 1)
+        : await contract?.erc721.transfer(toAddress, props.id)
+      resolve(toAddress)
+      setLoading(false)
     } catch (error) {
+      console.log(error)
       setLoading(false)
     }
   }

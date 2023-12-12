@@ -3,17 +3,20 @@ import TransferToModal, { TransferToModalProps } from "../TransferToModal"
 import { useInjectHolder } from "@overlays/react"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
-import { useState } from "react"
 export interface TransferButtonProps {
+  onSuccess?: (addr: string) => void
+  type?: 'erc721' | 'erc1155'
   address: string
   id: string
 }
 
 function TransferButton(props: TransferButtonProps) {
   const { t } = useTranslation()
-  const [visible, setVisible] = useState(false)
-  function transferNft() {
-    setVisible(true)
+  const [holder, openTransferToModal] = useInjectHolder<TransferToModalProps, string>(TransferToModal as any)
+  async function transferNft() {
+    const address = await openTransferToModal(props)
+    toast.success(t(`Transfer successful`))
+    props.onSuccess?.(address)
   }
 
   return <>
@@ -24,13 +27,7 @@ function TransferButton(props: TransferButtonProps) {
     >
       {t("Transfer")}
     </button>
-    <TransferToModal
-      visible={visible}
-      onReject={() => setVisible(false)}
-      address={props.address}
-      id={props.id}
-      onResolve={() => toast.success(t(`Transfer successful`))}
-    />
+    {holder}
   </>
 }
 
