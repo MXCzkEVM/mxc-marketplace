@@ -17,6 +17,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@hairy/utils": "^0.6.4",
+    "@overlays/react": "^0.4.3",
     "@pinata/sdk": "^2.1.0",
     "@rainbow-me/rainbowkit": "^1.0.2",
     "@reach/dialog": "^0.10.3",

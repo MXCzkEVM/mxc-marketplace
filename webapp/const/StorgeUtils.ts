@@ -23,7 +23,9 @@ const mep1002NameEvent = async () => {
         }
     })
     let namesTokens: any = await localforage.getItem('namesTokens') || []
+
     let newEvents = namesTokens.concat(events)
+
     await localforage.setItem('namesTokens__blocksNum', latestBlock)
     await localforage.setItem('namesTokens', newEvents)
 

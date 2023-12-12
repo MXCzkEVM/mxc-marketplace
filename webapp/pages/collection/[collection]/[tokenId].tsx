@@ -33,8 +33,10 @@ import { useTranslation } from "react-i18next"
 import { nftClient } from "@/util/apolloClient"
 import { Table } from 'antd'
 import { ColumnsType } from "antd/es/table"
+import {useInjectHolder} from '@overlays/react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import TransferToModal from "@/components/TransferToModal"
 dayjs.extend(relativeTime)
 
 const api = new ApiClient("/")
@@ -92,6 +94,8 @@ export default function TokenPage() {
     mkpContract,
     "executeOrder"
   )
+
+  const [holder, openTransferToModal] = useInjectHolder(TransferToModal)
 
   useEffect(() => {
     if (collection == zeroAddress) {
@@ -249,6 +253,9 @@ export default function TokenPage() {
 
     return txResult
   }
+  const transferNft = async () => {
+    openTransferToModal()
+  }
 
   const requestNftOrders = async () => {
     if (collection === zeroAddress)
@@ -342,6 +349,7 @@ export default function TokenPage() {
   return (
     <div className="nft_detail">
       <Toaster position="bottom-center" reverseOrder={false} />
+      {holder}
       {nft.owner ? (
         <Container maxWidth="lg">
           <div className="container">
@@ -461,6 +469,9 @@ export default function TokenPage() {
                   >
                     {t("List for sale")}
                   </Web3Button>
+                  <button onClick={transferNft}>
+                    Transfer
+                  </button>
                 </div>
               ) : null}
 

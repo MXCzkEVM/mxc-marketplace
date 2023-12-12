@@ -77,6 +77,7 @@ export default function CollectPage() {
       setCollectionDta(nwData)
       let nftList = await getThirdWebNFTList(nftLis)
       setNFTS(nftList)
+      console.log(nftList)
     }
     fetchData()
   }, [collectionAddress, nftLis])
