@@ -102,5 +102,13 @@
   "AuthenticateDes": "MXC NFT の信頼性を高め、位置証明を組み込むために、NFT 発行時に Twitter ID を認証することをお勧めします。\nこのステップにより、リストに信頼の層が追加されます。",
   "Skip": "スキップ",
   "Authenticate": "認証する",
-  "Sold": "販売済み"
+  "Sold": "販売済み",
+  "Added to shopping cart": "ショッピングカートに追加されました",
+  "Removed from shopping cart": "ショッピングカートから削除されました",
+  "Complete Purchase": "購入を完了する",
+  "Add a project to get started": "プロジェクトを追加して開始します。",
+  "ItemCount": "{{count}} 個のアイテム",
+  "Clear all": "すべてクリア",
+  "Your Cart": "あなたのカート",
+  "Total Price": "合計金額"
 }

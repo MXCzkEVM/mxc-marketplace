@@ -59,6 +59,7 @@
     "react-use-gesture": "^6.0.14",
     "styled-components": "^6.0.0-rc.3",
     "tailwindcss": "^3.3.2",
+    "valtio": "^1.12.1",
     "wagmi": "^1.2.0",
     "web3": "^4.0.2"
   },

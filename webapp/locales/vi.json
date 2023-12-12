@@ -102,5 +102,13 @@
   "AuthenticateDes": "Để nâng cao độ tin cậy của MXC NFT và kết hợp bằng chứng vị trí, chúng tôi mời bạn xác thực ID Twitter của mình trong quá trình phát hành NFT. \nBước này thêm một lớp tin cậy vào danh sách của bạn.",
   "Skip": "Nhảy",
   "Authenticate": "Xác thực",
-  "Sold": "Đã bán"
+  "Sold": "Đã bán",
+  "Added to shopping cart": "Đã thêm vào giỏ hàng",
+  "Removed from shopping cart": "Đã xóa khỏi giỏ hàng",
+  "Complete Purchase": "Hoàn tất mua hàng",
+  "Add a project to get started": "Thêm một dự án để bắt đầu.",
+  "ItemCount": "{{count}} mục",
+  "Clear all": "Làm sạch tất cả",
+  "Your Cart": "Giỏ hàng của bạn",
+  "Total Price": "Tổng giá"
 }

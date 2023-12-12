@@ -103,5 +103,13 @@
   "AuthenticateDes": "To elevate the credibility of MXC NFTs and incorporate location proofs, we invite you to authenticate your Twitter ID during the NFT issuance. This step adds a layer of trust to your listings.",
   "Skip": "Skip",
   "Authenticate": "Authenticate",
-  "Sold": "Sold"
+  "Sold": "Sold",
+  "Added to shopping cart": "Added to shopping cart",
+  "Removed from shopping cart": "Removed from shopping cart",
+  "Complete Purchase": "Complete Purchase",
+  "Add a project to get started": "Add a project to get started.",
+  "ItemCount": "{{count}} Item",
+  "Clear all": "Clear all",
+  "Your Cart": "Your Cart",
+  "Total Price": "Total Price"
 }

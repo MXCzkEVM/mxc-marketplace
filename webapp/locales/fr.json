@@ -102,5 +102,13 @@
   "AuthenticateDes": "Pour accroître la crédibilité des MXC NFT et intégrer des preuves de localisation, nous vous invitons à authentifier votre identifiant Twitter lors de l'émission du NFT. \nCette étape ajoute une couche de confiance à vos annonces.",
   "Skip": "Sauter",
   "Authenticate": "Authentifier",
-  "Sold": "Vendu"
+  "Sold": "Vendu",
+  "Added to shopping cart": "Ajouté au panier",
+  "Removed from shopping cart": "Retiré du panier",
+  "Complete Purchase": "Finaliser l'achat",
+  "Add a project to get started": "Ajoutez un projet pour commencer.",
+  "ItemCount": "{{count}} Article",
+  "Clear all": "Tout effacer",
+  "Your Cart": "Votre panier",
+  "Total Price": "Prix ​​total"
 }

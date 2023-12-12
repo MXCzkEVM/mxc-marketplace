@@ -102,5 +102,13 @@
   "AuthenticateDes": "为了提高 MXC极域 NFT 的可信度并纳入位置证明，我们邀请您在 NFT 发行期间验证您的 Twitter ID。\n此步骤为您的列表添加了一层信任。",
   "Skip": "跳过",
   "Authenticate": "认证",
-  "Sold": "上架"
+  "Sold": "上架",
+  "Added to shopping cart": "已添加至购物车",
+  "Removed from shopping cart": "已从购物车中删除",
+  "Complete Purchase": "完成购买",
+  "Add a project to get started": "添加一个项目即可开始。",
+  "ItemCount": "{{count}} 项",
+  "Clear all": "全部清除",
+  "Your Cart": "您的购物车",
+  "Total Price": "总价"
 }

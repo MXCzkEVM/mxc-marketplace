@@ -102,5 +102,13 @@
   "AuthenticateDes": "Om de geloofwaardigheid van MXC NFT's te vergroten en locatiebewijzen op te nemen, nodigen we u uit om uw Twitter-ID te authenticeren tijdens de NFT-uitgifte. \nDeze stap voegt een vertrouwenslaag toe aan uw vermeldingen.",
   "Skip": "Overslaan",
   "Authenticate": "Authenticeren",
-  "Sold": "Verkocht"
+  "Sold": "Verkocht",
+  "Added to shopping cart": "Toegevoegd aan winkelwagen",
+  "Removed from shopping cart": "Verwijderd uit winkelwagen",
+  "Complete Purchase": "Voltooi aankoop",
+  "Add a project to get started": "Voeg een project toe om aan de slag te gaan.",
+  "ItemCount": "{{count}} Artikel",
+  "Clear all": "Wis alles",
+  "Your Cart": "Jouw winkelwagen",
+  "Total Price": "Totale prijs"
 }

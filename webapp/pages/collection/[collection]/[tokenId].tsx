@@ -34,6 +34,7 @@ import { nftClient } from "@/util/apolloClient"
 import { Table } from 'antd'
 import { ColumnsType } from "antd/es/table"
 import {useInjectHolder} from '@overlays/react'
+import { AddCartButton } from "@/components/CartButton/AddCartButton"
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import TransferToModal from "@/components/TransferToModal"
@@ -514,15 +515,26 @@ export default function TokenPage() {
                 !nftPrice.eq(0) ? (
                 <div className="sell_info">
                   <h4 className="formSectionTitle">{t("Excute Order")} </h4>
-
-                  <Web3Button
-                    contractAddress={CONTRACTS_MAP.MARKETPLACE}
-                    contractAbi={ABI.marketplace}
-                    action={async () => await buyMakeOrder()}
-                    className="list_btn"
-                  >
-                    {t("Buy at asking price")}
-                  </Web3Button>
+                  <div className="flex gap-3 items-center">
+                    <Web3Button
+                      contractAddress={CONTRACTS_MAP.MARKETPLACE}
+                      contractAbi={ABI.marketplace}
+                      action={async () => await buyMakeOrder()}
+                      className="flex-1"
+                    >
+                      {t("Buy at asking price")}
+                    </Web3Button>
+                    <AddCartButton
+                      item={{
+                        address: collection,
+                        asset: Number(tokenId),
+                        image: nft.image,
+                        meta: nft.metadata,
+                        owner: nft.owner,
+                        price: nftPrice.toString()
+                      }}
+                    />
+                  </div>
                 </div>
               ) : null}
               <h4 style={{ fontWeight: 600, fontSize: '18px', marginBottom: '1rem' }}>
