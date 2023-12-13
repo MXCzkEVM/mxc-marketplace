@@ -7,12 +7,12 @@ const twitterProvider = TwitterProvider({
   clientSecret: process.env.TWITTER_SECRET!,
   version: '2.0',
 })
-twitterProvider.profile = function({data}:any) {
+twitterProvider.profile = function ({data}: any) {
   return {
     id: data.id,
-    name: '-----------------------------------------------',
-    email: '+++++++++++++++++++++++++++++++++++++++++++++++',
-    image: '================================================',
+    name: '-------------------------------------------',
+    email: '-------------------------------------------',
+    image: '-------------------------------------------',
   }
 }
 export default NextAuth({
