@@ -46,7 +46,7 @@ function TransferToModal(props: PropsWidthOverlays<TransferToModalProps>) {
   }
 
   return <Modal open={visible} onCancel={() => reject()} footer={false}>
-    <div className='mb-6'>Transfer Confirm</div>
+    <div className='mb-6'>{t('Transfer Confirm')}</div>
     <div className='flex'>
       <input value={toAddress} placeholder='To Address' onChange={(e) => setToAddress(e.target.value)} className='flex-1 p-3' />
     </div>
