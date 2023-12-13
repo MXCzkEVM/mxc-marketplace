@@ -58,6 +58,7 @@ export function Navbar(props: any) {
             <MenuItem href="/collections">{t("Collections")}</MenuItem>
             <MenuItem href="/hexagons">{t("Hexagon")}</MenuItem>
             <MenuItem href="/domains">{t("Domains")}</MenuItem>
+            <MenuItem>{t("Cart")}</MenuItem>
           </Menu>
         </div>
 
@@ -67,7 +68,7 @@ export function Navbar(props: any) {
           </div>
           {address && (<>
             <a href={`/profile/${address}`}>
-              <IconWallet className="text-gradient text-[42px]" />
+              <IconWallet className="text-[42px]" />
             </a>
             <CartButton />
           </>)}
