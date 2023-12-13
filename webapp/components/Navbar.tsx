@@ -58,7 +58,6 @@ export function Navbar(props: any) {
             <MenuItem href="/collections">{t("Collections")}</MenuItem>
             <MenuItem href="/hexagons">{t("Hexagon")}</MenuItem>
             <MenuItem href="/domains">{t("Domains")}</MenuItem>
-            <MenuItem>{t("Cart")}</MenuItem>
           </Menu>
         </div>
 
