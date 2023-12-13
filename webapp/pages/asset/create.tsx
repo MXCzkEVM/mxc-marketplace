@@ -90,7 +90,7 @@ export default function AssetCrearePage() {
   const { mutateAsync: mintNFT } = useContractWrite(collectionContract, "mint")
   async function cal() {
     const session = await  getSession({})
-    console.log(session)
+    console.log({session})
   }
   useEffect(() => {
     cal()
