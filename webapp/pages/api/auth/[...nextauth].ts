@@ -11,9 +11,9 @@ const twitterProvider = TwitterProvider({
 twitterProvider.profile = function ({ data }: any) {
   console.log('profile--------------', data)
   return {
-    id: data.id,
+    id: data.id || data.id_str,
     name: data.name,
-    email: data.id ||'!!!!!!!!!!!!!!!!!!!',
+    email: data.id || data.id_str || '!!!!!!!!!!!!!!!!!!!',
     image: data.profile_image_url,
   }
 }
@@ -21,6 +21,13 @@ export default NextAuth({
   providers: [
     twitterProvider
   ],
+  callbacks: {
+    session({ session }) {
+      if (session.user)
+        session.user.email = '------------------------------------------------'
+      return session
+    },
+  },
   secret: 'e4c972eb07ac063727a910f072f80ab4'
 });
 
