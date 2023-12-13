@@ -12,6 +12,8 @@ export default NextAuth({
       token: "https://api.twitter.com/2/oauth2/token",
       userinfo:
         "https://api.twitter.com/2/users/me?user.fields=?user.fields=id,name,username,profile_image_url",
+      clientId: process.env.TWITTER_ID!,
+      clientSecret: process.env.TWITTER_SECRET!,
       profile({ data }) {
         return {
           id: '----------------------------------------------',
