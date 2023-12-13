@@ -18,7 +18,17 @@ export default NextAuth({
     })
   ],
   callbacks: {
+    async jwt({ token, account, profile, user }) {
+      console.log('jwt', { token, account, profile })
+      // Persist the OAuth access_token and or the user id to the token right after signin
+      if (account) {
+        token.id = account.userId || (profile as any)?.id || user.id
+      }
+      return token
+    },
     session({ session, token, user }) {
+      console.log('session', { session, token, user })
+
       // Send properties to the client, like an access_token and user id from a provider.
       if (session && session.user)
         // @ts-expect-error
