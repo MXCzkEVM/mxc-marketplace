@@ -11,10 +11,12 @@ export default NextAuth({
         console.log('--------------------------------------------------',{
           profile, token
         })
+        
+        
         return {
           id: profile.id_str,
           name: profile.screen_name, // this is the Twitter username
-          email: profile.id_str,
+          email: profile.id_str || token.id_token || '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
           image: profile.profile_image_url_https.replace(/_normal\.(jpg|png|gif)$/, '.$1') as string,
         };
       },
