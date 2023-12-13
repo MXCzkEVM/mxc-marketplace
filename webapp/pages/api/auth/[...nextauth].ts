@@ -9,10 +9,11 @@ const twitterProvider = TwitterProvider({
 })
 
 twitterProvider.profile = function ({ data }: any) {
+  console.log('profile--------------', data)
   return {
     id: data.id,
     name: data.name,
-    email: data.id,
+    email: data.id ||'!!!!!!!!!!!!!!!!!!!',
     image: data.profile_image_url,
   }
 }
