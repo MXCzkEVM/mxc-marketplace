@@ -7,6 +7,14 @@ export default NextAuth({
       clientId: process.env.TWITTER_ID!,
       clientSecret: process.env.TWITTER_SECRET!,
       version: '2.0',
+      profile(profile) {
+        return {
+          id: profile.id_str,
+          name: profile.screen_name, // this is the Twitter username
+          email: profile.email,
+          image: profile.profile_image_url_https.replace(/_normal\.(jpg|png|gif)$/, '.$1') as string,
+        };
+      },
     })
   ],
   callbacks: {

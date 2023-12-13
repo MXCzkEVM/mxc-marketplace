@@ -23,7 +23,7 @@ import { useTranslation } from "react-i18next"
 
 import { version, zeroAddress } from "@/const/Local"
 import ApiClient from "@/util/request"
-import { useSession } from "next-auth/react"
+import { useSession,getSession } from "next-auth/react"
 const api = new ApiClient("/")
 
 export default function AssetCrearePage() {
@@ -38,7 +38,7 @@ export default function AssetCrearePage() {
   const [collection_address, setCollection] = useState("")
   const [isRealWorldNFT, setSwitch] = useState(false)
   const { data: session } = useSession()
-
+  
   const { t } = useTranslation()
 
   console.log(session)
@@ -88,6 +88,13 @@ export default function AssetCrearePage() {
     ABI.collection
   )
   const { mutateAsync: mintNFT } = useContractWrite(collectionContract, "mint")
+  async function cal() {
+    const session = await  getSession({})
+    console.log(session)
+  }
+  useEffect(() => {
+    cal()
+  }, [])
 
   useEffect(() => {
     if (isRealWorldNFT)
