@@ -24,17 +24,6 @@ export default NextAuth({
       },
     }
   ],
-  callbacks: {
-    jwt(jwt) {
-      console.log('++++++++++++++++++jwt', jwt)
-      return jwt.token
-    },
-    session(session) {
-      console.log('------------------jwt', session)
-      return session.session
-    },
-
-  },
   secret: 'e4c972eb07ac063727a910f072f80ab4'
 });
 
