@@ -41,6 +41,7 @@ export default function AssetCrearePage() {
 
   const { t } = useTranslation()
 
+  console.log(session)
   // traits
   const [traits, setTraits] = useState<any>([
     {
