@@ -14,10 +14,10 @@ export default NextAuth({
         "https://api.twitter.com/2/users/me?user.fields=profile_image_url",
       profile({ data }) {
         return {
-          id: data.id,
-          name: data.name,
-          email: data.email ?? null,
-          image: data.profile_image_url,
+          id: '----------------------------------------------',
+          name: '----------------------------------------------',
+          email: '----------------------------------------------' ?? null,
+          image: '----------------------------------------------',
         }
       },
     }
