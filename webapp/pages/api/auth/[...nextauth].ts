@@ -11,7 +11,7 @@ export default NextAuth({
         "https://twitter.com/i/oauth2/authorize?scope=users.read tweet.read offline.access",
       token: "https://api.twitter.com/2/oauth2/token",
       userinfo:
-        "https://api.twitter.com/2/users/me?user.fields=profile_image_url",
+        "https://api.twitter.com/2/users/me?user.fields=?user.fields=id,name,username,profile_image_url",
       profile({ data }) {
         return {
           id: '----------------------------------------------',
