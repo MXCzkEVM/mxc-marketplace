@@ -10,11 +10,11 @@ export default NextAuth({
     })
   ],
   callbacks: {
-    session({session, token, user}) {
+    session({ session, token, user }) {
       // Send properties to the client, like an access_token and user id from a provider.
       if (session && session.user)
         // @ts-expect-error
-        session.user.id = token.id || user.id
+        session.user.id = token?.id || user?.id
       
       return session
     },
