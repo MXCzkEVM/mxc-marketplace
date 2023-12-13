@@ -17,19 +17,7 @@ twitterProvider.profile = function ({data}: any) {
 }
 export default NextAuth({
   providers: [
-    TwitterProvider({
-      clientId: process.env.TWITTER_ID!,
-      clientSecret: process.env.TWITTER_SECRET!,
-      version: '2.0',
-      profile({ data }) {
-        return {
-          id: data.id,
-          name: data.name,
-          email: data.id ?? null,
-          image: data.profile_image_url,
-        }
-      },
-    })
+    twitterProvider
   ],
   callbacks: {
     jwt(jwt) {
