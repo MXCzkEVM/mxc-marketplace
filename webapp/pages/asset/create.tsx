@@ -43,9 +43,6 @@ export default function AssetCrearePage() {
 
   // traits
   const [traits, setTraits] = useState<any>([
-    ...(session
-      ? [{ trait_type: 'Twitter', value: session.user?.name, edit: false }]
-      : []),
     {
       trait_type: "Year",
       value: "2023",
@@ -62,6 +59,9 @@ export default function AssetCrearePage() {
       trait_type: "Network",
       value: "NEO and M2Pro",
     },
+    ...(session
+      ? [{ trait_type: 'Twitter', value: session.user?.name, edit: false }]
+      : []),
     // {
     //   trait_type: "Social Handle",
     //   value: "@MXCFoundation",
@@ -370,22 +370,24 @@ export default function AssetCrearePage() {
                       <span className="font-semibold">{trait_type}</span>:{" "}
                       {value}
                     </p>
-                    {edit !== false && (
-                      <div>
+
+
+                    <div>
+                      {edit !== false && (
                         <button
                           className="mr-2 text-yellow-500"
                           onClick={() => handleEditTrait(i)}
                         >
                           {t("Edit")}
                         </button>
-                        <button
-                          className="text-red-500"
-                          onClick={() => handleDeleteTrait(i)}
-                        >
-                          {t("Delete")}
-                        </button>
-                      </div>
-                    )}
+                      )}
+                      <button
+                        className="text-red-500"
+                        onClick={() => handleDeleteTrait(i)}
+                      >
+                        {t("Delete")}
+                      </button>
+                    </div>
 
                   </div>
                 ))}
