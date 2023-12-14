@@ -7,20 +7,20 @@ import { useAddress } from '@thirdweb-dev/react'
 const runs: Record<string, boolean> = {}
 
 export function useName(addr: string | undefined, def?: boolean) {
-  const { ready, getName } = useEns()
+  const ens = useEns()
   const names = useNamesStore()
 
   const address = addr?.toLocaleUpperCase()
 
   async function fetchNameByAddress(address?: string) {
-    if (!address || !ready || runs[address])
+    if (!address || !ens.ready || runs[address])
       return
     runs[address] = true
     if (address === '0x0000000000000000000000000000000000000000')
       return
     if (names.getName(address))
       return
-    const res = await getName(address)
+    const res = await ens.getName(address)
     if (!res || !res.name || !res.match)
       return
     names.setName(address, res.name)
@@ -28,7 +28,7 @@ export function useName(addr: string | undefined, def?: boolean) {
 
   useEffect(() => {
     fetchNameByAddress(address)
-  }, [ready, address])
+  }, [ens.ready, address])
 
   return useMemo(() => {
     if (!address)

@@ -37,8 +37,9 @@ export default function ProfilePage() {
     "nfts" | "collections" | "hexagons" | "domains"
   >("collections")
   const router = useRouter()
-  const address = router.query.address || zeroAddress
-  const name = useName(address as string)
+  const address = router.query.address
+
+  const name = useName(router.query.address as string)
   const { t } = useTranslation()
 
   return (
@@ -58,9 +59,7 @@ export default function ProfilePage() {
             }}
           />
           <h1 className={styles.profileName}>
-            {address ? name : (
-              <Skeleton width="320" />
-            )}
+            {address ? name : <Skeleton width="320" />}
           </h1>
         </div>
 
