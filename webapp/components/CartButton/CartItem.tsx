@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import useCartStore, { CartItem as _CartItem } from '@/store'
+import { useCartStore, CartItem as _CartItem } from '@/store'
 import { Tag } from 'antd'
 import IconRemove from './IconRemove'
 import toast from 'react-hot-toast'
@@ -11,12 +11,12 @@ interface CartItemProps {
 
 function CartItem(props: CartItemProps) {
   const cartStore = useCartStore()
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   function onMinusCart() {
     cartStore.remove(props.item.address, props.item.asset)
-    toast.success(t('Removed from shopping cart'), {position: 'bottom-right'})
+    toast.success(t('Removed from shopping cart'), { position: 'bottom-right' })
   }
-  
+
   return <div className='flex text-black text-sm'>
     <a className='w-[72px] h-[72px] mr-4 overflow-hidden rounded-md' href={`/collection/${props.item.address}/${props.item.asset}`}>
       <img className='w-full h-full' src={props.item.image} alt="" />

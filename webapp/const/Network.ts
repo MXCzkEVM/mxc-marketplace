@@ -98,7 +98,10 @@ const networks: any = {
 
 export const NETWORK = networks[CHAIN_ID]
 export const ETHERSCAN_URL = NETWORK.etherscan
-export const provider = new ethers.providers.JsonRpcProvider(networks[CHAIN_ID].rpc[0]);
+export const provider = new ethers.providers.JsonRpcProvider(networks[CHAIN_ID].rpc[0], {
+  chainId: +CHAIN_ID,
+  name: 'MXC'
+});
 export const graphNode = NETWORK.graphNode
 
 export const gatewayUrls = {

@@ -1,6 +1,6 @@
 import { CartItem } from "@/store";
 import { useMemo } from "react";
-import useCartStore from "@/store";
+import { useCartStore } from "@/store";
 import IconCartMinus from "./IconCartMinus";
 import IconCartPlus from "./IconCartPlus";
 import { toast } from "react-toastify"

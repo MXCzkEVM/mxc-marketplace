@@ -40,6 +40,7 @@
     "i18next-browser-languagedetector": "^7.1.0",
     "localforage": "^1.10.0",
     "next": "^13",
+    "@ensdomains/ensjs": "3.0.0-alpha.62",
     "next-auth": "^4.24.5",
     "nextjs-progressbar": "^0.0.16",
     "polished": "^3.3.2",

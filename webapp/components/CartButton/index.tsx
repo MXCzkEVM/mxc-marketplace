@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Badge, Drawer } from 'antd'
 import IconCart from './IconCart'
 import CartItem from "./CartItem";
-import useCartStore, { CartItem as CartItemType } from "@/store";
+import { useCartStore, CartItem as CartItemType } from "@/store";
 import { useTranslation } from "react-i18next";
 import { BigNumber, ethers } from "ethers";
 import { useAddress, useContract, useContractWrite } from "@thirdweb-dev/react";
@@ -51,14 +51,14 @@ export default function CartButton() {
     try {
       await Promise.all(cartStore.carts.map(buyMarkOrder))
       toast.success(t("Purchase success"))
-     setLoading(false)
+      setLoading(false)
     } catch (error) {
       console.log(error)
       toast.error(t("Purchase failed"))
       setLoading(false)
     }
   }
-  
+
 
   return <>
     <div className="mt-3 cursor-pointer" onClick={() => setShowCartDrawer(true)}>
@@ -100,12 +100,12 @@ export default function CartButton() {
         onClick={buyAllTokens}
       >
         {
-          !loading 
-          ?  <>{t('Complete Purchase')}</>
-          : <IconLoading />
+          !loading
+            ? <>{t('Complete Purchase')}</>
+            : <IconLoading />
         }
-        
-        
+
+
       </button>
     </Drawer>
   </>
