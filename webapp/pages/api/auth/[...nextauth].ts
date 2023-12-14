@@ -19,19 +19,19 @@ export default NextAuth({
               Authorization: `Bearer ${tokens.access_token}`,
             },
           })
-          return response.json()
+          const json = await response.json()
+          return {
+            id: json.id,
+            name: json.id,
+            image: '------',
+            email: '------',
+            sub: '-----'
+          }
         },
       },
       clientId: process.env.TWITTER_ID!,
       clientSecret: process.env.TWITTER_SECRET!,
-      profile({ data }) {
-        return {
-          id: data.id,
-          name: data.name,
-          email: data.id,
-          image: '--------------------------',
-        }
-      },
+      profile: undefined as any
     }
   ],
   secret: 'e4c972eb07ac063727a910f072f80ab4'
