@@ -16,6 +16,7 @@ import { randomColor } from "@/util/randomColor"
 import { zeroAddress } from "@/const/Local"
 import dynamic from "next/dynamic"
 import { useTranslation } from "react-i18next"
+import { useName } from "@/hooks"
 
 const ProfileCollections = dynamic(
   () => import("@/components/Profile/Collections")
@@ -37,6 +38,7 @@ export default function ProfilePage() {
   >("collections")
   const router = useRouter()
   const address = router.query.address || zeroAddress
+  const name = useName(address as string)
   const { t } = useTranslation()
 
   return (
@@ -56,11 +58,7 @@ export default function ProfilePage() {
             }}
           />
           <h1 className={styles.profileName}>
-            {address ? (
-              address.toString().substring(0, 4) +
-              "..." +
-              address.toString().substring(38, 42)
-            ) : (
+            {address ? name : (
               <Skeleton width="320" />
             )}
           </h1>

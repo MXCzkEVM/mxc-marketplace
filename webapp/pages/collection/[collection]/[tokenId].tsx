@@ -33,11 +33,10 @@ import { useTranslation } from "react-i18next"
 import { nftClient } from "@/util/apolloClient"
 import { Table } from 'antd'
 import { ColumnsType } from "antd/es/table"
-import { useInjectHolder } from '@overlays/react'
+import { useName, useNamesByAddress } from '@/hooks'
 import { AddCartButton } from "@/components/CartButton/AddCartButton"
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import TransferToModal from "@/components/TransferToModal"
 import TransferButton from "@/components/TransferButton"
 dayjs.extend(relativeTime)
 
@@ -52,6 +51,10 @@ export default function TokenPage() {
   const [inputPrice, setInputPrice] = useState<any>("")
   const router = useRouter()
   const address = useAddress() || zeroAddress
+  const ownerName = useName(nft.owner)
+  const [tableAddress, setTableAddress] = useState<string[]>([])
+  const names = useNamesByAddress(tableAddress)
+
   const { t } = useTranslation()
 
   const { collection = zeroAddress, tokenId = "0" } = router.query as {
@@ -64,7 +67,7 @@ export default function TokenPage() {
   const { data: isApproved } = useContractRead(nftContract, "getApproved", [
     tokenId,
   ])
-  
+
   const { data: isApprovedForAll } = useContractRead(
     nftContract,
     "isApprovedForAll",
@@ -264,6 +267,10 @@ export default function TokenPage() {
     const orderInfos = [...result.data.marketplaceOrderInfos]
     orderInfos.sort((a: any, b: any) => b.blockTimestamp - a.blockTimestamp)
     setOrderInfos(orderInfos)
+    setTableAddress([
+      ...orderInfos.map((o: any) => o.buyer),
+      ...orderInfos.map((o: any) => o.seller)
+    ])
   }
 
   useEffect(() => {
@@ -302,8 +309,7 @@ export default function TokenPage() {
       render(value) {
         if (!value) return '-'
         return <Link target="_blank" href={`${explorerUrl}/address/${value}`}>
-          {value.slice(0, 4)}...
-          {value.slice(-4)}
+            {names[value.toLocaleUpperCase()]}
         </Link>
       },
     },
@@ -314,8 +320,7 @@ export default function TokenPage() {
       render(value) {
         if (!value) return '-'
         return <Link target="_blank" href={`${explorerUrl}/address/${value}`}>
-          {value.slice(0, 4)}...
-          {value.slice(-4)}
+          {names[value.toLocaleUpperCase()]}
         </Link>
       },
     },
@@ -410,8 +415,7 @@ export default function TokenPage() {
                   <div className="nftOwnerInfo">
                     <p className="label">{t("Current Owner")}</p>
                     <p className="nftOwnerAddress">
-                      {nft.owner.slice(0, 8)}...
-                      {nft.owner.slice(-4)}
+                      {ownerName}
                     </p>
                   </div>
                 </Link>
@@ -444,7 +448,6 @@ export default function TokenPage() {
                 nftPrice.eq(0) ? (
                 <div className="sell_info">
                   <h4 className="formSectionTitle">{t("Price")} </h4>
-
                   <PriceInput
                     className="input"
                     placeholder="NFT Price"
@@ -511,7 +514,7 @@ export default function TokenPage() {
               {address !== zeroAddress &&
                 nft.owner !== address &&
                 !nftPrice.eq(0) ? (
-                <div className="sell_info">
+                <div className="sell_info mb-6">
                   <h4 className="formSectionTitle">{t("Excute Order")} </h4>
                   <div className="flex gap-3 items-center">
                     <Web3Button
@@ -535,7 +538,7 @@ export default function TokenPage() {
                   </div>
                 </div>
               ) : null}
-              <h4 style={{ fontWeight: 600, fontSize: '18px', marginBottom: '1rem' }}>
+              <h4 className="formSectionTitle mb-3">
                 {t('Order Events')}
               </h4>
               <Table scroll={{ x: 800 }} pagination={false} dataSource={orderInfos} columns={columns} />

@@ -4,7 +4,6 @@ import { CHAIN_ID, provider } from '../const/Network'
 
 import { ENS } from '@ensdomains/ensjs'
 import type { ContractName } from '@ensdomains/ensjs/contracts/types'
-import { getChainProvider } from '@thirdweb-dev/sdk'
 
 const opts: ConstructorParameters<typeof ENS>[0] = {}
 

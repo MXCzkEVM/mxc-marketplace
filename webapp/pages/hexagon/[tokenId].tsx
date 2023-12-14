@@ -24,6 +24,7 @@ import HexagonLogo from "@/components/HexagonLogo"
 import ApiClient from "@/util/request"
 import { useTranslation } from "react-i18next"
 import TransferButton from "@/components/TransferButton"
+import { useName } from "@/hooks"
 
 const [randomColor1, randomColor2] = [randomColor(), randomColor()]
 
@@ -36,6 +37,8 @@ export default function TokenPage() {
   const address = useAddress() || zeroAddress
   const collection = CONTRACTS_MAP.MEP1002Name
   const { t } = useTranslation()
+  const ownerName = useName(nft.owner)
+
 
   const { tokenId = "0" } = router.query as {
     tokenId: string
@@ -236,8 +239,7 @@ export default function TokenPage() {
                   <div className="nftOwnerInfo">
                     <p className="label">{t("Current Owner")}</p>
                     <p className="nftOwnerAddress">
-                      {nft.owner.slice(0, 8)}...
-                      {nft.owner.slice(-4)}
+                      {ownerName}
                     </p>
                   </div>
                 </Link>
