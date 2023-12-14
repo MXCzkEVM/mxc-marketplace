@@ -11,7 +11,6 @@ export default NextAuth({
       version: '2.0',
       userinfo: 'https://api.twitter.com/2/users/me?user.fields=id,username,profile_image_url',
       profile(profile) {
-        console.log({profile})
         return {
           id: profile.data.id,
           name: profile.data.username,
