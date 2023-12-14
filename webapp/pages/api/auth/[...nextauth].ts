@@ -9,13 +9,14 @@ export default NextAuth({
       clientId: process.env.TWITTER_ID!,
       clientSecret: process.env.TWITTER_SECRET!,
       version: '2.0',
-      userinfo: 'https://api.twitter.com/2/users/me?user.fields=id,profile_image_url',
-      profile({ data }) {
+      userinfo: 'https://api.twitter.com/2/users/me?user.fields=id,username,profile_image_url',
+      profile(profile) {
+        console.log({profile})
         return {
-          id: data.id,
-          name: data.name,
-          email: data.id,
-          image: data.profile_image_url,
+          id: profile.data.id,
+          name: profile.data.username,
+          email: profile.data.email ?? null,
+          image: profile.data.profile_image_url,
         }
       },
     })
