@@ -23,7 +23,7 @@ import { useTranslation } from "react-i18next"
 
 import { version, zeroAddress } from "@/const/Local"
 import ApiClient from "@/util/request"
-import { useSession,getSession } from "next-auth/react"
+import { useSession, getSession } from "next-auth/react"
 const api = new ApiClient("/")
 
 export default function AssetCrearePage() {
@@ -38,12 +38,14 @@ export default function AssetCrearePage() {
   const [collection_address, setCollection] = useState("")
   const [isRealWorldNFT, setSwitch] = useState(false)
   const { data: session } = useSession()
-  
+
   const { t } = useTranslation()
 
-  console.log(session)
   // traits
   const [traits, setTraits] = useState<any>([
+    ...(session
+      ? [{ trait_type: 'Twitter', value: session.user?.name, edit: false }]
+      : []),
     {
       trait_type: "Year",
       value: "2023",
@@ -60,9 +62,6 @@ export default function AssetCrearePage() {
       trait_type: "Network",
       value: "NEO and M2Pro",
     },
-    ...(session 
-     ? [{ trait_type: 'Twitter', value: session.user?.name }]
-     : []),
     // {
     //   trait_type: "Social Handle",
     //   value: "@MXCFoundation",
@@ -88,13 +87,6 @@ export default function AssetCrearePage() {
     ABI.collection
   )
   const { mutateAsync: mintNFT } = useContractWrite(collectionContract, "mint")
-  async function cal() {
-    const session = await  getSession({})
-    console.log({session})
-  }
-  useEffect(() => {
-    cal()
-  }, [])
 
   useEffect(() => {
     if (isRealWorldNFT)
@@ -372,26 +364,29 @@ export default function AssetCrearePage() {
             </div>
             <div className="inputWrapper">
               <div className="p-4 bg-black text-white shadow-md rounded">
-                {traits.map(({ trait_type, value }: any, i: any) => (
+                {traits.map(({ trait_type, value, edit }: any, i: any) => (
                   <div key={i} className="flex justify-between mb-2">
                     <p>
                       <span className="font-semibold">{trait_type}</span>:{" "}
                       {value}
                     </p>
-                    <div>
-                      <button
-                        className="mr-2 text-yellow-500"
-                        onClick={() => handleEditTrait(i)}
-                      >
-                        {t("Edit")}
-                      </button>
-                      <button
-                        className="text-red-500"
-                        onClick={() => handleDeleteTrait(i)}
-                      >
-                        {t("Delete")}
-                      </button>
-                    </div>
+                    {edit !== false && (
+                      <div>
+                        <button
+                          className="mr-2 text-yellow-500"
+                          onClick={() => handleEditTrait(i)}
+                        >
+                          {t("Edit")}
+                        </button>
+                        <button
+                          className="text-red-500"
+                          onClick={() => handleDeleteTrait(i)}
+                        >
+                          {t("Delete")}
+                        </button>
+                      </div>
+                    )}
+
                   </div>
                 ))}
 
@@ -433,9 +428,8 @@ export default function AssetCrearePage() {
               <div className="flex items-center justify-start">
                 <label
                   htmlFor="toggle"
-                  className={`relative inline-block w-12 h-6 transition-all duration-200 ease-in-out bg-gray-400 rounded-full shadow-inner cursor-pointer ${
-                    isRealWorldNFT && "bg-green-400"
-                  }`}
+                  className={`relative inline-block w-12 h-6 transition-all duration-200 ease-in-out bg-gray-400 rounded-full shadow-inner cursor-pointer ${isRealWorldNFT && "bg-green-400"
+                    }`}
                 >
                   <input
                     id="toggle"
@@ -445,9 +439,8 @@ export default function AssetCrearePage() {
                     onChange={() => setSwitch(!isRealWorldNFT)}
                   />
                   <span
-                    className={`absolute left-1 top-1 w-4 h-4 transition-all duration-200 ease-in-out bg-white rounded-full shadow ${
-                      isRealWorldNFT && "transform translate-x-6"
-                    }`}
+                    className={`absolute left-1 top-1 w-4 h-4 transition-all duration-200 ease-in-out bg-white rounded-full shadow ${isRealWorldNFT && "transform translate-x-6"
+                      }`}
                   />
                 </label>
               </div>
