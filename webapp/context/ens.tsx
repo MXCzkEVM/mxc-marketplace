@@ -1,4 +1,3 @@
-import {  } from '@wagmi/connectors'
 import React, { createContext, useContext, useMemo, useRef, useState } from 'react'
 import { CHAIN_ID, provider } from '../const/Network'
 

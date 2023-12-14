@@ -1,5 +1,4 @@
 import type { NextPage } from "next"
-import ApiClient from "@/util/request"
 import React, { useEffect, useState, useRef } from "react"
 import HexagonLogo from "@/components/HexagonLogo"
 import { getHexagonWithAddress } from "@/const/StorgeUtils"
