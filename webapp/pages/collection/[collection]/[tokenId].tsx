@@ -536,7 +536,7 @@ export default function TokenPage() {
                 </div>
               ) : null}
               <h4 style={{ fontWeight: 600, fontSize: '18px', marginBottom: '1rem' }}>
-                Events
+                {t('Order Events')}
               </h4>
               <Table scroll={{ x: 800 }} pagination={false} dataSource={orderInfos} columns={columns} />
             </div>
