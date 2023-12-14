@@ -541,7 +541,7 @@ export default function TokenPage() {
               <h4 className="formSectionTitle mb-3">
                 {t('Order Events')}
               </h4>
-              <Table scroll={{ x: 800 }} pagination={false} dataSource={orderInfos} columns={columns} />
+              <Table scroll={{ x: 850 }} pagination={false} dataSource={orderInfos} columns={columns} />
             </div>
           </div>
         </Container>

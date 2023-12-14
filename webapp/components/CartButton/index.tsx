@@ -61,7 +61,7 @@ export default function CartButton() {
 
 
   return <>
-    <div className="mt-3 cursor-pointer" onClick={() => setShowCartDrawer(true)}>
+    <div className="mt-[5px] cursor-pointer" onClick={() => setShowCartDrawer(true)}>
       <Badge offset={[-5, 5]} count={cartLength}>
         <IconCart className="text-[38px] text-white" />
       </Badge>
@@ -71,7 +71,6 @@ export default function CartButton() {
       {
         cartStore.carts.length
           ? <>
-
             <div className="flex justify-between text-black mb-6">
               <div>{t('ItemCount', { count: cartStore.carts.length })}</div>
               <button onClick={() => cartStore.clear()}>{t('Clear all')}</button>
@@ -104,8 +103,6 @@ export default function CartButton() {
             ? <>{t('Complete Purchase')}</>
             : <IconLoading />
         }
-
-
       </button>
     </Drawer>
   </>
