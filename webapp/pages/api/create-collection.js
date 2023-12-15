@@ -71,5 +71,9 @@ export default async function handler(req, res) {
     [collection]: target,
   })
 
+  if (formData.url)
+    await redis.lpush(`${chainId}_use_domains`, formData.url)
+  
+
   return res.status(200).send({ status: 200 })
 }

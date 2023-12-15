@@ -40,7 +40,7 @@ export function useName(addr: string | undefined, def?: boolean) {
 
 }
 
-export function useNamesByAddress(address: string[]) {
+export function useNames(address: string[]) {
   const { ready, getName } = useEns()
   const names = useNamesStore()
   

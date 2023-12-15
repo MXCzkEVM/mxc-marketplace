@@ -33,7 +33,7 @@ import { useTranslation } from "react-i18next"
 import { nftClient } from "@/util/apolloClient"
 import { Table } from 'antd'
 import { ColumnsType } from "antd/es/table"
-import { useName, useNamesByAddress } from '@/hooks'
+import { useName, useNames } from '@/hooks'
 import { AddCartButton } from "@/components/CartButton/AddCartButton"
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -45,7 +45,8 @@ const explorerUrl = process.env.NEXT_PUBLIC_EXPLORER
 
 export default function TokenPage() {
   const [collectionDta, setCollectionDta] = useState<any>({})
-  const [orderInfos, setOrderInfos] = useState<any>([])
+  const [orderInfos, setOrderInfos
+  ] = useState<any>([])
   const [nft, SetNFT] = useState<any>({ metadata: {}, owner: null })
   const [nftPrice, setNftPrice] = useState<BigNumber>(BigNumber.from(0))
   const [inputPrice, setInputPrice] = useState<any>("")
@@ -53,7 +54,7 @@ export default function TokenPage() {
   const address = useAddress() || zeroAddress
   const ownerName = useName(nft.owner)
   const [tableAddress, setTableAddress] = useState<string[]>([])
-  const names = useNamesByAddress(tableAddress)
+  const names = useNames(tableAddress)
 
   const { t } = useTranslation()
 
