@@ -15,7 +15,6 @@ import FormData from "form-data"
 import axios from "axios"
 
 import { ethers } from "ethers"
-import { useNamesFromAddress } from '@/hooks'
 import Container from "@/components/Container/Container"
 import PriceInput from "@/components/PriceInput"
 import uploadIcon from "@/assets/imgs/upload.png"
@@ -66,8 +65,6 @@ const CollectDetail = (props: any) => {
   const [editLoading, setEditLoading] = useState(false)
 
   const address = useAddress()
-  const names = useNamesFromAddress(address)
-
   // "Techcode.MXC", "HelloWorld.MXC"
   // const domains: any = []
   const nftUri = process.env.NEXT_PUBLIC_NFTURL
@@ -598,7 +595,11 @@ const CollectDetail = (props: any) => {
                 className={`block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500`}
               >
                 <option value="">{t("Select domains")}</option>
-                {names.map((n, i) => (<option key={i} value={n}> {n} </option>))}
+                {domains.map((option: any) => (
+                  <option key={option.id} value={option.name}>
+                    {option.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -728,8 +729,9 @@ const CollectDetail = (props: any) => {
               <button
                 onClick={editCollection}
                 disabled={editLoading}
-                className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${editLoading ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
+                className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${
+                  editLoading ? "opacity-50 cursor-not-allowed" : ""
+                }`}
               >
                 {editLoading ? t("Wait") : t("Edit Collection")}
               </button>
