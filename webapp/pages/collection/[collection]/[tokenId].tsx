@@ -539,7 +539,7 @@ export default function TokenPage() {
                 </div>
               ) : null}
               {
-                orderInfos.length && <>
+                !!orderInfos.length && <>
                   <h4 className="formSectionTitle mb-3">
                     {t('Order Events')}
                   </h4>
