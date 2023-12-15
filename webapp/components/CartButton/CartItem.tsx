@@ -23,7 +23,7 @@ function CartItem(props: CartItemProps) {
     </a>
     <div className='flex flex-col flex-1 h-[72px]'>
       <h4 className='text-sm'>Token ID #{props.item.asset}</h4>
-      <p className='text-sm font-medium truncate ...'>{props.item.meta.description}</p>
+      <p className='text-sm font-medium truncate ... w-24'>Alien Art Collection, a very limited edition of only 100 crafted NFTs that dive into the future of NFT art.</p>
     </div>
     <div className='h-[72px] flex flex-col items-end text-sm font-medium'>
       <span className='mb-8'>{ethers.utils.formatEther(props.item.price)} MXC</span>

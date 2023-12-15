@@ -82,7 +82,7 @@ export default function CartButton() {
 
             <div className="flex justify-between text-black mt-6">
               <div>{t('Total Price')}</div>
-              <div>{totalPrice} ETH</div>
+              <div>{totalPrice} MXC</div>
             </div>
           </>
           : <>
