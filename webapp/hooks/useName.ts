@@ -41,25 +41,25 @@ export function useName(addr: string | undefined, def?: boolean) {
 }
 
 export function useNamesByAddress(address: string[]) {
-  const { ready, getName } = useEns()
+  const ens = useEns()
   const names = useNamesStore()
   
   async function fetchNameByAddress(address?: string) {
     address = address?.toLocaleUpperCase()
-    if (!address || !ready || runs[address])
+    if (!address || !ens.ready || runs[address])
       return
     runs[address] = true
     if (address === '0x0000000000000000000000000000000000000000')
       return
     if (names.getName(address))
       return
-    const res = await getName(address)
+    const res = await ens.getName(address)
     if (!res || !res.name || !res.match)
       return
     names.setName(address, res.name)
   }
 
-  useEffect(() => address.forEach(fetchNameByAddress), [ready, address])
+  useEffect(() => address.forEach(fetchNameByAddress), [ens.ready, address])
 
   return useMemo(() => {
     return address.reduce((total, address) => {
