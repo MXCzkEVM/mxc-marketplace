@@ -309,7 +309,7 @@ export default function TokenPage() {
       render(value) {
         if (!value) return '-'
         return <Link target="_blank" href={`${explorerUrl}/address/${value}`}>
-            {names[value.toLocaleUpperCase()]}
+          {names[value.toLocaleUpperCase()]}
         </Link>
       },
     },
@@ -538,10 +538,14 @@ export default function TokenPage() {
                   </div>
                 </div>
               ) : null}
-              <h4 className="formSectionTitle mb-3">
-                {t('Order Events')}
-              </h4>
-              <Table scroll={{ x: 850 }} pagination={false} dataSource={orderInfos} columns={columns} />
+              {
+                orderInfos.length && <>
+                  <h4 className="formSectionTitle mb-3">
+                    {t('Order Events')}
+                  </h4>
+                  <Table scroll={{ x: 850 }} pagination={false} dataSource={orderInfos} columns={columns} />
+                </>
+              }
             </div>
           </div>
         </Container>
