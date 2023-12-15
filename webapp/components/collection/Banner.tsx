@@ -5,10 +5,12 @@ import Image from "@/components/Image"
 import defaultPng from "@/assets/placeholder.png"
 import defaultlongPng from "@/assets/placeholder_long.png"
 import { CategoryMap } from "@/const/Local"
+import { useName } from "@/hooks"
 
 const BannerComponent = (props: any) => {
   let dta = props.collectionDta
   const date = new Date(dta.timestamp)
+  const name = useName(dta.creator)
   const monthNames = [
     "Jan",
     "Feb",
@@ -54,7 +56,7 @@ const BannerComponent = (props: any) => {
         </div>
         <div className="article">
           <span className="by"></span>
-          <span className="articlename"> By {dta.creator}</span>
+          <span className="articlename"> By {name}</span>
         </div>
         <div className="statisticalDataTop">
           <div className="items">
