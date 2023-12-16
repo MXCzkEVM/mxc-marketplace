@@ -446,6 +446,23 @@ export default function TokenPage() {
                 </div>
               </div>
 
+              {/* 自己的nft 并且还没授权给市场 */}
+              {isApproved == zeroAddress &&
+                isApproved !== CONTRACTS_MAP.MARKETPLACE &&
+                !isApprovedForAll &&
+                nft.owner == address ? (
+                <>
+                  <h4 className="formSectionTitle mb-2">{t("Approve")} </h4>
+                  <Web3Button
+                    contractAddress={collection}
+                    contractAbi={ABI.collection}
+                    action={async () => await approveForSale()}
+                    className="list_btn"
+                  >
+                    {t("Approve item for marketplace")}
+                  </Web3Button>
+                </>
+              ) : null}
               {address !== zeroAddress &&
                 nft.owner == address &&
                 nftPrice.eq(0) ? (
@@ -480,23 +497,7 @@ export default function TokenPage() {
                 </div>
               ) : null}
 
-              {/* 自己的nft 并且还没授权给市场 */}
-              {isApproved == zeroAddress &&
-                isApproved !== CONTRACTS_MAP.MARKETPLACE &&
-                !isApprovedForAll &&
-                nft.owner == address ? (
-                <>
-                  <h4 className="formSectionTitle mb-2">{t("Approve")} </h4>
-                  <Web3Button
-                    contractAddress={collection}
-                    contractAbi={ABI.collection}
-                    action={async () => await approveForSale()}
-                    className="list_btn"
-                  >
-                    {t("Approve item for marketplace")}
-                  </Web3Button>
-                </>
-              ) : null}
+
 
               {address !== zeroAddress &&
                 nft.owner == address &&
