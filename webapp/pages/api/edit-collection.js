@@ -13,7 +13,7 @@ const redis = new Redis({
 
 export default async function handler(req, res) {
   let { chainId, signedMessage, formData, collection } = req.body
-
+  const redisDomainKey = `${chainId}_use_domains`
   // const newData = data.newData
   if (!chainId) {
     return res.status(200).send({ code: 500, message: i18n.t("Wrong chainId") })
@@ -51,20 +51,35 @@ export default async function handler(req, res) {
   }
 
   if (formData.url) {
+    const indexOf = await redis.lpos(`${chainId}_use_domains`, formData.url)
+    if (indexOf !== null)
+      return res.status(200).send({
+        code: 500, message: i18n.t("The domain name is already in use."),
+      })
+
     // check domain
     const nameWrapper = await instanceNameWrapper()
     let nameOwner = await nameWrapper.ownerOf(
       ethers.BigNumber.from(namehash.hash(formData.url))
     )
-    if (target.creator !== nameOwner.toString()) {
-      return res
-        .status(200)
-        .send({ code: 500, message: i18n.t("You are not the domain owner") })
+    if (target.creator !== nameOwner.toString())
+      return res.status(200).send({
+        code: 500, message: i18n.t("You are not the domain owner")
+      })
+
+    if (target.url) {
+      const index = await redis.lpos(redisDomainKey, target.url)
+      await redis.lset(redisDomainKey, index, formData.url)
+    } else {
+      await redis.lpush(redisDomainKey, formData.url)
     }
+
     await redis.hset(`${chainId}_collections_map`, {
       [formData.url]: collection,
     })
   }
+
+
 
   let newData = Object.assign({}, target, {
     cover: formData.cover,

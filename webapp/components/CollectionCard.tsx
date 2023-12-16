@@ -41,7 +41,7 @@ export default function CollectionCard(props: any) {
 
   let { ceilingPrice, floorPrice } = collectionMarketInfo || {}
   return (
-    <div className="nft_item csp" onClick={() => toDetail(nft.collection)}>
+    <div className="nft_item csp" onClick={() => toDetail(nft.url||nft.collection)}>
       <div className="image">
         <Image
           src={nft.profile ? nft.profile : defaultPng.src}
@@ -49,7 +49,6 @@ export default function CollectionCard(props: any) {
           alt=""
         />
       </div>
-
       <div className="content">
         <div className="contentTop break_ellipsis mb-5">
           <span className="title text-sm " style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>

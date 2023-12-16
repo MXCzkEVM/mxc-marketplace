@@ -115,7 +115,7 @@ export default function NFTCard(props: any) {
       <div
         className="content csp"
         onClick={() => {
-          Router.push(`/collection/${nft.collection}`)
+          Router.push(`/collection/${nft.url || nft.collection}`)
         }}
       >
         <div className="cover mr-2">

@@ -33,7 +33,7 @@ import { useTranslation } from "react-i18next"
 import { nftClient } from "@/util/apolloClient"
 import { Table } from 'antd'
 import { ColumnsType } from "antd/es/table"
-import { useName, useNames } from '@/hooks'
+import { useCollectionAddress, useName, useNames } from '@/hooks'
 import { AddCartButton } from "@/components/CartButton/AddCartButton"
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -58,10 +58,12 @@ export default function TokenPage() {
 
   const { t } = useTranslation()
 
-  const { collection = zeroAddress, tokenId = "0" } = router.query as {
+  const { collection: addrOrUrl = zeroAddress, tokenId = "0" } = router.query as {
     tokenId: string
     collection: string
   }
+
+  const collection = useCollectionAddress(addrOrUrl)
 
   // get nft info
   const { contract: nftContract } = useContract(collection, ABI.collection)

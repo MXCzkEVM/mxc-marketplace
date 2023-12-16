@@ -8,18 +8,19 @@ const redis = new Redis({
 })
 
 export default async function handler(req, res) {
-  let { chainId } = req.body
+  let { chainId, domain } = req.body
 
   if (!chainId) {
     return res.status(200).send({ status: 500 })
   }
 
-  let ops = await redis.lrange(`${chainId}_use_domains`, 0, 100)
-  if (ops == null) {
-    return res.status(200).send({ code: 500, message: i18n.t("Wrong domains") })
-  }
+  const indexOf = await redis.lpos(`${chainId}_use_domains`, domain)
+  if (indexOf !== null)
+    return res.status(200).send({
+      code: 500, message: i18n.t("The domain name is already in use."),
+    })
 
   return res
     .status(200)
-    .send({ code: 200, data: { collection: ops }, message: i18n.t("success") })
+    .send({ code: 200, data: 'ok', message: i18n.t("success") })
 }

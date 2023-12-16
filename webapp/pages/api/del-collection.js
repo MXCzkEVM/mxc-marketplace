@@ -42,6 +42,8 @@ export default async function handler(req, res) {
       .send({ code: 500, message: i18n.t("You are not the collection owner") })
   }
 
+  if (target.url)
+    await redis.lrem(`${chainId}_use_domains`, 0, target.url)
   await redis.hdel(`${chainId}_collections`, collection)
 
   return res

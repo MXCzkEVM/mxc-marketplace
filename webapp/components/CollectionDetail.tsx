@@ -297,6 +297,21 @@ const CollectDetail = (props: any) => {
     setEditLoading(false)
   }
 
+  async function checkDomain() {
+    if (domainValue) {
+      const { data } = await axios.post("/api/check-domain", {
+        chainId: CHAIN_ID,
+        domain: domainValue
+      })
+      if (data.code !== 200) {
+        toast.error(t('The domain name is already in use'))
+        return false
+      }
+    }
+
+    return true
+  }
+
   async function saveCollection() {
     if (!name) {
       toast.warn(t("Please type your collection name"))
@@ -378,6 +393,7 @@ const CollectDetail = (props: any) => {
         null,
         address
       )
+
       collectionFactory.once(
         filterCollection,
         async (collectionAddress, owner) => {
@@ -398,6 +414,9 @@ const CollectDetail = (props: any) => {
           }
         }
       )
+
+      if (!(await checkDomain())) 
+        return
 
       // Simple one-liner for buying the NFT
       txResult = await createCollection({
@@ -450,7 +469,6 @@ const CollectDetail = (props: any) => {
       return
     }
   }
-
   return (
     <Container maxWidth="lg">
       <div className="create_page">
@@ -729,9 +747,8 @@ const CollectDetail = (props: any) => {
               <button
                 onClick={editCollection}
                 disabled={editLoading}
-                className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${
-                  editLoading ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+                className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${editLoading ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
               >
                 {editLoading ? t("Wait") : t("Edit Collection")}
               </button>
