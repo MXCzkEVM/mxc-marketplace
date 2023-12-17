@@ -27,6 +27,15 @@ const BannerComponent = (props: any) => {
   ]
 
   const formattedDate = `${monthNames[date.getMonth()]} ${date.getFullYear()}`
+  function spliceUrl(url: string) {
+    url = url.replace('https://', '')
+    url = url.replace('http://', '')
+    url = url.replace('www.', '')
+    url = url[url.length - 1] === '/'
+      ? url.slice(0, url.length - 1)
+      : url
+    return url
+  }
   return (
     <div className="banner">
       <div className="coverPhoto">
@@ -54,11 +63,11 @@ const BannerComponent = (props: any) => {
             <span className="name">{dta.name}</span>
           </div>
         </div>
-        <div className="article">
-          <span className="by"></span>
-          <span className="articlename"> By {name}</span>
+        <div className="article mb-3">
+          <span className="articlename"> By </span>
+          <span className="articlename">{name}</span>
         </div>
-        <div className="statisticalDataTop">
+        <div className="statisticalDataTop mb-3">
           <div className="items">
             <span className="text">Items</span>
             <span>{props.nfts || 0}</span>
@@ -83,8 +92,23 @@ const BannerComponent = (props: any) => {
             <span className="text"> Category</span>
             <span>{CategoryMap[dta.category]}</span>
           </div>
+
         </div>
-        <div className="introduce">
+        {dta.site && <>
+          <div className="flex">
+            <div>Site</div>
+            &nbsp;&nbsp;&middot;&nbsp;&nbsp;
+            <a className="font-normal" href={dta.site}>{spliceUrl(dta.site)}</a>
+          </div>
+        </>}
+        {dta.social && <>
+          <div className="flex">
+            <div>Social</div>
+            &nbsp;&nbsp;&middot;&nbsp;&nbsp;
+            <a className="font-normal" href={dta.social}>{spliceUrl(dta.social)}</a>
+          </div>
+        </>}
+        <div className="introduce mt-3">
           <div className={`introduceword`}>
             <p>
               {dta.description}
