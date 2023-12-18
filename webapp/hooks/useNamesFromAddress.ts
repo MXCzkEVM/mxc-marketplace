@@ -16,7 +16,6 @@ export function useNamesFromAddress(address?: string) {
       orderDirection: 'desc',
     })
 
-    console.log({res, address})
     if (!res || !res.length)
       return
     setNames(res.map(v => v.name))
