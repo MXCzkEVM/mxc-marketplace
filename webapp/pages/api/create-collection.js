@@ -19,17 +19,22 @@ export default async function handler(req, res) {
   let { formData, signedMessage } = req.body
 
   const chainId = formData.chainId
+  const collection = formData.collection
 
   if (!chainId || !formData.creator) {
     return res.status(200).send({ code: 500, message: i18n.t("Wrong params") })
   }
 
   if (formData.url) {
-    if (!signedMessage) {
-      return res
-        .status(200)
-        .send({ code: 500, message: i18n.t("Sign message is need") })
-    }
+    const indexOf = await redis.lpos(`${chainId}_use_domains`, formData.url)
+    if (indexOf !== null)
+      return res.status(200).send({
+        code: 500, message: i18n.t("The domain name is already in use."),
+      })
+    if (!signedMessage)
+      return res.status(200).send({
+        code: 500, message: i18n.t("Sign message is need")
+      })
     const messageHash = ethers.utils.hashMessage(
       ethers.utils.arrayify(ethers.utils.toUtf8Bytes(formData.url))
     )
@@ -38,14 +43,10 @@ export default async function handler(req, res) {
       signedMessage
     )
     // check owner
-    if (formData.creator !== recoveredAddress) {
-      return res
-        .status(200)
-        .send({
-          code: 500,
-          message: i18n.t("You are not the collection owner"),
-        })
-    }
+    if (formData.creator !== recoveredAddress)
+      return res.status(200).send({
+        code: 500, message: i18n.t("You are not the collection owner"),
+      })
 
     // check domain
     const nameWrapper = await instanceNameWrapper()
@@ -58,12 +59,13 @@ export default async function handler(req, res) {
         .send({ code: 500, message: i18n.t("You are not the domain owner") })
     }
 
+    await redis.lpush(`${chainId}_use_domains`, formData.url)
+
     await redis.hset(`${chainId}_collections_map`, {
       [formData.url]: collection,
     })
   }
 
-  const collection = formData.collection
   formData.timestamp = new Date().getTime()
 
   const target = JSON.stringify(formData)

@@ -33,7 +33,7 @@ import { useTranslation } from "react-i18next"
 import { nftClient } from "@/util/apolloClient"
 import { Table } from 'antd'
 import { ColumnsType } from "antd/es/table"
-import { useName, useNamesByAddress } from '@/hooks'
+import { useCollectionAddress, useName, useNames } from '@/hooks'
 import { AddCartButton } from "@/components/CartButton/AddCartButton"
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -45,7 +45,8 @@ const explorerUrl = process.env.NEXT_PUBLIC_EXPLORER
 
 export default function TokenPage() {
   const [collectionDta, setCollectionDta] = useState<any>({})
-  const [orderInfos, setOrderInfos] = useState<any>([])
+  const [orderInfos, setOrderInfos
+  ] = useState<any>([])
   const [nft, SetNFT] = useState<any>({ metadata: {}, owner: null })
   const [nftPrice, setNftPrice] = useState<BigNumber>(BigNumber.from(0))
   const [inputPrice, setInputPrice] = useState<any>("")
@@ -53,14 +54,16 @@ export default function TokenPage() {
   const address = useAddress() || zeroAddress
   const ownerName = useName(nft.owner)
   const [tableAddress, setTableAddress] = useState<string[]>([])
-  const names = useNamesByAddress(tableAddress)
+  const names = useNames(tableAddress)
 
   const { t } = useTranslation()
 
-  const { collection = zeroAddress, tokenId = "0" } = router.query as {
+  const { collection: addrOrUrl = zeroAddress, tokenId = "0" } = router.query as {
     tokenId: string
     collection: string
   }
+
+  const collection = useCollectionAddress(addrOrUrl)
 
   // get nft info
   const { contract: nftContract } = useContract(collection, ABI.collection)
@@ -443,6 +446,23 @@ export default function TokenPage() {
                 </div>
               </div>
 
+              {/* 自己的nft 并且还没授权给市场 */}
+              {isApproved == zeroAddress &&
+                isApproved !== CONTRACTS_MAP.MARKETPLACE &&
+                !isApprovedForAll &&
+                nft.owner == address ? (
+                <>
+                  <h4 className="formSectionTitle mb-2">{t("Approve")} </h4>
+                  <Web3Button
+                    contractAddress={collection}
+                    contractAbi={ABI.collection}
+                    action={async () => await approveForSale()}
+                    className="list_btn"
+                  >
+                    {t("Approve item for marketplace")}
+                  </Web3Button>
+                </>
+              ) : null}
               {address !== zeroAddress &&
                 nft.owner == address &&
                 nftPrice.eq(0) ? (
@@ -477,23 +497,7 @@ export default function TokenPage() {
                 </div>
               ) : null}
 
-              {/* 自己的nft 并且还没授权给市场 */}
-              {isApproved == zeroAddress &&
-                isApproved !== CONTRACTS_MAP.MARKETPLACE &&
-                !isApprovedForAll &&
-                nft.owner == address ? (
-                <>
-                  <h4 className="formSectionTitle mb-2">{t("Approve")} </h4>
-                  <Web3Button
-                    contractAddress={collection}
-                    contractAbi={ABI.collection}
-                    action={async () => await approveForSale()}
-                    className="list_btn"
-                  >
-                    {t("Approve item for marketplace")}
-                  </Web3Button>
-                </>
-              ) : null}
+
 
               {address !== zeroAddress &&
                 nft.owner == address &&

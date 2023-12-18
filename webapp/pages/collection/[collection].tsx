@@ -13,20 +13,20 @@ import { CHAIN_ID } from "@/const/Network"
 import { ABI } from "@/const/Address"
 import { Pagination } from "antd"
 import SkeletonList from "@/components/Skeleton/SkeletonList"
-
+import { useCollectionAddress } from '@/hooks'
 import { zeroAddress } from "@/const/Local"
 import { getCollectInfo, getThirdWebNFTList } from "@/util/getNFT"
 import ApiClient from "@/util/request"
 const api = new ApiClient("/")
 
 export default function CollectPage() {
-  const [collectionDta, setCollectionDta] = useState(null)
+  const [collectionDta, setCollectionDta] = useState<any>(null)
   const [page, setPage] = useState(1)
   const [nfts, setNFTS] = useState<any>([])
-  const [collectionAddress, setCollectionAddress] = useState(zeroAddress)
 
   const router = useRouter()
   const collectionId: any = router.query.collection || zeroAddress
+  const collectionAddress = useCollectionAddress(collectionId)
 
   const { contract: nftContract } = useContract(
     collectionAddress,
@@ -41,28 +41,6 @@ export default function CollectPage() {
     start: (page - 1) * 20,
   })
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (collectionId == zeroAddress) {
-        return
-      }
-
-      if (collectionId.toLowerCase().includes("mxc")) {
-        let mapResult: any = await api.post("/api/get-collection-map", {
-          chainId: CHAIN_ID,
-          domain: collectionId,
-        })
-        if (mapResult.collection) {
-          setCollectionAddress(mapResult.collection)
-        }
-        return
-      }
-      setCollectionAddress(collectionId)
-    }
-    fetchData()
-  }, [collectionId])
-
-  //
   useEffect(() => {
     const fetchData = async () => {
       if (collectionAddress == zeroAddress) {
@@ -107,7 +85,7 @@ export default function CollectPage() {
                     <CollectionCard
                       key={index}
                       item={item}
-                      collection_id={collectionAddress}
+                      collection_id={collectionDta.url || collectionAddress}
                     />
                   )
                 })}
