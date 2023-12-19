@@ -332,13 +332,6 @@ const CollectDetail = (props: any) => {
 
     // if want to bind domain, need to signature
     let signedMessage: string = ""
-    if (domainValue) {
-      const web3 = require("web3")
-      signedMessage = await window.ethereum.request({
-        method: "personal_sign",
-        params: [web3.utils.utf8ToHex(domainValue), address],
-      })
-    }
 
     let cover_ipfs: any = ""
     let profile_ipfs: any = ""
