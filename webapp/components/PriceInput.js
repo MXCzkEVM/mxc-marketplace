@@ -43,6 +43,7 @@ const PriceInput = ({
   return (
     <input
       type="number"
+      min="0"
       value={value}
       onChange={handleChange}
       {...rest}
