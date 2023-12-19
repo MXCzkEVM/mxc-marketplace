@@ -27,18 +27,6 @@ const PriceInput = ({
     }
   }, [value])
 
-  const handleKeyDown = (e) => {
-    const key = e.keyCode
-    if (key >= "0".charCodeAt(0) && key <= "9".charCodeAt(0)) {
-      if (value === "0" && key === "0".charCodeAt(0)) e.preventDefault()
-    } else if (key === 190) {
-      if (value.length === 0 || value.includes(".") || decimals === 0)
-        e.preventDefault()
-    } else if (key !== 8) {
-      e.preventDefault()
-    }
-  }
-
   const checkDecimals = (val) => {
     if (!val) return ""
     if (val.indexOf(".") > -1 && val.length - val.indexOf(".") - 1 > decimals) {
@@ -54,8 +42,8 @@ const PriceInput = ({
 
   return (
     <input
+      type="number"
       value={value}
-      onKeyDown={handleKeyDown}
       onChange={handleChange}
       {...rest}
     />
