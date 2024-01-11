@@ -42,7 +42,7 @@
       },
       {
         "internalType": "address",
-        "name": "_mortgageToken",
+        "name": "_collateral",
         "type": "address"
       }
     ],

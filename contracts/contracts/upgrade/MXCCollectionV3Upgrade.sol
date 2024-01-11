@@ -13,16 +13,18 @@ error MXCCollection__NotOwner();
 contract MXCCollectionV3Upgrade is UUPSUpgradeable, ERC721Upgrade {
     uint256 private _tokenIdCounter;
     uint256 public totalSupply;
+    uint256 public existSupply;
 
     uint256 public royaltiesCutPerMillion;
     address public royaltyRecipientAddress;
     address public creator;
-    address public mortgageToken;
-    uint256 public existSupply;
+
+    // erc20 collateral address
+    address public collateral;
 
     mapping(uint256 => string) private _tokenURIs;
-    mapping(uint256 => uint256) private _mortgages;
-    error MXCCollection__MortgageTokenTransferFailed();
+    mapping(uint256 => uint256) private _stakedOf;
+    error MXCCollection__StakedTokenTransferFailed();
 
     modifier onlyCreator() {
         if (msg.sender != creator) revert MXCCollection__NotCreator();
@@ -32,104 +34,91 @@ contract MXCCollectionV3Upgrade is UUPSUpgradeable, ERC721Upgrade {
     function initialize(
         address _creator,
         address _royaltyRecipient,
+        address _collateral,
         uint256 _royaltiesCutPerMillion,
         string memory _name,
-        string memory _symbol,
-        address _mortgageToken
+        string memory _symbol
     ) public initializer {
         royaltiesCutPerMillion = _royaltiesCutPerMillion;
         royaltyRecipientAddress = _royaltyRecipient;
         creator = _creator;
-        mortgageToken = _mortgageToken;
+        collateral = _collateral;
         initializeERC721(_name, _symbol);
-
         __UUPSUpgradeable_init();
     }
 
     function _authorizeUpgrade(address) internal override {}
 
-    function royaltyInfo(
-        uint256 _salePrice
-    ) external view returns (uint256 royaltyAmount, address royaltyRecipient) {
-        if (royaltiesCutPerMillion > 0) {
-            return (
-                (_salePrice * royaltiesCutPerMillion) / 10000,
-                royaltyRecipientAddress
-            );
-        } else {
-            return (0, address(0));
-        }
+    function royaltyInfo(uint256 _salePrice) external view returns (uint256 royaltyAmount, address royaltyRecipient) {
+      if (royaltiesCutPerMillion > 0)
+        return ((_salePrice * royaltiesCutPerMillion) / 10000, royaltyRecipientAddress);
+      else
+        return (0, address(0));
     }
 
-    function mint(string memory _tokenURI, uint256 mortgage) public onlyCreator {
-        uint256 nft = _tokenIdCounter;
-        _mint(msg.sender, nft);
-        setTokenURI(nft, _tokenURI);
-        setMortgage(nft, mortgage);
-        _tokenIdCounter = _tokenIdCounter + 1;
-        totalSupply += 1;
-        existSupply += 1;
+    function mint(string memory _tokenURI, uint256 stakedAmount) public onlyCreator {
+      uint256 nft = _tokenIdCounter;
+      _mint(msg.sender, nft);
+
+      setStakedBalanceOf(nft, stakedAmount);
+      setTokenURI(nft, _tokenURI);
+
+      _tokenIdCounter = _tokenIdCounter + 1;
+      totalSupply += 1;
+      existSupply += 1;
     }
 
-    function burn(uint256 tokenId) public {
-        if (!_isApprovedOrOwner(msg.sender, tokenId)) {
-            revert MXCCollection__NotAuthorize();
-        }
-        _burn(tokenId);
-        existSupply -= 1;
+    function burn(uint256 nft) public {
+      if (!_isApprovedOrOwner(msg.sender, nft))
+        revert MXCCollection__NotAuthorize();
+      _burn(nft);
+      _burnStaked(nft);
+      existSupply -= 1;
     }
 
-    function _isApprovedOrOwner(
-        address spender,
-        uint256 tokenId
-    ) internal view returns (bool) {
-        address owner = ERC721Upgrade.ownerOf(tokenId);
-        return (spender == owner ||
-            isApprovedForAll[owner][spender] ||
-            getApproved[tokenId] == spender);
+    function exists(uint256 tokenId) internal view returns (bool) {
+      return ownerOf(tokenId) != address(0);
+    }
+
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+      if (!exists(tokenId))
+        revert MXCCollection__NotExistToken();
+      return _tokenURIs[tokenId];
     }
 
     function setTokenURI(uint256 tokenId, string memory uri) public {
         address owner = ERC721Upgrade.ownerOf(tokenId);
-        if (msg.sender != owner) revert MXCCollection__NotOwner();
+        if (msg.sender != owner)
+          revert MXCCollection__NotOwner();
         _tokenURIs[tokenId] = uri;
     }
 
-    function exists(uint256 tokenId) internal view returns (bool) {
-        return ownerOf(tokenId) != address(0);
+    function stakedBalanceOf(uint256 nft) public view returns (uint256) {
+      return _stakedOf[nft];
     }
 
-    function tokenURI(
-        uint256 tokenId
-    ) public view override returns (string memory) {
-        if (!exists(tokenId)) {
-            revert MXCCollection__NotExistToken();
-        }
-        return _tokenURIs[tokenId];
+    function setStakedBalanceOf(uint256 nft, uint256 amount) private {
+      if (amount > 0)
+        _transferFromStaked(msg.sender, address(this), amount);
+      _stakedOf[nft] = amount;
     }
 
-    function setMortgage(uint256 nft, uint256 _amount) private {
-      if (_amount > 0)
-        _transferFrom(msg.sender, address(this), _amount);
-      _mortgages[nft] = _amount;
-    }
-    
-    function getMortgage(uint256 nft) public view returns (uint256) {
-      return _mortgages[nft];
-    }
-
-    function recovery(uint256 nft) public {
+    function _burnStaked(uint256 nft) private {
       require(_ownerOf[nft] == msg.sender, "Not an NFT owner");
-      _transferFrom(address(this), msg.sender, _mortgages[nft]);
-      _ownerOf[nft] = address(0);
-      _mortgages[nft] = 0;
+      _transferFromStaked(address(this), msg.sender, _stakedOf[nft]);
+      _stakedOf[nft] = 0;
     }
 
-    function _transferFrom(address _from, address _to, uint256 _amount) private {
+    function _transferFromStaked(address _from, address _to, uint256 _amount) private {
       bytes4 methodId = bytes4(keccak256("transferFrom(address,address,uint256)"));
       bytes memory data =  abi.encodeWithSelector(methodId, _from, _to,_amount);
-      (bool sent,) = mortgageToken.call(data);
+      (bool sent,) = collateral.call(data);
       if (!sent)
-        revert MXCCollection__MortgageTokenTransferFailed();
+        revert MXCCollection__StakedTokenTransferFailed();
+    }
+
+    function _isApprovedOrOwner(address spender,uint256 tokenId) internal view returns (bool) {
+      address owner = ERC721Upgrade.ownerOf(tokenId);
+      return (spender == owner || isApprovedForAll[owner][spender] || getApproved[tokenId] == spender);
     }
 }

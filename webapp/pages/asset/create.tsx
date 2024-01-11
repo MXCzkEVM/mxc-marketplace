@@ -10,7 +10,6 @@ import {
   useContractWrite,
   useContractRead,
 } from "@thirdweb-dev/react"
-import { getJsonFromIPFS } from "@/util/uploadToPinata"
 import Container from "@/components/Container/Container"
 import uploadIcon from "@/assets/imgs/upload.png"
 import plusIcon from "@/assets/svgs/plus.svg"

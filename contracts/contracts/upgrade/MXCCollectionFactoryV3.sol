@@ -16,7 +16,7 @@ contract MXCCollectionFactoryV3 {
         string memory _symbol,
         uint256 _royaltiesCutPerMillion,
         address _royaltyRecipient,
-        address _mortgageToken
+        address _collateral
     ) external returns (address[2] memory) {
         MXCCollectionV3Upgrade newCollection = new MXCCollectionV3Upgrade();
         ERC1967Proxy proxy = new ERC1967Proxy(
@@ -25,10 +25,10 @@ contract MXCCollectionFactoryV3 {
                 newCollection.initialize.selector,
                 msg.sender,
                 _royaltyRecipient,
+                _collateral,
                 _royaltiesCutPerMillion,
                 _name,
-                _symbol,
-                _mortgageToken
+                _symbol
             )
         );
 
