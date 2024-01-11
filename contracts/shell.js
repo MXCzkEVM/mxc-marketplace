@@ -10,6 +10,7 @@ scripts
 hh run scripts/index.js --network localhost
 hh run scripts/upgrade.js --network wannsee
 hh run scripts/index.js --network wannsee
+hardhat run scripts/marketplace.js --network wannsee
 hh run scripts/mkpUpgrade.js --network wannsee_mainnet
 hh run scripts/nft_uri.js --network wannsee_mainnet
 hh console --network wannsee_mainnet
@@ -31,8 +32,8 @@ await network.provider.send("eth_blockNumber", [])
 deploy
 /* 
 hh deploy --network ganache
-hh deploy --tags marketplace --network wannsee_mainnet
-hh deploy --tags collections --network wannsee_mainnet
+hardhat deploy --tags marketplace --network wannsee_mainnet
+hardhat deploy --tags collections --network wannsee_mainnet
 */
 
 /* 

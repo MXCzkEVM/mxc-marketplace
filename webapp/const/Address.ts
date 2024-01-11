@@ -1,12 +1,13 @@
 
 
 import { ethers } from 'ethers'
-import collectionFactory from "./abi_mxccollection/MXCCollectionFactoryV2.json"
-import collection from "./abi_mxccollection/MXCCollectionV2Upgrade.json"
+import collectionFactory from "./abi_mxccollection/MXCCollectionFactoryV3.json"
+import collection from "./abi_mxccollection/MXCCollectionV3Upgrade.json"
 import marketplace from './abi_mxccollection/MXCMarketplaceUpgradeV4.json'
 import mep1002 from './abi_mep/mep1002.json'
 import mep1002Name from './abi_mep/mep1002Name.json'
 import mnsNameWrap from './abi_mns/NameWrapper.json'
+import erc20 from './abi_common/erc20.json'
 import { provider } from './Network'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAINID || ""
@@ -21,8 +22,9 @@ const contracts: any = {
         MNSNAMEWRAP: "0xD1B70f92b310c3Fa95b83dB436E00a53e1f1f5d5"
     },
     5167003: {
-        COLLECTION_FACTORY: '0xD15A89C59A1aF63588B0b905dAD47eF20058998a',
+        COLLECTION_FACTORY: '0x6c8ae2df0D619FF3314a61c723757521837dcFe3',
         MARKETPLACE: '0x91fd2e13379dF87f752c82E8C16a1aE72601a9B2',
+        XSD: "0xB9506A80429Ee619C74D46a3276c622358795e2B",
 
         MEP1002Name: "0xad5a1855A383732f311241c1A4F9510da0Ad0743",
         MEP1002NameStartBlock: 61546,
@@ -49,7 +51,8 @@ export const ABI = {
     collection,
     mep1002,
     mep1002Name,
-    mnsNameWrap
+    mnsNameWrap,
+    erc20
 }
 
 

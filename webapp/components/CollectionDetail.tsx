@@ -418,6 +418,7 @@ const CollectDetail = (props: any) => {
           formData.name,
           formData.royaltiesCutPerMillion,
           formData.royaltyRecipient,
+          CONTRACTS_MAP['XSD']
         ],
       })
     } catch (error) {

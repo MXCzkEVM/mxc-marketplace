@@ -43,6 +43,9 @@ export function Navbar(props: any) {
               <Link href="/domains" className="link">
                 {t("Domains")}
               </Link>
+              <Link href="/miner" className="link">
+                {t("Miner")}
+              </Link>
             </div>
           </div>
         </div>

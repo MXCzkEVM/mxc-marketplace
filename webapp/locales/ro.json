@@ -114,5 +114,12 @@
   "Transfer successful": "Transfer cu succes",
   "Confirm": "A confirma",
   "Transfer Confirm": "Confirmare transfer",
-  "Order Events": "Comandă evenimente"
+  "Order Events": "Comandă evenimente",
+  "Mortgage Input Title": "Îmbunătățiți-vă RWA NFT cu blocarea XSD",
+  "Mortgage Input Des": "Sporiți credibilitatea RWA NFT prin blocarea jetoanelor XSD în el. \nAceastă caracteristică adaugă un nivel suplimentar de încredere, asigurând că XSD-ul este returnat creatorului numai dacă NFT-ul este ars permanent (trimis la o adresă neagră). \nAsigurați-vă integritatea și valoarea conținutului cu această protecție suplimentară.",
+  "Real-World Collectables": "Obiecte de colecție din lumea reală",
+  "Approve for XSD": "Aprobați pentru XSD",
+  "XSD approve failed": "Aprobarea XSD a eșuat",
+  "XSD Approved click button to continue": "XSD Aprobat, faceți clic pe butonul pentru a continua.",
+  "You don t have enough XSD": "Nu ai suficient XSD"
 }

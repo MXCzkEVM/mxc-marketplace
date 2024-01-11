@@ -115,5 +115,12 @@
   "Transfer successful": "Transfer successful",
   "Confirm": "Confirm",
   "Transfer Confirm": "Transfer Confirm",
-  "Order Events": "Order Events"
+  "Order Events": "Order Events",
+  "Mortgage Input Title": " Enhance Your RWA NFT with XSD Locking",
+  "Mortgage Input Des": "Boost the credibility of your RWA NFT by locking XSD tokens into it. This feature adds an extra layer of trust, ensuring that the XSD is only returned to the creator if the NFT is permanently burnt (sent to a blackhole address). Secure your content's integrity and value with this additional safeguard.",
+  "Real-World Collectables": "Real-World Collectables",
+  "Approve for XSD": "Approve for XSD",
+  "XSD approve failed": "XSD approve failed",
+  "XSD Approved click button to continue": "XSD Approved, click button to continue.",
+  "You don t have enough XSD": "You don't have enough XSD"
 }

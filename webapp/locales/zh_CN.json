@@ -114,5 +114,11 @@
   "Transfer successful": "转账成功",
   "Confirm": "确认",
   "Transfer Confirm": "转账确认",
-  "Order Events": "订购活动"
+  "Order Events": "订购活动",
+  "Mortgage Input Title": "使用 XSD 锁定增强您的 RWA NFT",
+  "Mortgage Input Des": "通过将 XSD 代币锁定其中，提高 RWA NFT 的可信度。\n此功能增加了额外的信任层，确保只有在 NFT 被永久销毁（发送到黑洞地址）时，XSD 才会返回给创建者。\n通过这种额外的保护措施确保您内容的完整性和价值。",
+  "Real-World Collectables": "现实世界的收藏品",
+  "Approve for XSD": "批准 XSD",
+  "XSD approve failed": "XSD 批准失败",
+  "You don t have enough XSD": "你没有足够的XSD"
 }

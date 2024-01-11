@@ -114,5 +114,12 @@
   "Transfer successful": "Transferência bem-sucedida",
   "Confirm": "confirme",
   "Transfer Confirm": "Confirmação de transferência",
-  "Order Events": "Encomendar eventos"
+  "Order Events": "Encomendar eventos",
+  "Mortgage Input Title": "Aprimore seu RWA NFT com bloqueio XSD",
+  "Mortgage Input Des": "Aumente a credibilidade do seu RWA NFT bloqueando tokens XSD nele. \nEste recurso adiciona uma camada extra de confiança, garantindo que o XSD só seja devolvido ao criador se o NFT for permanentemente queimado (enviado para um endereço blackhole). \nProteja a integridade e o valor do seu conteúdo com esta proteção adicional.",
+  "Real-World Collectables": "Colecionáveis ​​do mundo real",
+  "Approve for XSD": "Aprovar para XSD",
+  "XSD approve failed": "Falha na aprovação do XSD",
+  "XSD Approved click button to continue": "XSD aprovado, clique no botão para continuar.",
+  "You don t have enough XSD": "Você não tem XSD suficiente"
 }

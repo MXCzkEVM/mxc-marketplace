@@ -114,5 +114,12 @@
   "Transfer successful": "Transfer berhasil",
   "Confirm": "Mengonfirmasi",
   "Transfer Confirm": "Konfirmasi Transfer",
-  "Order Events": "Acara Pemesanan"
+  "Order Events": "Acara Pemesanan",
+  "Mortgage Input Title": "Tingkatkan ATMR NFT Anda dengan Penguncian XSD",
+  "Mortgage Input Des": "Tingkatkan kredibilitas ATMR NFT Anda dengan mengunci token XSD ke dalamnya. \nFitur ini menambahkan lapisan kepercayaan ekstra, memastikan bahwa XSD hanya dikembalikan ke pembuatnya jika NFT dibakar secara permanen (dikirim ke alamat lubang hitam). \nAmankan integritas dan nilai konten Anda dengan perlindungan tambahan ini.",
+  "Real-World Collectables": "Barang Koleksi Dunia Nyata",
+  "Approve for XSD": "Setujui XSD",
+  "XSD approve failed": "Persetujuan XSD gagal",
+  "XSD Approved click button to continue": "XSD Disetujui, klik tombol untuk melanjutkan.",
+  "You don t have enough XSD": "Anda tidak memiliki cukup XSD"
 }

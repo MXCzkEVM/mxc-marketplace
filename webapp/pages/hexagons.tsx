@@ -137,7 +137,7 @@ export default function Hexagons() {
           !isLoading &&
           currenthexsgons.length < targetLen && (
             <MoreBtn loadmore={loadmore} loadMoreData={loadMoreData} />
-          )}
+          ) || ''}
       </Container>
     </div>
   )

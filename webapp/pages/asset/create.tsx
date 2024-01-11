@@ -18,12 +18,13 @@ import closeIcon from "@/assets/svgs/close.svg"
 import { storeImage, storeJson } from "@/util/uploadToPinata"
 import { getCollectList } from "@/util/getNFT"
 import { CHAIN_ID } from "@/const/Network"
-import { ABI } from "@/const/Address"
+import { ABI, CONTRACTS_MAP } from "@/const/Address"
 import { useTranslation } from "react-i18next"
 
 import { version, zeroAddress } from "@/const/Local"
 import ApiClient from "@/util/request"
 import { useSession, getSession } from "next-auth/react"
+import BigNumber from 'bignumber.js'
 const api = new ApiClient("/")
 
 export default function AssetCrearePage() {
@@ -33,20 +34,17 @@ export default function AssetCrearePage() {
   const [nameError, setNameError] = useState<any>(null)
   const [nftImage, setImage] = useState(null)
   const [nftImageFile, setImageFile] = useState<any>(null)
-  // const [external_link, setExternal] = useState("")
   const [description, setDescription] = useState("")
   const [collection_address, setCollection] = useState("")
   const [isRealWorldNFT, setSwitch] = useState(false)
+  const [mortgage, setMortgage] = useState('')
   const { data: session } = useSession()
 
   const { t } = useTranslation()
 
   // traits
   const [traits, setTraits] = useState<any>([
-    {
-      trait_type: "Year",
-      value: "2023",
-    },
+    { trait_type: "Year", value: "2023" },
     {
       trait_type: "Producer",
       value: "MXC DAO",
@@ -82,11 +80,32 @@ export default function AssetCrearePage() {
 
   const address = useAddress()
 
-  const { contract: collectionContract } = useContract(
+  const { contract: colContract } = useContract(
     collection_address,
     ABI.collection
   )
-  const { mutateAsync: mintNFT } = useContractWrite(collectionContract, "mint")
+  const { contract: xsdContract } = useContract(
+    CONTRACTS_MAP['XSD'],
+    ABI.erc20
+  )
+
+  const allowanceParams = [address || zeroAddress, collection_address || zeroAddress]
+  const { data: allowance, isLoading, refetch: refetchAllowance } = useContractRead(
+    xsdContract,
+    'allowance',
+    allowanceParams
+  )
+  const { data: xsdBalance, refetch: refetchXsdBalance } = useContractRead(
+    xsdContract,
+    'balanceOf',
+    [address]
+  )
+
+
+  const { mutateAsync: mintNFT } = useContractWrite(colContract, "mint")
+  const { mutateAsync: approveXSD } = useContractWrite(xsdContract, "approve")
+
+  const toMortgage = new BigNumber(mortgage).multipliedBy(10 ** 18).toFixed(0)
 
   useEffect(() => {
     if (isRealWorldNFT)
@@ -129,6 +148,12 @@ export default function AssetCrearePage() {
   }
 
   const createItem = async () => {
+    console.log(xsdBalance)
+
+    if (mortgage && xsdBalance.lt(toMortgage)) {
+      toast.warn(t("You don t have enough XSD"))
+      return
+    }
     if (!name) {
       toast.warn(t("Please type your collection name"))
       return
@@ -173,8 +198,9 @@ export default function AssetCrearePage() {
     let txResult
     try {
       // Simple one-liner for buying the NFT
+      const xsd = mortgage ? toMortgage : 0
       txResult = await mintNFT({
-        args: [`ipfs://${jsonIpfs}`],
+        args: [`ipfs://${jsonIpfs}`, xsd],
       })
       toast.success("NFT item create successfully!")
       Router.push(`/collection/${collection_address}`)
@@ -227,12 +253,58 @@ export default function AssetCrearePage() {
     }
   }
 
+  async function approve() {
+    try {
+      // Simple one-liner for buying the NFT
+      const res = await approveXSD({ args: [collection_address, toMortgage] })
+      return res
+    } catch (error) {
+      // console.error(error)
+      console.log(error)
+      toast.error(t("XSD approve failed"))
+    }
+  }
+
+  function renderApprove() {
+    return (
+      <Web3Button
+        contractAddress={CONTRACTS_MAP['XSD']}
+        contractAbi={ABI.erc20}
+        action={approve}
+        className="list_btn"
+        onSuccess={() => {
+          refetchAllowance()
+          toast.success(t("XSD Approved click button to continue"))
+        }}
+      >
+        {t("Approve for XSD")}
+      </Web3Button>
+    )
+  }
+
+  function renderCreate() {
+    return (
+      <Web3Button
+        contractAddress={collection_address}
+        contractAbi={ABI.collection}
+        action={async () => await createItem()}
+        isDisabled={isLoading}
+        className="px-4 py-2 bg-blue-600 text-white"
+        onSuccess={() => {
+          refetchXsdBalance()
+        }}
+      >
+        {t("Create item")}
+      </Web3Button>
+    )
+  }
+
+  const inApprove = (mortgage && allowance ? allowance.lt(toMortgage) : false)
   return (
     <Container maxWidth="lg">
       <div className="create_page">
         <div className="inner">
           <div className="title">Create New Item</div>
-
           <div className="inputGroup">
             <div className="inputTitle">{t("Item Name")} *</div>
             <div className="inputWrapper">
@@ -461,16 +533,30 @@ export default function AssetCrearePage() {
             </div>
           </div>
 
+          <div className="inputGroup">
+            <div className="inputTitle">{t("Mortgage Input Title")}</div>
+            <div className="inputSubTitle">
+              {t("Mortgage Input Des")}
+            </div>
+            <div className="inputWrapper">
+              <input
+                className={`input ${nameError && "hasError"}`}
+                maxLength={30}
+                type="number"
+                placeholder={'0.00'}
+                min="0"
+                value={mortgage}
+                onChange={(e) => Number(e.target.value || 0) >= 0 && setMortgage(e.target.value)}
+                onBlur={validateName}
+              />
+            </div>
+          </div>
+
+
+
           {collection_address && (
             <div className="subwrap flex_c mt-5">
-              <Web3Button
-                contractAddress={collection_address}
-                contractAbi={ABI.collection}
-                action={async () => await createItem()}
-                className="px-4 py-2 bg-blue-600 text-white"
-              >
-                {t("Create item")}
-              </Web3Button>
+              {inApprove ? renderApprove() : renderCreate()}
             </div>
           )}
         </div>

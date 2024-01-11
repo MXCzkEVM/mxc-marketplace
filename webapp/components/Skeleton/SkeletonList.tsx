@@ -9,11 +9,8 @@ type Props = {
 
 export default function SkeletonList({ borderRadius = "10px" }: Props) {
   return (
-    <div
-      style={{
-        borderRadius,
-      }}
-      className={`${styles.SkeletonList}`}
-    />
+    <>
+      <div style={{borderRadius}}className={`${styles.SkeletonList}`} />
+    </>
   )
 }

@@ -114,5 +114,12 @@
   "Transfer successful": "전송 성공",
   "Confirm": "확인하다",
   "Transfer Confirm": "이체 확인",
-  "Order Events": "주문 이벤트"
+  "Order Events": "주문 이벤트",
+  "Mortgage Input Title": "XSD 잠금으로 RWA NFT 향상",
+  "Mortgage Input Des": "XSD 토큰을 잠그면 RWA NFT의 신뢰성을 높일 수 있습니다. \n이 기능은 NFT가 영구적으로 소각(블랙홀 주소로 전송)된 경우에만 XSD가 작성자에게 반환되도록 추가 신뢰 계층을 추가합니다. \n이 추가 보호 장치를 통해 콘텐츠의 무결성과 가치를 보호하세요.",
+  "Real-World Collectables": "실제 수집품",
+  "Approve for XSD": "XSD 승인",
+  "XSD approve failed": "XSD 승인 실패",
+  "XSD Approved click button to continue": "XSD가 승인되었습니다. 계속하려면 버튼을 클릭하세요.",
+  "You don t have enough XSD": "XSD가 충분하지 않습니다."
 }

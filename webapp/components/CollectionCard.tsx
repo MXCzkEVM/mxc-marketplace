@@ -41,7 +41,7 @@ export default function CollectionCard(props: any) {
 
   let { ceilingPrice, floorPrice } = collectionMarketInfo || {}
   return (
-    <div className="nft_item csp" onClick={() => toDetail(nft.url||nft.collection)}>
+    <div className="nft_item csp" style={{order: isOfficalNft ? '-2' : nft.name.startsWith('Ascendant Aura') ? '-1' : '0'}} onClick={() => toDetail(nft.url||nft.collection)}>
       <div className="image">
         <Image
           src={nft.profile ? nft.profile : defaultPng.src}

@@ -4,7 +4,7 @@
     "author": "",
     "license": "ISC",
     "scripts": {
-        "export:abi": "hh clear-abi && hh export-abi"
+        "export:abi": "hardhat clear-abi && hardhat export-abi"
     },
     "devDependencies": {
         "@nomicfoundation/hardhat-chai-matchers": "^1.0.6",

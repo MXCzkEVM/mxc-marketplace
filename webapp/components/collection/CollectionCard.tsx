@@ -38,6 +38,7 @@ const CollectionCard = (props: any) => {
   return (
     <div
       className="collectioncard"
+      style={{order: mkp_current_info && !mkp_current_info?.price.eq(0) ? '-1' : '1'}}
       onClick={() => toPath(`/collection/${collection_id}/${item.metadata.id}`)}
     >
       <div className="image">

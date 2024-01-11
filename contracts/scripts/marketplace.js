@@ -14,10 +14,10 @@ async function main() {
     // let res = await nftFactory.fetchCollections()
     // console.log(res)
 
-    // await createColelction()
+    await createColelction()
     // await createNFT()
     // await makeOrder()
-    await excuteOrder()
+    // await excuteOrder()
 }
 
 async function excuteOrder() {
