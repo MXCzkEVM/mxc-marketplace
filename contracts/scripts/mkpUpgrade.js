@@ -17,8 +17,8 @@ async function main() {
     const { deployer } = await getNamedAccounts()
     const chainId = network.config.chainId
 
-    // await upgradeMarketPlace()
-    await mkpV4Test()
+    await upgradeMarketPlace()
+    // await mkpV4Test()
 }
 
 async function mkpV4Test() {
@@ -85,22 +85,26 @@ async function upgradeMarketPlace() {
     const mkpContractV4 = await ethers.getContractFactory(
         "MXCMarketplaceUpgradeV4"
     )
+    const mkpContractV5 = await ethers.getContractFactory(
+        "MXCMarketPlaceUpgradeV5"
+    )
 
     // console.log(contracts.mkp)
-    let instance = mkpContractV3.attach(contracts.mkp)
-    let owner = await instance.admin()
-    console.log(owner)
+    // let instance = mkpContractV5.attach(contracts.mkp)
+    // let owner = await instance.admin()
+    // console.log(owner)
 
     // get marketplace logic
-    const implement = await upgrades.erc1967.getImplementationAddress(
-        contracts.mkp
-    )
-    console.log(implement)
+    // const implement = await upgrades.erc1967.getImplementationAddress(
+    //     contracts.mkp
+    // )
+    // console.log(implement)
 
     // upgrade
-    // await upgrades.upgradeProxy(contracts.mkp, mkpContractV4)
-    // let res = await upgrades.prepareUpgrade(contracts.mkp, mkpContractV4)
-    // console.log(res)
+    await upgrades.upgradeProxy(contracts.mkp, mkpContractV5)
+    let res = await upgrades.prepareUpgrade(contracts.mkp, mkpContractV5)
+    console.log(res)
+    console.log(contracts.mkp)
 }
 
 main().catch((error) => {

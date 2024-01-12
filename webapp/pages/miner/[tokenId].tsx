@@ -86,9 +86,8 @@ export default function TokenPage() {
     mkpContract,
     "cancelOrder"
   )
-  const { mutateAsync: executeOrder } = useContractWrite(
-    mkpContract,
-    "executeOrder"
+  const { mutateAsync: executeOrderByErc721 } = useContractWrite(
+    mkpContract, "executeOrderByErc721"
   )
 
   useEffect(() => {
@@ -200,7 +199,7 @@ export default function TokenPage() {
     let txResult
     try {
       // Simple one-liner for buying the NFT
-      txResult = await executeOrder({
+      txResult = await executeOrderByErc721({
         args: [collection, tokenId],
         overrides: {
           value: nftPrice,
@@ -222,8 +221,6 @@ export default function TokenPage() {
     isApproved !== CONTRACTS_MAP.MARKETPLACE &&
     isApprovedForAll
     
-  console.log(isApproved, CONTRACTS_MAP.MARKETPLACE)
-
   const isNFTOwner = nft.owner === address
 
   function renderApprove() {

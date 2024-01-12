@@ -34,6 +34,7 @@ deploy
 hh deploy --network ganache
 hardhat deploy --tags marketplace --network wannsee_mainnet
 hardhat deploy --tags collections --network wannsee_mainnet
+hardhat run scripts/mkpUpgrade.js --network wannsee_mainnet
 */
 
 /* 

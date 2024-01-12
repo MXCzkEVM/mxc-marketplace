@@ -3,7 +3,7 @@
 import { ethers } from 'ethers'
 import collectionFactory from "./abi_mxccollection/MXCCollectionFactoryV3.json"
 import collection from "./abi_mxccollection/MXCCollectionV3Upgrade.json"
-import marketplace from './abi_mxccollection/MXCMarketplaceUpgradeV4.json'
+import marketplace from './abi_mxccollection/MXCMarketPlaceUpgradeV5.json'
 import mep1002 from './abi_mep/mep1002.json'
 import mep1004 from './abi_mep/mep1004.json'
 import mep1002Name from './abi_mep/mep1002Name.json'

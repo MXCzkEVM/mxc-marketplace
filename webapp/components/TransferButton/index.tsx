@@ -8,6 +8,7 @@ export interface TransferButtonProps {
   type?: 'erc721' | 'erc1155'
   address: string
   id: string
+  className?:string
 }
 
 function TransferButton(props: TransferButtonProps) {
@@ -22,7 +23,7 @@ function TransferButton(props: TransferButtonProps) {
   return <>
     <button
       style={{flex:'1'}}
-      className="tw-web3button css-1fii1tk"
+      className={"tw-web3button css-1fii1tk " + props.className || ''}
       onClick={transferNft}
     >
       {t("Transfer")}

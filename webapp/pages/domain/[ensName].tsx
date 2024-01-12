@@ -80,9 +80,9 @@ export default function TokenPage() {
     mkpContract,
     "cancelOrder"
   )
-  const { mutateAsync: executeDomainOrder } = useContractWrite(
+  const { mutateAsync: executeOrderByErc1155 } = useContractWrite(
     mkpContract,
-    "executeDomainOrder"
+    "executeOrderByErc1155"
   )
 
   useEffect(() => {
@@ -187,8 +187,8 @@ export default function TokenPage() {
     let txResult
     try {
       // Simple one-liner for buying the NFT
-      txResult = await executeDomainOrder({
-        args: [ethers.BigNumber.from(tokenId)],
+      txResult = await executeOrderByErc1155({
+        args: [collection, ethers.BigNumber.from(tokenId)],
         overrides: {
           value: nftPrice,
           gasLimit: 300000, // override default gas limit
@@ -320,7 +320,7 @@ export default function TokenPage() {
                     {t("List for sale")}
                   </Web3Button>
                   <TransferButton
-                    
+                    className="list_btn"
                     onSuccess={(owner) => SetNFT({ ...nft, owner })}
                     address={collection}
                     id={tokenId}
