@@ -420,7 +420,7 @@ export default function TokenPage() {
           style={{ flex: '1' }}
           onSuccess={() => {
             toast.success(t("Burn successful"))
-            SetNFT({ ...nft, owner: zeroAddress })
+            router.replace(`/collection/${addrOrUrl}`)
           }}
         >
           {t("Burn")}
