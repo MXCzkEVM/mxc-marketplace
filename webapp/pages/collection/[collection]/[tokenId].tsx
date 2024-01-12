@@ -361,9 +361,9 @@ export default function TokenPage() {
   attributes = attributes.filter((item: any) => item.trait_type !== 'Social Handle')
 
   const isApprovedCond =
-    !(isApproved == zeroAddress &&
-      isApproved !== CONTRACTS_MAP.MARKETPLACE &&
-      !isApprovedForAll)
+    isApproved !== zeroAddress &&
+    isApproved !== CONTRACTS_MAP.MARKETPLACE &&
+    isApprovedForAll
   const isNFTOwner = nft.owner === address
 
   function renderApprove() {
@@ -474,7 +474,7 @@ export default function TokenPage() {
     return (
       <div className="pricingContainer">
         <div className="pricingInfo">
-          <p  className="mb-1">{t("Price")}</p>
+          <p className="mb-1">{t("Price")}</p>
           <div className="pricingValue">
             {mkpLoading ? (
               <Skeleton width="120" height="24" />
@@ -517,25 +517,30 @@ export default function TokenPage() {
               <div className="token_image">
                 <Image src={nft.image} defaultImage={defaultPng.src} alt="" />
               </div>
-              <h3 className="descriptionTitle">{t("Description")}</h3>
-              <p className="description">{nft.metadata.description}</p>
+              {nft.metadata.description && <>
+                <h3 className="descriptionTitle">{t("Description")}</h3>
+                <p className="description">{nft.metadata.description}</p>
+              </>}
 
-              <h3 className="descriptionTitle">{t("Traits")}</h3>
-              <div className="traitsContainer">
-                {attributes.map((item: any, index: number) => (
-                  <div
-                    onClick={() => clickAttr(item)}
-                    className={`traitContainer ${getAttrCss(item)}`}
-                    key={index}
-                  >
-                    <p className="traitName text-xs">{item.trait_type}</p>
-                    {item.trait_type !== 'Twitter'
-                      ? <p className="traitValue text-sm">{item.value?.toString() || ""}</p>
-                      : <Link className="traitValue text-sm" href={`https://twitter.com/${item.value}`}>{item.value || ""}</Link>
-                    }
-                  </div>
-                ))}
-              </div>
+              {!!attributes?.length && <>
+                <h3 className="descriptionTitle">{t("Traits")}</h3>
+                <div className="traitsContainer">
+                  {attributes.map((item: any, index: number) => (
+                    <div
+                      onClick={() => clickAttr(item)}
+                      className={`traitContainer ${getAttrCss(item)}`}
+                      key={index}
+                    >
+                      <p className="traitName text-xs">{item.trait_type}</p>
+                      {item.trait_type !== 'Twitter'
+                        ? <p className="traitValue text-sm">{item.value?.toString() || ""}</p>
+                        : <Link className="traitValue text-sm" href={`https://twitter.com/${item.value}`}>{item.value || ""}</Link>
+                      }
+                    </div>
+                  ))}
+                </div>
+              </>}
+
             </div>
 
             <div className="listingContainer">
@@ -558,7 +563,7 @@ export default function TokenPage() {
                 {nft.metadata.name}
                 <div className="flex gap-3">
                   <span>Token ID #{nft.metadata.id}</span>
-                  {nft.owner === zeroAddress && <div style={{ color: '#f27575' }}>Fused</div>}
+                  {nft.owner === zeroAddress && <div style={{ color: '#f27575' }}>{t('Fused')}</div>}
                 </div>
               </div>
 
@@ -588,10 +593,10 @@ export default function TokenPage() {
               </div>
 
               {/* 自己的nft 并且还没授权给市场 */}
-              {!isApprovedCond && isNFTOwner && renderApprove()}
-              {isApprovedCond && isNFTOwner && renderListNft()}
+              {isNFTOwner && !isApprovedCond && renderApprove()}
+              {isNFTOwner && nftPrice.eq(0) && isApprovedCond && renderListNft()}
+              {isNFTOwner && !nftPrice.eq(0) && isApprovedCond && renderCancel()}
               {isNFTOwner && nftPrice.eq(0) && renderButtons()}
-              {isApprovedCond && isNFTOwner && !nftPrice.eq(0) && renderCancel()}
               {address !== zeroAddress && !isNFTOwner && !nftPrice.eq(0) && renderExcute()}
               {
                 !!orderInfos.length && <>
