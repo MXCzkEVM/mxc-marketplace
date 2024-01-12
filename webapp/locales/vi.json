@@ -116,10 +116,13 @@
   "Transfer Confirm": "Xác nhận chuyển khoản",
   "Order Events": "Sự kiện đặt hàng",
   "Mortgage Input Title": "Nâng cao RWA NFT của bạn bằng Khóa XSD",
-  "Mortgage Input Des": "Tăng độ tin cậy của RWA NFT của bạn bằng cách khóa mã thông báo XSD vào đó. \nTính năng này bổ sung thêm một lớp tin cậy, đảm bảo rằng XSD chỉ được trả lại cho người tạo nếu NFT bị cháy vĩnh viễn (được gửi đến địa chỉ lỗ đen). \nBảo vệ tính toàn vẹn và giá trị của nội dung của bạn bằng biện pháp bảo vệ bổ sung này.",
+  "Mortgage Input Des": "Tăng độ tin cậy của RWA NFT của bạn bằng cách khóa mã thông báo XSD vào đó. \nTính năng này bổ sung thêm một lớp tin cậy, đảm bảo rằng XSD chỉ được trả lại cho chủ sở hữu nếu NFT bị cháy vĩnh viễn (được gửi đến địa chỉ lỗ đen). \nBảo vệ tính toàn vẹn và giá trị của nội dung của bạn bằng biện pháp bảo vệ bổ sung này.",
   "Real-World Collectables": "Đồ sưu tầm trong thế giới thực",
   "Approve for XSD": "Phê duyệt XSD",
   "XSD approve failed": "XSD phê duyệt không thành công",
   "XSD Approved click button to continue": "XSD đã được phê duyệt, nhấp vào nút để tiếp tục.",
-  "You don t have enough XSD": "Bạn không có đủ XSD"
+  "You don t have enough XSD": "Bạn không có đủ XSD",
+  "Burn": "Ghi (Tái chế XSD)",
+  "Burn successful": "Ghi thành công",
+  "Staked": "đặt cược"
 }

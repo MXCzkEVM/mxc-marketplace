@@ -21,7 +21,7 @@ function TransferButton(props: TransferButtonProps) {
 
   return <>
     <button
-      style={{ width: '100%', marginBottom: '24px' }}
+      style={{flex:'1'}}
       className="tw-web3button css-1fii1tk"
       onClick={transferNft}
     >

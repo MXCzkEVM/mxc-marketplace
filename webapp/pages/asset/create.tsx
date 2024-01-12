@@ -537,6 +537,7 @@ export default function AssetCrearePage() {
             <div className="inputSubTitle">
               {t("Mortgage Input Des")}
             </div>
+            
             <div className="inputWrapper">
               <input
                 className={`input ${nameError && "hasError"}`}

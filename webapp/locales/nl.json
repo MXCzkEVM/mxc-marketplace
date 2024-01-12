@@ -116,10 +116,13 @@
   "Transfer Confirm": "Overdracht bevestigen",
   "Order Events": "Bestel evenementen",
   "Mortgage Input Title": "Verbeter uw RWA NFT met XSD-vergrendeling",
-  "Mortgage Input Des": "Vergroot de geloofwaardigheid van uw RWA NFT door XSD-tokens erin te vergrendelen. \nDeze functie voegt een extra vertrouwenslaag toe, waardoor de XSD alleen wordt teruggestuurd naar de maker als de NFT permanent wordt verbrand (verzonden naar een blackhole-adres). \nBeveilig de integriteit en waarde van uw inhoud met deze extra beveiliging.",
+  "Mortgage Input Des": "Vergroot de geloofwaardigheid van uw RWA NFT door XSD-tokens erin te vergrendelen. \nDeze functie voegt een extra vertrouwenslaag toe en zorgt ervoor dat de XSD alleen wordt teruggegeven aan de eigenaar als de NFT permanent wordt verbrand (verzonden naar een blackhole-adres). \nBeveilig de integriteit en waarde van uw inhoud met deze extra beveiliging.",
   "Real-World Collectables": "Verzamelobjecten uit de echte wereld",
   "Approve for XSD": "Goedkeuren voor XSD",
   "XSD approve failed": "XSD-goedkeuring mislukt",
   "XSD Approved click button to continue": "XSD goedgekeurd, klik op de knop om door te gaan.",
-  "You don t have enough XSD": "Je hebt niet genoeg XSD"
+  "You don t have enough XSD": "Je hebt niet genoeg XSD",
+  "Burn": "Verbranden (recycling XSD)",
+  "Burn successful": "Succesvol branden",
+  "Staked": "Uitgezet"
 }

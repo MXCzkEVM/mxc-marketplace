@@ -116,10 +116,13 @@
   "Transfer Confirm": "Aktarımı Onayla",
   "Order Events": "Sipariş Etkinlikleri",
   "Mortgage Input Title": "RWA NFT'nizi XSD Kilitlemeyle Geliştirin",
-  "Mortgage Input Des": "XSD tokenlerini içine kilitleyerek RWA NFT'nizin güvenilirliğini artırın. \nBu özellik ekstra bir güven katmanı ekleyerek XSD'nin yalnızca NFT'nin kalıcı olarak yakılması (bir kara delik adresine gönderilmesi) durumunda yaratıcıya iade edilmesini sağlar. \nBu ek korumayla içeriğinizin bütünlüğünü ve değerini koruyun.",
+  "Mortgage Input Des": "XSD tokenlerini içine kilitleyerek RWA NFT'nizin güvenilirliğini artırın. \nBu özellik ekstra bir güven katmanı ekleyerek XSD'nin yalnızca NFT'nin kalıcı olarak yakılması (bir kara delik adresine gönderilmesi) durumunda sahibine iade edilmesini sağlar. \nBu ek korumayla içeriğinizin bütünlüğünü ve değerini koruyun.",
   "Real-World Collectables": "Gerçek Dünya Koleksiyonları",
   "Approve for XSD": "XSD'yi onayla",
   "XSD approve failed": "XSD onayı başarısız oldu",
   "XSD Approved click button to continue": "XSD Onaylandı, devam etmek için düğmeye tıklayın.",
-  "You don t have enough XSD": "Yeterli XSD'niz yok"
+  "You don t have enough XSD": "Yeterli XSD'niz yok",
+  "Burn": "Yak(XSD Geri Dönüşümü)",
+  "Burn successful": "Başarılı bir şekilde yaz",
+  "Staked": "Bahis"
 }

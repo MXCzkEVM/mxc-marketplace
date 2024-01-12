@@ -76,10 +76,17 @@ export default function TokenPage() {
     "isApprovedForAll",
     [address || zeroAddress, CONTRACTS_MAP.MARKETPLACE]
   )
+  const { data: stakedBalance } = useContractRead(
+    nftContract,
+    "stakedBalanceOf",
+    [tokenId]
+  )
+
   const { mutateAsync: setApprovalForAll } = useContractWrite(
     nftContract,
     "setApprovalForAll"
   )
+  const { mutateAsync: burn } = useContractWrite(nftContract, "burn")
 
   // get market info
   const { contract: mkpContract } = useContract(
@@ -276,6 +283,7 @@ export default function TokenPage() {
     ])
   }
 
+
   useEffect(() => {
     requestNftOrders()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -352,6 +360,153 @@ export default function TokenPage() {
   let attributes = nft?.metadata?.attributes || []
   attributes = attributes.filter((item: any) => item.trait_type !== 'Social Handle')
 
+  const isApprovedCond =
+    !(isApproved == zeroAddress &&
+      isApproved !== CONTRACTS_MAP.MARKETPLACE &&
+      !isApprovedForAll)
+  const isNFTOwner = nft.owner === address
+
+  function renderApprove() {
+    return (
+      <>
+        <Web3Button
+          contractAddress={collection}
+          contractAbi={ABI.collection}
+          action={async () => await approveForSale()}
+          className="list_btn"
+        >
+          {t("Approve item for marketplace")}
+        </Web3Button>
+      </>
+    )
+  }
+  function renderListNft() {
+    return (
+      <div className="sell_info">
+        <PriceInput
+          className="input"
+          placeholder="NFT Price"
+          decimals={8}
+          value={"" + inputPrice}
+          onChange={(val: any) => setInputPrice(val)}
+        />
+
+        <Web3Button
+          isDisabled={!isApproved}
+          contractAddress={CONTRACTS_MAP.MARKETPLACE}
+          contractAbi={ABI.marketplace}
+          action={async () => await listForSale()}
+          className="list_btn"
+          style={{ width: '100%' }}
+        >
+          {t("List for sale")}
+        </Web3Button>
+      </div>
+    )
+  }
+  function renderButtons() {
+    return (
+      <div style={{ display: 'flex', gap: '10px' }}>
+        <TransferButton
+          onSuccess={(owner) => SetNFT({ ...nft, owner })}
+          address={collection}
+          id={tokenId}
+        />
+        <Web3Button
+          isDisabled={!isApproved}
+          contractAddress={collection}
+          contractAbi={ABI.collection}
+          action={() => burn({ args: [tokenId] })}
+          style={{ flex: '1' }}
+          onSuccess={() => {
+            toast.success(t("Burn successful"))
+            SetNFT({ ...nft, owner: zeroAddress })
+          }}
+        >
+          {t("Burn")}
+        </Web3Button>
+      </div>
+    )
+  }
+  function renderCancel() {
+    return (
+      <div className="sell_info mb-6">
+        <h4 className="formSectionTitle">{t("Cancel Order")} </h4>
+        <Web3Button
+          contractAddress={CONTRACTS_MAP.MARKETPLACE}
+          contractAbi={ABI.marketplace}
+          action={async () => await cancelMakeOrder()}
+          className="list_btn"
+        >
+          {t("Cancel list for sale")}
+        </Web3Button>
+      </div>
+    )
+  }
+  function renderExcute() {
+    return (
+      <div className="sell_info mb-6">
+        <h4 className="formSectionTitle">{t("Excute Order")} </h4>
+        <div className="flex gap-3 items-center">
+          <Web3Button
+            contractAddress={CONTRACTS_MAP.MARKETPLACE}
+            contractAbi={ABI.marketplace}
+            action={async () => await buyMakeOrder()}
+            className="flex-1"
+          >
+            {t("Buy at asking price")}
+          </Web3Button>
+          <AddCartButton
+            item={{
+              address: collection,
+              asset: Number(tokenId),
+              image: nft.image,
+              meta: nft.metadata,
+              owner: nft.owner,
+              price: nftPrice.toString()
+            }}
+          />
+        </div>
+      </div>
+    )
+  }
+  function renderPrices() {
+    return (
+      <div className="pricingContainer">
+        <div className="pricingInfo">
+          <p  className="mb-1">{t("Price")}</p>
+          <div className="pricingValue">
+            {mkpLoading ? (
+              <Skeleton width="120" height="24" />
+            ) : (
+              <>
+                {!nftPrice.eq(0) ? (
+                  <>
+                    {ethers.utils.formatEther(nftPrice)}
+                    {"  MXC"}
+                  </>
+                ) : (
+                  t("Not for sale")
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    )
+  }
+  function renderStaked() {
+    return (
+      <div className="pricingContainer">
+        <div className="pricingInfo">
+          <p className="mb-1">{t("Staked")}</p>
+          <div className="pricingValue">
+            {ethers.utils.formatEther(stakedBalance || 0)} XSD
+          </div>
+        </div>
+      </div>
+    )
+  }
   return (
     <div className="nft_detail">
       <Toaster position="bottom-center" reverseOrder={false} />
@@ -401,7 +556,10 @@ export default function TokenPage() {
               )}
               <div className="title">
                 {nft.metadata.name}
-                <div> Token ID #{nft.metadata.id}</div>
+                <div className="flex gap-3">
+                  <span>Token ID #{nft.metadata.id}</span>
+                  {nft.owner === zeroAddress && <div style={{ color: '#f27575' }}>Fused</div>}
+                </div>
               </div>
 
               <div className="owner">
@@ -424,124 +582,17 @@ export default function TokenPage() {
                 </Link>
               </div>
 
-              <div className="pricingContainer">
-                <div className="pricingInfo">
-                  <p>{t("Price")}</p>
-                  <div className="pricingValue">
-                    {mkpLoading ? (
-                      <Skeleton width="120" height="24" />
-                    ) : (
-                      <>
-                        {!nftPrice.eq(0) ? (
-                          <>
-                            {ethers.utils.formatEther(nftPrice)}
-                            {"  MXC"}
-                          </>
-                        ) : (
-                          t("Not for sale")
-                        )}
-                      </>
-                    )}
-                  </div>
-                </div>
+              <div className="flex gap-6">
+                {renderPrices()}
+                {stakedBalance && !stakedBalance?.eq(0) && renderStaked()}
               </div>
 
               {/* 自己的nft 并且还没授权给市场 */}
-              {isApproved == zeroAddress &&
-                isApproved !== CONTRACTS_MAP.MARKETPLACE &&
-                !isApprovedForAll &&
-                nft.owner == address ? (
-                <>
-                  <h4 className="formSectionTitle mb-2">{t("Approve")} </h4>
-                  <Web3Button
-                    contractAddress={collection}
-                    contractAbi={ABI.collection}
-                    action={async () => await approveForSale()}
-                    className="list_btn"
-                  >
-                    {t("Approve item for marketplace")}
-                  </Web3Button>
-                </>
-              ) : null}
-              {address !== zeroAddress &&
-                nft.owner == address &&
-                nftPrice.eq(0) ? (
-                <div className="sell_info">
-                  <h4 className="formSectionTitle">{t("Price")} </h4>
-                  <PriceInput
-                    className="input"
-                    placeholder="NFT Price"
-                    decimals={8}
-                    value={"" + inputPrice}
-                    onChange={(val: any) => setInputPrice(val)}
-                  />
-
-                  <Web3Button
-                    isDisabled={
-                      isApproved &&
-                      isApproved !== CONTRACTS_MAP.MARKETPLACE &&
-                      !isApprovedForAll
-                    }
-                    contractAddress={CONTRACTS_MAP.MARKETPLACE}
-                    contractAbi={ABI.marketplace}
-                    action={async () => await listForSale()}
-                    className="list_btn"
-                  >
-                    {t("List for sale")}
-                  </Web3Button>
-                  <TransferButton
-                    onSuccess={(owner) => SetNFT({ ...nft, owner })}
-                    address={collection}
-                    id={tokenId}
-                  />
-                </div>
-              ) : null}
-
-
-
-              {address !== zeroAddress &&
-                nft.owner == address &&
-                !nftPrice.eq(0) ? (
-                <div className="sell_info">
-                  <h4 className="formSectionTitle">{t("Cancel Order")} </h4>
-                  <Web3Button
-                    contractAddress={CONTRACTS_MAP.MARKETPLACE}
-                    contractAbi={ABI.marketplace}
-                    action={async () => await cancelMakeOrder()}
-                    className="list_btn"
-                  >
-                    {t("Cancel list for sale")}
-                  </Web3Button>
-                </div>
-              ) : null}
-
-              {address !== zeroAddress &&
-                nft.owner !== address &&
-                !nftPrice.eq(0) ? (
-                <div className="sell_info mb-6">
-                  <h4 className="formSectionTitle">{t("Excute Order")} </h4>
-                  <div className="flex gap-3 items-center">
-                    <Web3Button
-                      contractAddress={CONTRACTS_MAP.MARKETPLACE}
-                      contractAbi={ABI.marketplace}
-                      action={async () => await buyMakeOrder()}
-                      className="flex-1"
-                    >
-                      {t("Buy at asking price")}
-                    </Web3Button>
-                    <AddCartButton
-                      item={{
-                        address: collection,
-                        asset: Number(tokenId),
-                        image: nft.image,
-                        meta: nft.metadata,
-                        owner: nft.owner,
-                        price: nftPrice.toString()
-                      }}
-                    />
-                  </div>
-                </div>
-              ) : null}
+              {!isApprovedCond && isNFTOwner && renderApprove()}
+              {isApprovedCond && isNFTOwner && renderListNft()}
+              {isNFTOwner && nftPrice.eq(0) && renderButtons()}
+              {isApprovedCond && isNFTOwner && !nftPrice.eq(0) && renderCancel()}
+              {address !== zeroAddress && !isNFTOwner && !nftPrice.eq(0) && renderExcute()}
               {
                 !!orderInfos.length && <>
                   <h4 className="formSectionTitle mb-3">

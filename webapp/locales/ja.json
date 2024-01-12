@@ -116,10 +116,13 @@
   "Transfer Confirm": "転送確認",
   "Order Events": "イベントの注文",
   "Mortgage Input Title": "XSD ロックで RWA NFT を強化する",
-  "Mortgage Input Des": "XSD トークンを RWA NFT にロックすることで、RWA NFT の信頼性を高めます。\nこの機能は信頼層を追加し、NFT が永続的に書き込まれる (ブラックホール アドレスに送信される) 場合にのみ XSD が作成者に返されるようにします。\nこの追加の保護手段により、コンテンツの整合性と価値を保護します。",
+  "Mortgage Input Des": "XSD トークンを RWA NFT にロックすることで、RWA NFT の信頼性を高めます。\nこの機能は信頼層を追加し、NFT が永続的に書き込まれる (ブラックホール アドレスに送信される) 場合にのみ XSD が所有者に返されるようにします。\nこの追加の保護手段により、コンテンツの整合性と価値を保護します。",
   "Real-World Collectables": "現実世界の収集品",
   "Approve for XSD": "XSD を承認する",
   "XSD approve failed": "XSD 承認に失敗しました",
   "XSD Approved click button to continue": "XSD が承認されました。続行するにはボタンをクリックしてください。",
-  "You don t have enough XSD": "XSD が不十分です"
+  "You don t have enough XSD": "XSD が不十分です",
+  "Burn": "燃焼(XSDのリサイクル)",
+  "Burn successful": "書き込みが成功しました",
+  "Staked": "杭打ち"
 }

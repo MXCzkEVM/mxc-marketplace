@@ -104,14 +104,21 @@ contract MXCCollectionV3Upgrade is UUPSUpgradeable, ERC721Upgrade {
     }
 
     function _burnStaked(uint256 nft) private {
-      require(_ownerOf[nft] == msg.sender, "Not an NFT owner");
-      _transferFromStaked(address(this), msg.sender, _stakedOf[nft]);
+      _transferStaked(msg.sender, _stakedOf[nft]);
       _stakedOf[nft] = 0;
     }
 
     function _transferFromStaked(address _from, address _to, uint256 _amount) private {
       bytes4 methodId = bytes4(keccak256("transferFrom(address,address,uint256)"));
       bytes memory data =  abi.encodeWithSelector(methodId, _from, _to,_amount);
+      (bool sent,) = collateral.call(data);
+      if (!sent)
+        revert MXCCollection__StakedTokenTransferFailed();
+    }
+
+    function _transferStaked(address recipient, uint256 amount) private {
+      bytes4 methodId = bytes4(keccak256("transfer(address,uint256)"));
+      bytes memory data =  abi.encodeWithSelector(methodId, recipient, amount);
       (bool sent,) = collateral.call(data);
       if (!sent)
         revert MXCCollection__StakedTokenTransferFailed();
