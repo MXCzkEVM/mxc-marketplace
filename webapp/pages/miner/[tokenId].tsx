@@ -10,7 +10,6 @@ import {
 
 import { useRouter } from "next/router"
 import { Toaster } from "react-hot-toast"
-import { CHAIN_ID } from "@/const/Network"
 import { ABI, CONTRACTS_MAP } from "@/const/Address"
 
 import { zeroAddress } from "@/const/Local"
@@ -25,48 +24,35 @@ import PriceInput from "@/components/PriceInput"
 import { toast } from "react-toastify"
 import Image from "@/components/Image"
 import defaultPng from "@/assets/placeholder.png"
-import { searchNftOrders } from '@/graphql/nft'
-import { getNFTDetail, getCollectInfo } from "@/util/getNFT"
+import { getNFTDetail } from "@/util/getNFT"
 const [randomColor1, randomColor2] = [randomColor(), randomColor()]
-import ApiClient from "@/util/request"
 import { useTranslation } from "react-i18next"
-import { nftClient } from "@/util/apolloClient"
-import { Table } from 'antd'
-import { ColumnsType } from "antd/es/table"
-import { useCollectionAddress, useName, useNames } from '@/hooks'
+import { useName } from '@/hooks'
 import { AddCartButton } from "@/components/CartButton/AddCartButton"
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import TransferButton from "@/components/TransferButton"
 dayjs.extend(relativeTime)
 
-const api = new ApiClient("/")
-const explorerUrl = process.env.NEXT_PUBLIC_EXPLORER
+const collection = CONTRACTS_MAP.MEP1004
 
 export default function TokenPage() {
-  const [collectionDta, setCollectionDta] = useState<any>({})
-  const [orderInfos, setOrderInfos
-  ] = useState<any>([])
   const [nft, SetNFT] = useState<any>({ metadata: {}, owner: null })
   const [nftPrice, setNftPrice] = useState<BigNumber>(BigNumber.from(0))
   const [inputPrice, setInputPrice] = useState<any>("")
   const router = useRouter()
   const address = useAddress() || zeroAddress
   const ownerName = useName(nft.owner)
-  const [tableAddress, setTableAddress] = useState<string[]>([])
-  const names = useNames(tableAddress)
 
   const { t } = useTranslation()
 
-  const { collection: addrOrUrl = zeroAddress, tokenId = "0" } = router.query as {
+  const { tokenId = "0" } = router.query as {
     tokenId: string
     collection: string
   }
 
-  const collection = useCollectionAddress(addrOrUrl)
-
   // get nft info
-  const { contract: nftContract } = useContract(collection, ABI.collection)
+  const { contract: nftContract } = useContract(collection, ABI.mep1004)
   const { data: isApproved } = useContractRead(nftContract, "getApproved", [
     tokenId,
   ])
@@ -76,17 +62,11 @@ export default function TokenPage() {
     "isApprovedForAll",
     [address || zeroAddress, CONTRACTS_MAP.MARKETPLACE]
   )
-  const { data: stakedBalance } = useContractRead(
-    nftContract,
-    "stakedBalanceOf",
-    [tokenId]
-  )
 
   const { mutateAsync: setApprovalForAll } = useContractWrite(
     nftContract,
-    "setApprovalForAll"
+    "setApprovalForAll",
   )
-  const { mutateAsync: burn } = useContractWrite(nftContract, "burn")
 
   // get market info
   const { contract: mkpContract } = useContract(
@@ -112,55 +92,24 @@ export default function TokenPage() {
   )
 
   useEffect(() => {
-    if (collection == zeroAddress) {
+    if (collection == zeroAddress)
       return
-    }
     const fetchData = async () => {
-      let collectionsItem: any = await api.post("/api/get-collection", {
-        chainId: CHAIN_ID,
-        collection_id: collection,
-      })
-      let collectionDta = collectionsItem?.collection || {}
-      let nwData = await getCollectInfo(collectionDta)
-      setCollectionDta(nwData)
-
       let id = tokenId as string
       let nft = await getNFTDetail(collection, id)
       SetNFT(nft)
     }
     fetchData()
-  }, [tokenId, collection, mkp_info])
+  }, [tokenId, mkp_info])
 
   useEffect(() => {
-    if (!mkp_info) {
+    if (!mkp_info)
       return
-    }
-    let { expiresAt, price, seller } = mkp_info
-    setNftPrice(price)
+    setNftPrice(mkp_info.price)
   }, [mkp_info])
 
-  const clickAttr = async (item: any) => {
-    // if (item.trait_type == "Location Proofs") {
-    //   const contract = new ethers.Contract(
-    //     MEP1004ContractAddr,
-    //     mep1004abi,
-    //     provider
-    //   )
-    //   let { MEP1002TokenId } = await contract.latestLocationProofs(tokenId)
-    //   let hexId = MEP1002TokenId._hex.replace("0x", "")
-    //   window.open(
-    //     `https://wannsee-explorer.mxc.com/mapper?hexid=${hexId}`,
-    //     "_blank"
-    //   )
-    // }
-  }
 
-  const getAttrCss = (item: any) => {
-    if (item.trait_type == "Location Proofs") {
-      return "csp"
-    }
-    return ""
-  }
+
 
   const approveForSale = async () => {
     if (nft.owner !== address) {
@@ -268,102 +217,13 @@ export default function TokenPage() {
     return txResult
   }
 
-  const requestNftOrders = async () => {
-    if (collection === zeroAddress)
-      return
-    const result = await nftClient.query({
-      query: searchNftOrders(collection, tokenId),
-    })
-    const orderInfos = [...result.data.marketplaceOrderInfos]
-    orderInfos.sort((a: any, b: any) => b.blockTimestamp - a.blockTimestamp)
-    setOrderInfos(orderInfos)
-    setTableAddress([
-      ...orderInfos.map((o: any) => o.buyer),
-      ...orderInfos.map((o: any) => o.seller)
-    ])
-  }
-
-
-  useEffect(() => {
-    requestNftOrders()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [collection, nftPrice])
-
-  const columns: ColumnsType<any> = [
-    {
-      title: t('Event'),
-      dataIndex: 'event',
-      key: 'event',
-      render(value) {
-        const texts: Record<string, any> = {
-          created: t('Sold'),
-          cancelled: t('Cancelled'),
-          successful: t('Transfer')
-        }
-        return texts[value]
-      },
-    },
-    {
-      title: t('Price'),
-      dataIndex: 'totalPrice',
-      key: 'totalPrice',
-      render(value, row) {
-        return value || row.priceInWei
-          ? `${ethers.utils.formatEther(value || row.priceInWei)} MXC`
-          : '-'
-      },
-    },
-    {
-      title: t('From'),
-      dataIndex: 'seller',
-      key: 'seller',
-      render(value) {
-        if (!value) return '-'
-        return <Link target="_blank" href={`${explorerUrl}/address/${value}`}>
-          {names[value.toLocaleUpperCase()]}
-        </Link>
-      },
-    },
-    {
-      title: t('To'),
-      dataIndex: 'buyer',
-      key: 'buyer',
-      render(value) {
-        if (!value) return '-'
-        return <Link target="_blank" href={`${explorerUrl}/address/${value}`}>
-          {names[value.toLocaleUpperCase()]}
-        </Link>
-      },
-    },
-    {
-      title: t('Hash'),
-      dataIndex: 'transactionHash',
-      key: 'transactionHash',
-      render(value) {
-        if (!value) return '-'
-        return <Link target="_blank" href={`${explorerUrl}/tx/${value}`}>
-          {value.slice(0, 4)}...
-          {value.slice(-4)}
-        </Link>
-      },
-    },
-    {
-      title: t('Date'),
-      dataIndex: 'blockTimestamp',
-      key: 'blockTimestamp',
-      render(value) {
-        return dayjs(value * 1000).fromNow()
-      },
-    },
-  ];
-
-  let attributes = nft?.metadata?.attributes || []
-  attributes = attributes.filter((item: any) => item.trait_type !== 'Social Handle')
-
   const isApprovedCond =
     isApproved === zeroAddress &&
     isApproved !== CONTRACTS_MAP.MARKETPLACE &&
     isApprovedForAll
+    
+  console.log(isApproved, CONTRACTS_MAP.MARKETPLACE)
+
   const isNFTOwner = nft.owner === address
 
   function renderApprove() {
@@ -412,19 +272,6 @@ export default function TokenPage() {
           address={collection}
           id={tokenId}
         />
-        <Web3Button
-          isDisabled={!isApproved}
-          contractAddress={collection}
-          contractAbi={ABI.collection}
-          action={() => burn({ args: [tokenId] })}
-          style={{ flex: '1' }}
-          onSuccess={() => {
-            toast.success(t("Burn successful"))
-            router.replace(`/collection/${addrOrUrl}`)
-          }}
-        >
-          {t("Burn")}
-        </Web3Button>
       </div>
     )
   }
@@ -495,18 +342,6 @@ export default function TokenPage() {
       </div>
     )
   }
-  function renderStaked() {
-    return (
-      <div className="pricingContainer">
-        <div className="pricingInfo">
-          <p className="mb-1">{t("Staked")}</p>
-          <div className="pricingValue">
-            {ethers.utils.formatEther(stakedBalance || 0)} XSD
-          </div>
-        </div>
-      </div>
-    )
-  }
   return (
     <div className="nft_detail">
       <Toaster position="bottom-center" reverseOrder={false} />
@@ -515,55 +350,18 @@ export default function TokenPage() {
           <div className="container">
             <div className="metadataContainer">
               <div className="token_image">
-                <Image src={nft.image} defaultImage={defaultPng.src} alt="" />
+                <Image src="https://wannsee-mining.matchx.io/_next/image?url=%2Fassets%2Fm2pro-200.webp&w=256&q=75" defaultImage={defaultPng.src} alt="" />
               </div>
               {nft.metadata.description && <>
                 <h3 className="descriptionTitle">{t("Description")}</h3>
                 <p className="description">{nft.metadata.description}</p>
               </>}
-
-              {!!attributes?.length && <>
-                <h3 className="descriptionTitle">{t("Traits")}</h3>
-                <div className="traitsContainer">
-                  {attributes.map((item: any, index: number) => (
-                    <div
-                      onClick={() => clickAttr(item)}
-                      className={`traitContainer ${getAttrCss(item)}`}
-                      key={index}
-                    >
-                      <p className="traitName text-xs">{item.trait_type}</p>
-                      {item.trait_type !== 'Twitter'
-                        ? <p className="traitValue text-sm">{item.value?.toString() || ""}</p>
-                        : <Link className="traitValue text-sm" href={`https://twitter.com/${item.value}`}>{item.value || ""}</Link>
-                      }
-                    </div>
-                  ))}
-                </div>
-              </>}
-
             </div>
-
             <div className="listingContainer">
-              {collectionDta && (
-                <div className="flexbox mb-3">
-                  <div className="collectionImg">
-                    <Image
-                      src={collectionDta.cover}
-                      defaultImage={defaultPng.src}
-                      alt=""
-                    />
-                  </div>
-
-                  <div className="collectionName text-base">
-                    {collectionDta.name}
-                  </div>
-                </div>
-              )}
               <div className="title">
-                {nft.metadata.name}
+                MEP1004M2PRO
                 <div className="flex gap-3">
                   <span>Token ID #{nft.metadata.id}</span>
-                  {nft.owner === zeroAddress && <div style={{ color: '#f27575' }}>{t('Fused')}</div>}
                 </div>
               </div>
 
@@ -589,7 +387,6 @@ export default function TokenPage() {
 
               <div className="flex gap-6">
                 {renderPrices()}
-                {stakedBalance && !stakedBalance?.eq(0) && renderStaked()}
               </div>
 
               {/* 自己的nft 并且还没授权给市场 */}
@@ -598,14 +395,6 @@ export default function TokenPage() {
               {isNFTOwner && !nftPrice.eq(0) && isApprovedCond && renderCancel()}
               {isNFTOwner && nftPrice.eq(0) && renderButtons()}
               {address !== zeroAddress && !isNFTOwner && !nftPrice.eq(0) && renderExcute()}
-              {
-                !!orderInfos.length && <>
-                  <h4 className="formSectionTitle mb-3">
-                    {t('Order Events')}
-                  </h4>
-                  <Table scroll={{ x: 850 }} pagination={false} dataSource={orderInfos} columns={columns} />
-                </>
-              }
             </div>
           </div>
         </Container>

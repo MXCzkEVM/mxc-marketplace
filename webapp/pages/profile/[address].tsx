@@ -24,6 +24,7 @@ const ProfileCollections = dynamic(
 const ProfileNFTs = dynamic(() => import("@/components/Profile/Nfts"))
 const ProfileHexagons = dynamic(() => import("@/components/Profile/Hexagons"))
 const ProfileDomains = dynamic(() => import("@/components/Profile/Domains"))
+const ProfileMiner = dynamic(() => import("@/components/Profile/Miner"))
 
 const [randomColor1, randomColor2, randomColor3, randomColor4] = [
   randomColor(),
@@ -34,7 +35,7 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
 
 export default function ProfilePage() {
   const [tab, setTab] = useState<
-    "nfts" | "collections" | "hexagons" | "domains"
+    "nfts" | "collections" | "hexagons" | "domains" | "miners"
   >("collections")
   const router = useRouter()
   const address = router.query.address
@@ -96,12 +97,20 @@ export default function ProfilePage() {
           >
             {t("Domains")}
           </h3>
+          <h3
+            className={`${styles.tab} 
+            ${tab === "miners" ? styles.activeTab : ""}`}
+            onClick={() => setTab("miners")}
+          >
+            {t("Miners")}
+          </h3>
         </div>
 
         {tab == "collections" && <ProfileCollections />}
         {tab == "nfts" && <ProfileNFTs />}
         {tab == "hexagons" && <ProfileHexagons />}
         {tab == "domains" && <ProfileDomains />}
+        {tab == "miners" && <ProfileMiner />}
       </Container>
     </div>
   )

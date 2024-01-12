@@ -5,6 +5,7 @@ import collectionFactory from "./abi_mxccollection/MXCCollectionFactoryV3.json"
 import collection from "./abi_mxccollection/MXCCollectionV3Upgrade.json"
 import marketplace from './abi_mxccollection/MXCMarketplaceUpgradeV4.json'
 import mep1002 from './abi_mep/mep1002.json'
+import mep1004 from './abi_mep/mep1004.json'
 import mep1002Name from './abi_mep/mep1002Name.json'
 import mnsNameWrap from './abi_mns/NameWrapper.json'
 import erc20 from './abi_common/erc20.json'
@@ -26,6 +27,7 @@ const contracts: any = {
         MARKETPLACE: '0x91fd2e13379dF87f752c82E8C16a1aE72601a9B2',
         XSD: "0xB9506A80429Ee619C74D46a3276c622358795e2B",
 
+        MEP1004: "0x5CE293229a794AF03Ec3c95Cfba6b1058D558026",
         MEP1002Name: "0xad5a1855A383732f311241c1A4F9510da0Ad0743",
         MEP1002NameStartBlock: 61546,
         MNSNAMEWRAP: "0x2246EdAd0bc9212Bae82D43974619480A9D1f387"
@@ -49,6 +51,7 @@ export const ABI = {
     marketplace,
     collectionFactory,
     collection,
+    mep1004,
     mep1002,
     mep1002Name,
     mnsNameWrap,

@@ -7,7 +7,7 @@ import { NETWORK, } from "@/const/Network"
 import { ABI, instanceCollection } from "@/const/Address"
 
 
-export const getThirdWebNFTList = async (nftLis: any) => {
+export const getThirdWebNFTList = (nftLis: any) => {
     return nftLis?.filter((item: any) => item.owner !== zeroAddress)
 }
 
