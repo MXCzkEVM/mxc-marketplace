@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react"
 
 import {
@@ -6,6 +7,7 @@ import {
   useContractRead,
   useAddress,
   Web3Button,
+  getContractFromAbi
 } from "@thirdweb-dev/react"
 
 import { useRouter } from "next/router"
@@ -32,6 +34,7 @@ import { AddCartButton } from "@/components/CartButton/AddCartButton"
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import TransferButton from "@/components/TransferButton"
+import axios from "axios"
 dayjs.extend(relativeTime)
 
 const collection = CONTRACTS_MAP.MEP1004
@@ -40,6 +43,7 @@ export default function TokenPage() {
   const [nft, SetNFT] = useState<any>({ metadata: {}, owner: null })
   const [nftPrice, setNftPrice] = useState<BigNumber>(BigNumber.from(0))
   const [inputPrice, setInputPrice] = useState<any>("")
+  const [detail, setDetail] = useState<any>()
   const router = useRouter()
   const address = useAddress() || zeroAddress
   const ownerName = useName(nft.owner)
@@ -106,9 +110,6 @@ export default function TokenPage() {
       return
     setNftPrice(mkp_info.price)
   }, [mkp_info])
-
-
-
 
   const approveForSale = async () => {
     if (nft.owner !== address) {
@@ -222,6 +223,20 @@ export default function TokenPage() {
     isApprovedForAll
     
   const isNFTOwner = nft.owner === address
+
+  useEffect(() => {
+    requestDetail()
+  }, [tokenId])
+
+  async function requestDetail() {
+    if (!tokenId|| Number(tokenId) === 0)
+      return
+    const {data} = await axios('/mep2542/getMEP1004TokenDetail', {
+      baseURL: process.env.NEXT_PUBLIC_MINING_API,
+      params: { tokenId }
+    })
+    setDetail(data.mep1004TokenDetail)
+  }
 
   function renderApprove() {
     return (
@@ -347,12 +362,16 @@ export default function TokenPage() {
           <div className="container">
             <div className="metadataContainer">
               <div className="token_image">
-                <Image src="https://wannsee-mining.matchx.io/_next/image?url=%2Fassets%2Fm2pro-200.webp&w=256&q=75" defaultImage={defaultPng.src} alt="" />
+                <Image style={{height: '265px'}} src="https://matchx.io/cdn/shop/products/matchx_gateway_001.jpg?crop=center&height=675&v=1676546606&width=450" defaultImage={defaultPng.src} alt="" />
               </div>
               {nft.metadata.description && <>
                 <h3 className="descriptionTitle">{t("Description")}</h3>
                 <p className="description">{nft.metadata.description}</p>
               </>}
+              <h3 className="descriptionTitle">{t("Fuel Tank Address")}</h3>
+              <p className="description">{detail?.erc6551Addr}</p>
+              <h3 className="descriptionTitle">{t("Fuel Tank Size")}</h3>
+              <p className="description">{detail?.erc6551Addr}</p>
             </div>
             <div className="listingContainer">
               <div className="title">

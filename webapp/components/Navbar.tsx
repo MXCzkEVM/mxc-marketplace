@@ -43,8 +43,8 @@ export function Navbar(props: any) {
               <Link href="/domains" className="link">
                 {t("Domains")}
               </Link>
-              <Link href="/miner" className="link">
-                {t("Miner")}
+              <Link href="/minings" className="link">
+                {t("Minings")}
               </Link>
             </div>
           </div>
@@ -61,6 +61,7 @@ export function Navbar(props: any) {
             <MenuItem href="/collections">{t("Collections")}</MenuItem>
             <MenuItem href="/hexagons">{t("Hexagon")}</MenuItem>
             <MenuItem href="/domains">{t("Domains")}</MenuItem>
+            <MenuItem href="/minings">{t("Minings")}</MenuItem>
           </Menu>
         </div>
 
