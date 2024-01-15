@@ -16,7 +16,7 @@ export default async function handler(req, res) {
   const locale = req.headers["accept-language"] || "en"
   i18n.changeLanguage(locale)
 
-  let { formData, signedMessage } = req.body
+  let { formData } = req.body
 
   const chainId = formData.chainId
   const collection = formData.collection
@@ -31,22 +31,7 @@ export default async function handler(req, res) {
       return res.status(200).send({
         code: 500, message: i18n.t("The domain name is already in use."),
       })
-    if (!signedMessage)
-      return res.status(200).send({
-        code: 500, message: i18n.t("Sign message is need")
-      })
-    const messageHash = ethers.utils.hashMessage(
-      ethers.utils.arrayify(ethers.utils.toUtf8Bytes(formData.url))
-    )
-    const recoveredAddress = ethers.utils.recoverAddress(
-      messageHash,
-      signedMessage
-    )
-    // check owner
-    if (formData.creator !== recoveredAddress)
-      return res.status(200).send({
-        code: 500, message: i18n.t("You are not the collection owner"),
-      })
+
 
     // check domain
     const nameWrapper = await instanceNameWrapper()
