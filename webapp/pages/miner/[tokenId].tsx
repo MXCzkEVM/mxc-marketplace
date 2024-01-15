@@ -370,8 +370,8 @@ export default function TokenPage() {
               </>}
               <h3 className="descriptionTitle">{t("Fuel Tank Address")}</h3>
               <p className="description">{detail?.erc6551Addr}</p>
-              <h3 className="descriptionTitle">{t("Fuel Tank Size")}</h3>
-              <p className="description">{detail?.erc6551Addr}</p>
+              {/* <h3 className="descriptionTitle">{t("Fuel Tank Size")}</h3>
+              <p className="description">{detail?.erc6551Addr}</p> */}
             </div>
             <div className="listingContainer">
               <div className="title">
