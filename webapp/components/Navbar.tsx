@@ -34,6 +34,9 @@ export function Navbar(props: any) {
             </Link>
 
             <div className="navMiddle">
+              <Link href="/rwa" className="link">
+                {t("RWA")}
+              </Link>
               <Link href="/collections" className="link">
                 {t("Collections")}
               </Link>
@@ -43,8 +46,8 @@ export function Navbar(props: any) {
               <Link href="/domains" className="link">
                 {t("Domains")}
               </Link>
-              <Link href="/minings" className="link">
-                {t("Minings")}
+              <Link href="/miners" className="link">
+                {t("Miners")}
               </Link>
             </div>
           </div>
@@ -61,7 +64,7 @@ export function Navbar(props: any) {
             <MenuItem href="/collections">{t("Collections")}</MenuItem>
             <MenuItem href="/hexagons">{t("Hexagon")}</MenuItem>
             <MenuItem href="/domains">{t("Domains")}</MenuItem>
-            <MenuItem href="/minings">{t("Minings")}</MenuItem>
+            <MenuItem href="/miners">{t("Miners")}</MenuItem>
           </Menu>
         </div>
 

@@ -41,11 +41,11 @@ export default function Overview() {
       <Toaster></Toaster>
       <Container maxWidth="lg">
         <div className="feature mb-10">
-          <h1>Featured NFTs</h1>
-          <p>Discover the most outstanding NFTs in all topics of life.</p>
+          <h1>Featured RWA NFTs</h1>
+          <p>Discover the most outstanding RWA products in all topics of life.</p>
           <div className="nfts_feature">
             {collections && !isLoading
-              ? collections.filter((c:any) => !offs.includes(c.collection)).map((nft: any, index: number) => (
+              ? collections.filter((c:any) => offs.includes(c.collection)).map((nft: any, index: number) => (
                   <CollectionCard nft={nft} key={index} />
                 ))
               : isLoading && <SkeletonList />}
