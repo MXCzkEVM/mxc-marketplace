@@ -79,7 +79,11 @@ export default function AssetCrearePage() {
 
   const address = useAddress()
 
-  const { contract: colContract } = useContract(
+  const { contract: colV2Contract } = useContract(
+    collection_address,
+    ABI.collectionv2
+  )
+  const { contract: colV3Contract } = useContract(
     collection_address,
     ABI.collection
   )
@@ -89,6 +93,14 @@ export default function AssetCrearePage() {
   )
 
   const allowanceParams = [address || zeroAddress, collection_address || zeroAddress]
+
+  const { data: version = '2' } = useContractRead(
+    colV3Contract,
+    'getVersion'
+  )
+
+  const isVersion2 = version === '2' 
+
   const { data: allowance, isLoading, refetch: refetchAllowance } = useContractRead(
     xsdContract,
     'allowance',
@@ -101,7 +113,8 @@ export default function AssetCrearePage() {
   )
 
 
-  const { mutateAsync: mintNFT } = useContractWrite(colContract, "mint")
+  const { mutateAsync: mintNFT } = useContractWrite(colV3Contract, "mint")
+  const { mutateAsync: mintv2NFT } = useContractWrite(colV2Contract, "mint")
   const { mutateAsync: approveXSD } = useContractWrite(xsdContract, "approve")
 
   const toMortgage = new BigNumber(mortgage).multipliedBy(10 ** 18).toFixed(0)
@@ -198,9 +211,9 @@ export default function AssetCrearePage() {
     try {
       // Simple one-liner for buying the NFT
       const xsd = mortgage ? toMortgage : 0
-      txResult = await mintNFT({
-        args: [`ipfs://${jsonIpfs}`, xsd],
-      })
+      txResult = isVersion2
+        ?  await mintv2NFT({args: [`ipfs://${jsonIpfs}`]})
+        :  await mintNFT({args: [`ipfs://${jsonIpfs}`, xsd]})
       toast.success("NFT item create successfully!")
       Router.push(`/collection/${collection_address}`)
     } catch (error) {
@@ -282,7 +295,21 @@ export default function AssetCrearePage() {
   }
 
   function renderCreate() {
-    return (
+    return isVersion2
+      ? 
+      <Web3Button
+        contractAddress={collection_address}
+        contractAbi={ABI.collectionv2}
+        action={async () => await createItem()}
+        isDisabled={isLoading}
+        className="px-4 py-2 bg-blue-600 text-white"
+        onSuccess={() => {
+          refetchXsdBalance()
+        }}
+      >
+        {t("Create item")}
+      </Web3Button>
+      : 
       <Web3Button
         contractAddress={collection_address}
         contractAbi={ABI.collection}
@@ -295,7 +322,7 @@ export default function AssetCrearePage() {
       >
         {t("Create item")}
       </Web3Button>
-    )
+   
   }
 
   const inApprove = (mortgage && allowance ? allowance.lt(toMortgage) : false)
@@ -532,7 +559,7 @@ export default function AssetCrearePage() {
             </div>
           </div>
 
-          <div className="inputGroup">
+          {!isVersion2 && <div className="inputGroup">
             <div className="inputTitle">{t("Mortgage Input Title")}</div>
             <div className="inputSubTitle">
               {t("Mortgage Input Des")}
@@ -550,7 +577,8 @@ export default function AssetCrearePage() {
                 onBlur={validateName}
               />
             </div>
-          </div>
+          </div>}
+          
 
 
 

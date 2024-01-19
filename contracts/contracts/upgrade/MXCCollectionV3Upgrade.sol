@@ -24,6 +24,7 @@ contract MXCCollectionV3Upgrade is UUPSUpgradeable, ERC721Upgrade {
 
     mapping(uint256 => string) private _tokenURIs;
     mapping(uint256 => uint256) private _stakedOf;
+    string version = "3";
     error MXCCollection__StakedTokenTransferFailed();
 
     modifier onlyCreator() {
@@ -127,5 +128,9 @@ contract MXCCollectionV3Upgrade is UUPSUpgradeable, ERC721Upgrade {
     function _isApprovedOrOwner(address spender,uint256 tokenId) internal view returns (bool) {
       address owner = ERC721Upgrade.ownerOf(tokenId);
       return (spender == owner || isApprovedForAll[owner][spender] || getApproved[tokenId] == spender);
+    }
+
+    function getVersion() public view returns(string memory) {
+      return version;
     }
 }

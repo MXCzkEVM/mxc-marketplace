@@ -3,6 +3,7 @@
 import { ethers } from 'ethers'
 import collectionFactory from "./abi_mxccollection/MXCCollectionFactoryV3.json"
 import collection from "./abi_mxccollection/MXCCollectionV3Upgrade.json"
+import collectionv2 from "./abi_mxccollection/MXCCollectionV2Upgrade.json"
 import marketplace from './abi_mxccollection/MXCMarketPlaceUpgradeV5.json'
 import mep1002 from './abi_mep/mep1002.json'
 import mep1004 from './abi_mep/mep1004.json'
@@ -23,7 +24,7 @@ const contracts: any = {
         MNSNAMEWRAP: "0xD1B70f92b310c3Fa95b83dB436E00a53e1f1f5d5"
     },
     5167003: {
-        COLLECTION_FACTORY: '0x9AAa3294BC2F66b5241647682E2957d49AA18A42',
+        COLLECTION_FACTORY: '0xd52912735424162B2Ed90Ad51B7c09d7D01A17b1',
         MARKETPLACE: '0x91fd2e13379dF87f752c82E8C16a1aE72601a9B2',
         XSD: "0xB9506A80429Ee619C74D46a3276c622358795e2B",
 
@@ -55,7 +56,8 @@ export const ABI = {
     mep1002,
     mep1002Name,
     mnsNameWrap,
-    erc20
+    erc20,
+    collectionv2
 }
 
 
