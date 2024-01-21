@@ -130,7 +130,7 @@ contract MXCCollectionV3Upgrade is UUPSUpgradeable, ERC721Upgrade {
       return (spender == owner || isApprovedForAll[owner][spender] || getApproved[tokenId] == spender);
     }
 
-    function getVersion() public view returns(string memory) {
-      return version;
+    function getVersion() public pure returns(string memory) {
+      return "3";
     }
 }
