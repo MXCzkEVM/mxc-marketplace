@@ -1,8 +1,8 @@
 
 
 import { ethers } from 'ethers'
-import collectionFactory from "./abi_mxccollection/MXCCollectionFactoryV3.json"
-import collection from "./abi_mxccollection/MXCCollectionV3Upgrade.json"
+import collectionFactory from "./abi_mxccollection/MXCCollectionFactoryV4.json"
+import collection from "./abi_mxccollection/MXCCollectionV4Upgrade.json"
 import collectionv2 from "./abi_mxccollection/MXCCollectionV2Upgrade.json"
 import marketplace from './abi_mxccollection/MXCMarketPlaceUpgradeV5.json'
 import mep1002 from './abi_mep/mep1002.json'
@@ -24,7 +24,7 @@ const contracts: any = {
         MNSNAMEWRAP: "0xD1B70f92b310c3Fa95b83dB436E00a53e1f1f5d5"
     },
     5167003: {
-        COLLECTION_FACTORY: '0xeda73be8C8B13F4FCC3886bd423fd3bFe23ABe6b',
+        COLLECTION_FACTORY: '0x1e061286B181062035f770B5A911D3177708302e',
         MARKETPLACE: '0x91fd2e13379dF87f752c82E8C16a1aE72601a9B2',
         XSD: "0xB9506A80429Ee619C74D46a3276c622358795e2B",
 
