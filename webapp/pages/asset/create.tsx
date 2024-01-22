@@ -99,6 +99,7 @@ export default function AssetCrearePage() {
     'getVersion'
   )
 
+  console.log('version', '--------------', version)
   const isVersion2 = version === '2' 
 
   const { data: allowance, isLoading, refetch: refetchAllowance } = useContractRead(
