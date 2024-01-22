@@ -25,7 +25,9 @@ import ApiClient from "@/util/request"
 import { useSession, getSession } from "next-auth/react"
 import BigNumber from 'bignumber.js'
 import { getChainRPC } from "@thirdweb-dev/chains"
-import {Contract} from 'ethers'
+import { Contract } from 'ethers'
+import { ButtonForV3 } from "./v2button"
+import { ButtonForV2 } from "./v1button"
 const api = new ApiClient("/")
 
 export default function AssetCrearePage() {
@@ -82,17 +84,9 @@ export default function AssetCrearePage() {
   const [loading, setLoading] = useState(false)
 
   const address = useAddress()
-  
+
   const isVersion2 = typeof version === 'undefined'
 
-  const { contract: colV2Contract } = useContract(
-    collection_address,
-    ABI.collectionv2
-  )
-  const { contract: colV3Contract } = useContract(
-    collection_address,
-    ABI.collection
-  )
   const { contract: xsdContract } = useContract(
     CONTRACTS_MAP['XSD'],
     ABI.erc20
@@ -129,11 +123,10 @@ export default function AssetCrearePage() {
   )
 
 
-  const { mutateAsync: mintNFT } = useContractWrite(colV3Contract, "mint")
-  const { mutateAsync: mintv2NFT } = useContractWrite(colV2Contract, "mint")
   const { mutateAsync: approveXSD } = useContractWrite(xsdContract, "approve")
 
   const toMortgage = new BigNumber(mortgage).multipliedBy(10 ** 18).toFixed(0)
+
 
   useEffect(() => {
     if (isRealWorldNFT)
@@ -176,7 +169,6 @@ export default function AssetCrearePage() {
   }
 
   const createItem = async () => {
-    console.log(xsdBalance)
 
     if (mortgage && xsdBalance.lt(toMortgage)) {
       toast.warn(t("You don t have enough XSD"))
@@ -220,25 +212,7 @@ export default function AssetCrearePage() {
       toast.error(t("Upload json to ipfs failed"))
       return
     }
-
-    // console.log(jsonIpfs, "jsonIpfs")
-
-    let txResult
-    try {
-      // Simple one-liner for buying the NFT
-      const xsd = mortgage ? toMortgage : 0
-      txResult = isVersion2
-        ?  await mintv2NFT({args: [`ipfs://${jsonIpfs}`]})
-        :  await mintNFT({args: [`ipfs://${jsonIpfs}`, xsd]})
-      toast.success("NFT item create successfully!")
-      Router.push(`/collection/${collection_address}`)
-    } catch (error) {
-      // console.error(error)
-      console.log(error)
-      toast.error(t("NFT item create failed"))
-    }
-
-    return txResult
+    return jsonIpfs
   }
 
   const handleAddOrEditTrait = (e: any) => {
@@ -310,35 +284,25 @@ export default function AssetCrearePage() {
     )
   }
 
+  function renderButtonV2() {
+    return <ButtonForV2
+      address={collection_address} 
+      resolveIpfs={createItem}
+      onSuccess={refetchXsdBalance}
+    />
+  }
+  function renderButtonV3() {
+    const xsd = mortgage ? toMortgage : 0
+    return <ButtonForV3 
+      address={collection_address} 
+      resolveIpfs={createItem}
+      xsd={xsd}
+      onSuccess={refetchXsdBalance}
+    />
+  }
+
   function renderCreate() {
-    return isVersion2
-      ? 
-      <Web3Button
-        contractAddress={collection_address}
-        contractAbi={ABI.collectionv2}
-        action={async () => await createItem()}
-        isDisabled={isLoading || loading}
-        className="px-4 py-2 bg-blue-600 text-white"
-        onSuccess={() => {
-          refetchXsdBalance()
-        }}
-      >
-        {t("Create item")}
-      </Web3Button>
-      : 
-      <Web3Button
-        contractAddress={collection_address}
-        contractAbi={ABI.collection}
-        action={async () => await createItem()}
-        isDisabled={isLoading || loading}
-        className="px-4 py-2 bg-blue-600 text-white"
-        onSuccess={() => {
-          refetchXsdBalance()
-        }}
-      >
-        {t("Create item")}
-      </Web3Button>
-   
+    return isVersion2 ? renderButtonV2() : renderButtonV3()
   }
 
   const inApprove = (mortgage && allowance ? allowance.lt(toMortgage) : false)
@@ -580,7 +544,7 @@ export default function AssetCrearePage() {
             <div className="inputSubTitle">
               {t("Mortgage Input Des")}
             </div>
-            
+
             <div className="inputWrapper">
               <input
                 className={`input ${nameError && "hasError"}`}
@@ -594,7 +558,7 @@ export default function AssetCrearePage() {
               />
             </div>
           </div>}
-          
+
 
 
 
