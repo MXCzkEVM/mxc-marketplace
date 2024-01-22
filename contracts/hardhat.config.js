@@ -75,8 +75,6 @@ module.exports = {
       accounts: [PRIVATE_KEY_DOUGHNUT],
       saveDeployments: true,
       allowUnlimitedContractSize: true,
-      gasLimit: 30000000,
-      gasPrice: 100000000000000,
     },
   },
   abiExporter: {
