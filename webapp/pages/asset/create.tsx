@@ -1,6 +1,6 @@
 import Router, { useRouter } from "next/router"
 import Link from "next/link"
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, useMemo } from "react"
 import Select from "react-select"
 import { toast } from "react-toastify"
 import {
@@ -16,7 +16,7 @@ import plusIcon from "@/assets/svgs/plus.svg"
 import closeIcon from "@/assets/svgs/close.svg"
 import { storeImage, storeJson } from "@/util/uploadToPinata"
 import { getCollectList } from "@/util/getNFT"
-import { CHAIN_ID } from "@/const/Network"
+import { CHAIN_ID, provider } from "@/const/Network"
 import { ABI, CONTRACTS_MAP } from "@/const/Address"
 import { useTranslation } from "react-i18next"
 
@@ -24,6 +24,8 @@ import { version, zeroAddress } from "@/const/Local"
 import ApiClient from "@/util/request"
 import { useSession, getSession } from "next-auth/react"
 import BigNumber from 'bignumber.js'
+import { getChainRPC } from "@thirdweb-dev/chains"
+import {Contract} from 'ethers'
 const api = new ApiClient("/")
 
 export default function AssetCrearePage() {
@@ -76,8 +78,12 @@ export default function AssetCrearePage() {
   const [trait_type, setTraitType] = useState("")
   const [value, setValue] = useState("")
   const [userCollections, setUserCollections] = useState<any>([])
+  const [version, setVersion] = useState()
+  const [loading, setLoading] = useState(false)
 
   const address = useAddress()
+  
+  const isVersion2 = typeof version === 'undefined'
 
   const { contract: colV2Contract } = useContract(
     collection_address,
@@ -94,13 +100,22 @@ export default function AssetCrearePage() {
 
   const allowanceParams = [address || zeroAddress, collection_address || zeroAddress]
 
-  const { data: version = '2' } = useContractRead(
-    colV3Contract,
-    'getVersion'
-  )
-
-  console.log('version', '--------------', version)
-  const isVersion2 = version === '2' 
+  async function queryVersion() {
+    try {
+      setVersion(undefined)
+      if (!collection_address)
+        return
+      const contract = new Contract(collection_address, ABI.collection, provider)
+      const version = await contract.getVersion()
+      setVersion(version || undefined)
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
+    }
+  }
+  useEffect(() => {
+    queryVersion()
+  }, [collection_address])
 
   const { data: allowance, isLoading, refetch: refetchAllowance } = useContractRead(
     xsdContract,
@@ -302,7 +317,7 @@ export default function AssetCrearePage() {
         contractAddress={collection_address}
         contractAbi={ABI.collectionv2}
         action={async () => await createItem()}
-        isDisabled={isLoading}
+        isDisabled={isLoading || loading}
         className="px-4 py-2 bg-blue-600 text-white"
         onSuccess={() => {
           refetchXsdBalance()
@@ -315,7 +330,7 @@ export default function AssetCrearePage() {
         contractAddress={collection_address}
         contractAbi={ABI.collection}
         action={async () => await createItem()}
-        isDisabled={isLoading}
+        isDisabled={isLoading || loading}
         className="px-4 py-2 bg-blue-600 text-white"
         onSuccess={() => {
           refetchXsdBalance()
