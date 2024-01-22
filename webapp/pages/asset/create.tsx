@@ -26,8 +26,8 @@ import { useSession, getSession } from "next-auth/react"
 import BigNumber from 'bignumber.js'
 import { getChainRPC } from "@thirdweb-dev/chains"
 import { Contract } from 'ethers'
-import { ButtonForV3 } from "./v2button"
-import { ButtonForV2 } from "./v1button"
+import { ButtonForV3 } from "@/components/v2button"
+import { ButtonForV2 } from "@/components/v1button"
 const api = new ApiClient("/")
 
 export default function AssetCrearePage() {
