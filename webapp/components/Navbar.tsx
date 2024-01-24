@@ -61,6 +61,7 @@ export function Navbar(props: any) {
               </MenuButton>
             }
           >
+            <MenuItem href="/rwa">{t("RWA")}</MenuItem>
             <MenuItem href="/collections">{t("Collections")}</MenuItem>
             <MenuItem href="/hexagons">{t("Hexagon")}</MenuItem>
             <MenuItem href="/domains">{t("Domains")}</MenuItem>
