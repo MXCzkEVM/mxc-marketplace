@@ -85,7 +85,7 @@ export default function CollectPage() {
                     <CollectionCard
                       key={index}
                       item={item}
-                      collection_id={collectionDta.url || collectionAddress}
+                      collection_id={collectionAddress}
                     />
                   )
                 })}

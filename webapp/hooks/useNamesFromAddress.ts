@@ -4,6 +4,7 @@ import { useEns } from '../context'
 
 export function useNamesFromAddress(address?: string) {
   const ens = useEns()
+
   const [names, setNames] = useState<string[]>([])
 
   async function fetchNamesByAddress(address?: string) {
@@ -15,7 +16,7 @@ export function useNamesFromAddress(address?: string) {
       orderBy: 'name',
       orderDirection: 'desc',
     })
-
+    
     if (!res || !res.length)
       return
     setNames(res.map(v => v.name))
