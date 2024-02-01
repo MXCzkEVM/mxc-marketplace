@@ -1,5 +1,6 @@
 import { Redis } from "@upstash/redis"
 import i18n from "../../util/i18n"
+import NextCors from 'nextjs-cors';
 
 require("dotenv").config()
 const redis = new Redis({
@@ -33,7 +34,18 @@ export default async function handler(req, res) {
 
   ops = ops.sort((a, b) => a.collection - b.collection)
 
+  await NextCors(req, res, {
+    // Options
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+    origin: '*',
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+ });
+
   return res
     .status(200)
-    .send({ code: 200, data: { collections: ops }, message: i18n.t("success") })
+    .send({
+      code: 200,
+      data: { collections: ops },
+      message: i18n.t("success")
+    })
 }
