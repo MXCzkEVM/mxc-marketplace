@@ -90,8 +90,8 @@ export default function TokenPage() {
     mkpContract,
     "cancelOrder"
   )
-  const { mutateAsync: executeOrderByErc721 } = useContractWrite(
-    mkpContract, "executeOrderByErc721"
+  const { mutateAsync: executeOrderByMiner } = useContractWrite(
+    mkpContract, "executeOrderByMiner"
   )
 
   useEffect(() => {
@@ -200,7 +200,7 @@ export default function TokenPage() {
     let txResult
     try {
       // Simple one-liner for buying the NFT
-      txResult = await executeOrderByErc721({
+      txResult = await executeOrderByMiner({
         args: [collection, tokenId],
         overrides: {
           value: nftPrice,
@@ -409,7 +409,7 @@ export default function TokenPage() {
               {isNFTOwner && !isApprovedCond && renderApprove()}
               {isNFTOwner && nftPrice.eq(0) && isApprovedCond && renderListNft()}
               {isNFTOwner && !nftPrice.eq(0) && isApprovedCond && renderCancel()}
-              {isNFTOwner && nftPrice.eq(0) && renderButtons()}
+              {/* {isNFTOwner && nftPrice.eq(0) && renderButtons()} */}
               {address !== zeroAddress && !isNFTOwner && !nftPrice.eq(0) && renderExcute()}
             </div>
           </div>

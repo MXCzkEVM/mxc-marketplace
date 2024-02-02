@@ -77,8 +77,8 @@ export default function TokenPage() {
     mkpContract,
     "cancelOrder"
   )
-  const { mutateAsync: executeOrderByErc721 } = useContractWrite(
-    mkpContract, "executeOrderByErc721"
+  const { mutateAsync: executeOrderByHexagon } = useContractWrite(
+    mkpContract, "executeOrderByHexagon"
   )
 
   useEffect(() => {
@@ -183,7 +183,7 @@ export default function TokenPage() {
     let txResult
     try {
       // Simple one-liner for buying the NFT
-      txResult = await executeOrderByErc721({
+      txResult = await executeOrderByHexagon({
         args: [collection, ethers.BigNumber.from(tokenId)],
         overrides: {
           value: nftPrice,

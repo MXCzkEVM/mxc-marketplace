@@ -88,6 +88,9 @@ async function upgradeMarketPlace() {
     const mkpContractV5 = await ethers.getContractFactory(
         "MXCMarketPlaceUpgradeV5"
     )
+    const mkpContractV6 = await ethers.getContractFactory(
+      "MXCMarketPlaceUpgradeV6"
+    )
 
     // console.log(contracts.mkp)
     // let instance = mkpContractV5.attach(contracts.mkp)
@@ -101,8 +104,8 @@ async function upgradeMarketPlace() {
     // console.log(implement)
 
     // upgrade
-    await upgrades.upgradeProxy(contracts.mkp, mkpContractV5)
-    let res = await upgrades.prepareUpgrade(contracts.mkp, mkpContractV5)
+    await upgrades.upgradeProxy(contracts.mkp, mkpContractV6)
+    let res = await upgrades.prepareUpgrade(contracts.mkp, mkpContractV6)
     console.log(res)
     console.log(contracts.mkp)
 }

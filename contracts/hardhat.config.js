@@ -65,8 +65,6 @@ module.exports = {
       accounts: [PRIVATE_KEY_MXCADMIN1, PRIVATE_KEY_DOUGHNUT],
       saveDeployments: true,
       allowUnlimitedContractSize: true,
-      gasLimit: 3000000,
-      // gasPrice: 6000000000000,
     },
     wannsee_mainnet: {
       // url: "https://rpc.mxc.com",
