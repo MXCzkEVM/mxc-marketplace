@@ -127,5 +127,7 @@
   "Staked": "Abgesteckt",
   "Fused": "Verschmolzen",
   "Miners": "Minenarbeiter",
-  "Minings": "Bergbau"
+  "Minings": "Bergbau",
+  "commission fee 25": "25 % Provision",
+  "Commission Fee": "Provisionsgebühr"
 }

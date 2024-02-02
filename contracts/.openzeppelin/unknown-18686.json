@@ -615,6 +615,214 @@
           }
         }
       }
+    },
+    "71f904f59cd9ccb62ee09a93775fdf2f7724e3c0a8b9400d0fd878d16dfb43e0": {
+      "address": "0x1eC58467b2A64E7f0d85677785d87fDfE034a65E",
+      "txHash": "0xdd2b5d69db49cec5f335fb5937724f10a3c6c92faced6ae5841f5947272c8a22",
+      "layout": {
+        "solcVersion": "0.8.18",
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint8",
+            "contract": "Initializable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:67"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ERC1967UpgradeUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:197"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "UUPSUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:107"
+          },
+          {
+            "label": "admin",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_address",
+            "contract": "MXCMarketPlaceUpgradeV6",
+            "src": "contracts\\upgrade\\MXCMarketPlaceUpgradeV6.sol:54"
+          },
+          {
+            "label": "orderByAssetId",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(Order)1784_storage))",
+            "contract": "MXCMarketPlaceUpgradeV6",
+            "src": "contracts\\upgrade\\MXCMarketPlaceUpgradeV6.sol:56"
+          },
+          {
+            "label": "assertPrice",
+            "offset": 0,
+            "slot": "103",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(LatestInfo)1789_storage))",
+            "contract": "MXCMarketPlaceUpgradeV6",
+            "src": "contracts\\upgrade\\MXCMarketPlaceUpgradeV6.sol:58"
+          },
+          {
+            "label": "collectionMarketInfo",
+            "offset": 0,
+            "slot": "104",
+            "type": "t_mapping(t_address,t_struct(collectionMarket)1794_storage)",
+            "contract": "MXCMarketPlaceUpgradeV6",
+            "src": "contracts\\upgrade\\MXCMarketPlaceUpgradeV6.sol:60"
+          },
+          {
+            "label": "nameToken",
+            "offset": 0,
+            "slot": "105",
+            "type": "t_address",
+            "contract": "MXCMarketPlaceUpgradeV6",
+            "src": "contracts\\upgrade\\MXCMarketPlaceUpgradeV6.sol:64"
+          },
+          {
+            "label": "domainToken",
+            "offset": 0,
+            "slot": "106",
+            "type": "t_address",
+            "contract": "MXCMarketPlaceUpgradeV6",
+            "src": "contracts\\upgrade\\MXCMarketPlaceUpgradeV6.sol:65"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_struct(LatestInfo)1789_storage))": {
+            "label": "mapping(address => mapping(uint256 => struct MXCMarketPlaceUpgradeV6.LatestInfo))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_struct(Order)1784_storage))": {
+            "label": "mapping(address => mapping(uint256 => struct MXCMarketPlaceUpgradeV6.Order))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_struct(collectionMarket)1794_storage)": {
+            "label": "mapping(address => struct MXCMarketPlaceUpgradeV6.collectionMarket)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(LatestInfo)1789_storage)": {
+            "label": "mapping(uint256 => struct MXCMarketPlaceUpgradeV6.LatestInfo)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(Order)1784_storage)": {
+            "label": "mapping(uint256 => struct MXCMarketPlaceUpgradeV6.Order)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(LatestInfo)1789_storage": {
+            "label": "struct MXCMarketPlaceUpgradeV6.LatestInfo",
+            "members": [
+              {
+                "label": "price",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "transactions",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_struct(Order)1784_storage": {
+            "label": "struct MXCMarketPlaceUpgradeV6.Order",
+            "members": [
+              {
+                "label": "id",
+                "type": "t_bytes32",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "seller",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "nftAddress",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "price",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "3"
+              },
+              {
+                "label": "expiresAt",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "4"
+              }
+            ],
+            "numberOfBytes": "160"
+          },
+          "t_struct(collectionMarket)1794_storage": {
+            "label": "struct MXCMarketPlaceUpgradeV6.collectionMarket",
+            "members": [
+              {
+                "label": "floorPrice",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "ceilingPrice",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint8": {
+            "label": "uint8",
+            "numberOfBytes": "1"
+          }
+        }
+      }
     }
   }
 }

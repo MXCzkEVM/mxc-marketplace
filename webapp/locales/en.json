@@ -128,5 +128,7 @@
   "Staked": "Staked",
   "Fused": "Fused",
   "Miners": "Miners",
-  "Minings": "Minings"
+  "Minings": "Minings",
+  "commission fee 25": "25% commission fee",
+  "Commission Fee": "Commission Fee"
 }

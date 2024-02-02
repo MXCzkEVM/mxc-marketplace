@@ -127,5 +127,7 @@
   "Staked": "Bahis",
   "Fused": "Sigortalı",
   "Miners": "Madenciler",
-  "Minings": "madencilik"
+  "Minings": "madencilik",
+  "commission fee 25": "%25 komisyon ücreti",
+  "Commission Fee": "Komisyon ücreti"
 }

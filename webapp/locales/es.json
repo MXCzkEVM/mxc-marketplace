@@ -127,5 +127,7 @@
   "Staked": "apostado",
   "Fused": "fusionado",
   "Miners": "mineros",
-  "Minings": "Minería"
+  "Minings": "Minería",
+  "commission fee 25": "25% de comisión",
+  "Commission Fee": "Cuota de comisión"
 }
