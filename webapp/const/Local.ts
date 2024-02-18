@@ -2,7 +2,7 @@
 
 export const version = "v100002"
 export const zeroAddress = '0x0000000000000000000000000000000000000000'
-export const IPFS_GATEWAY = 'https://ipfs.io/ipfs/'
+export const IPFS_GATEWAY = 'https://gateway.pinata.cloud/ipfs/'
 export const CategoryArray = [
     {
         label: "Winery",
