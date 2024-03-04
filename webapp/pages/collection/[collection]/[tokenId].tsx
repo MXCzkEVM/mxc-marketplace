@@ -10,7 +10,7 @@ import {
 
 import { useRouter } from "next/router"
 import { Toaster } from "react-hot-toast"
-import { CHAIN_ID } from "@/const/Network"
+import { CHAIN_ID, provider } from "@/const/Network"
 import { ABI, CONTRACTS_MAP } from "@/const/Address"
 
 import { zeroAddress } from "@/const/Local"
@@ -19,7 +19,7 @@ import Container from "@/components/Container/Container"
 import { randomColor } from "@/util/randomColor"
 import Link from "next/link"
 
-import { BigNumber, ethers } from "ethers"
+import { BigNumber, Contract, ethers } from "ethers"
 import Skeleton from "@/components/Skeleton/Skeleton"
 import PriceInput from "@/components/PriceInput"
 import { toast } from "react-toastify"
@@ -48,6 +48,7 @@ export default function TokenPage() {
   const [orderInfos, setOrderInfos
   ] = useState<any>([])
   const [nft, SetNFT] = useState<any>({ metadata: {}, owner: null })
+  const [stakedBalance, setStakedBalance] = useState<any>()
   const [nftPrice, setNftPrice] = useState<BigNumber>(BigNumber.from(0))
   const [inputPrice, setInputPrice] = useState<any>("")
   const router = useRouter()
@@ -76,11 +77,7 @@ export default function TokenPage() {
     "isApprovedForAll",
     [address || zeroAddress, CONTRACTS_MAP.MARKETPLACE]
   )
-  const { data: stakedBalance } = useContractRead(
-    nftContract,
-    "stakedBalanceOf",
-    [tokenId]
-  )
+
 
   const { mutateAsync: setApprovalForAll } = useContractWrite(
     nftContract,
@@ -111,9 +108,16 @@ export default function TokenPage() {
     "executeOrder"
   )
 
+ 
+
   useEffect(() => {
     if (collection == zeroAddress) {
       return
+    }
+    async function queryStakedBalance() { 
+      const contract = new Contract(collection, ABI.collection, provider)
+      const balance = await contract.stakedBalanceOf(tokenId)
+      setStakedBalance(balance)
     }
     const fetchData = async () => {
       let collectionsItem: any = await api.post("/api/get-collection", {
@@ -129,6 +133,7 @@ export default function TokenPage() {
       SetNFT(nft)
     }
     fetchData()
+    queryStakedBalance()
   }, [tokenId, collection, mkp_info])
 
   useEffect(() => {
