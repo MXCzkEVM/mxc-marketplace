@@ -13,7 +13,11 @@ import Router, { useRouter } from "next/router"
 import SkeletonList from "@/components/Skeleton/SkeletonList"
 import { useTranslation } from "react-i18next"
 import MoreBtn from "@/components/Button/more"
-
+import { nftClient } from "@/util/apolloClient"
+import { searchNftAssets } from "@/graphql/nft"
+import { CONTRACTS_MAP } from "@/const/Address"
+import { formatEther, hexlify } from "ethers/lib/utils"
+import { arange } from '@hairy/utils'
 export default function Hexagons() {
   const hexsgonsRef = useRef<any[]>([])
   const searchRef = useRef<any[]>([])
@@ -29,26 +33,18 @@ export default function Hexagons() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
-      let hexs: any = await getHexagon()
-      hexsgonsRef.current = hexs
-
-      setTargetLen(hexs.length)
-      let currHexs = getPageData(1)
+      let currHexs =await getPageData(1)
       setCurrentHexsgons(currHexs)
       setLoading(false)
     }
+
     fetchData()
   }, [])
 
   const loadMoreData = async () => {
     setLoadMore(true)
 
-    let newData: any[]
-    if (searchTerm.length) {
-      newData = getSearchPageData(page + 1)
-    } else {
-      newData = getPageData(page + 1)
-    }
+    let newData: any[] = await getPageData(page + 1)
 
     setCurrentHexsgons((prevData) => {
       return [...prevData, ...newData]
@@ -58,33 +54,32 @@ export default function Hexagons() {
     setLoadMore(false)
   }
 
-  const getPageData = (page: number = 1) => {
-    const start = (page - 1) * pageSize
-    const pageItems = hexsgonsRef.current.slice(start, start + pageSize)
-    return pageItems
+  const getPageData = async (page: number = 1, search?: string) => {
+    const { data } = await nftClient.query({
+      query: searchNftAssets(30, page, CONTRACTS_MAP.MEP1002Name, search)
+    })
+    const _hexagons = data.nftAssets.map((nft: any) => ({
+      ...nft,
+      tokenId: hexlify(BigInt(nft.tokenId)),
+      owner: nft.seller
+    }))
+    const hexagons: any[] = []
+    _hexagons.forEach((hex:any) => {
+      if (!hexagons.some(h => h.tokenId === hex.tokenId))
+        hexagons.push(hex)
+    });
+    return hexagons
   }
 
-  const getSearchPageData = (page: number = 1) => {
-    const start = (page - 1) * pageSize
-    const pageItems = searchRef.current.slice(start, start + pageSize)
-    return pageItems
-  }
-
-  const executeSearch = () => {
+  const executeSearch = async () => {
     if (!searchTerm) {
-      let currHexs = getPageData(1)
+      let currHexs = await getPageData(1)
       setTargetLen(hexsgonsRef.current.length)
       setCurrentHexsgons(currHexs)
       setPage(1)
       return
     }
-    const filteredData = hexsgonsRef.current.filter((item) =>
-      item.tokenId.includes(searchTerm)
-    )
-    searchRef.current = filteredData
-    setTargetLen(filteredData.length)
-
-    let currHexs = getSearchPageData(1)
+    let currHexs = await getPageData(1, searchTerm)
     setCurrentHexsgons(currHexs)
     setPage(1)
   }
@@ -116,28 +111,27 @@ export default function Hexagons() {
         <div className="nfts_hexagons">
           {currenthexsgons && !isLoading
             ? currenthexsgons.map((item, index) => {
-                return (
-                  <div
-                    className="nft_item"
-                    key={item.tokenId}
-                    onClick={() => Router.push(`/hexagon/${item.tokenId}`)}
-                  >
-                    <div className="nft_image flex flex-col items-center justify-center">
-                      <HexagonLogo fill={getColorFromH3Id(item.tokenId)} />
-                    </div>
-                    <div className="token_id">{item.tokenId}</div>
-                    <div className="token_name">MXC</div>
+              return (
+                <div
+                  className="nft_item"
+                  key={item.tokenId}
+                  onClick={() => Router.push(`/hexagon/${item.tokenId}`)}
+                >
+                  <div className="nft_image flex flex-col items-center justify-center">
+                    <HexagonLogo fill={getColorFromH3Id(item.tokenId)} />
                   </div>
-                )
-              })
+                  <div className="token_id">{item.tokenId}</div>
+                  {item.price === '0' 
+                  ?  <div className="token_name">Not for sale</div>
+                  : <div className="token_name">{formatEther(item.price)} MXC</div>}
+                 
+                </div>
+              )
+            })
             : isLoading && <SkeletonList />}
         </div>
 
-        {currenthexsgons.length &&
-          !isLoading &&
-          currenthexsgons.length < targetLen && (
-            <MoreBtn loadmore={loadmore} loadMoreData={loadMoreData} />
-          ) || ''}
+        {!isLoading && currenthexsgons.length >= 30 && <MoreBtn loadmore={loadmore} loadMoreData={loadMoreData} /> }
       </Container>
     </div>
   )

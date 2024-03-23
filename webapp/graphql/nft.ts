@@ -1,4 +1,5 @@
 
+import { BigNumber } from "ethers"
 import gql from "graphql-tag"
 
 export const searchNftOrders = (address: string, id: string) => {
@@ -19,4 +20,30 @@ export const searchNftOrders = (address: string, id: string) => {
     }
   }
 `
+}
+export const searchNftAssets = (pageSize: number = 30, page: number = 1, address: string, hexagon?: string) => {
+  const skip = (page - 1) * pageSize
+  const where = [
+    `nftAddress: "${address}"`,
+    hexagon && `tokenId: ${BigNumber.from(hexagon).toString()}`
+  ]
+  const query = [
+    'orderDirection: desc',
+    'orderBy: price',
+    `first: ${pageSize}`,
+    `skip: ${skip}`,
+    `where: {${where.filter(Boolean)}}`,
+  ]
+  return gql`
+    {
+      nftAssets(${query}) {
+        id
+        nftAddress
+        expiredAt
+        price
+        seller
+        tokenId
+      }
+    }
+  `
 }
