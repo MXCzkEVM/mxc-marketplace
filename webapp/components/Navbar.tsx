@@ -25,12 +25,7 @@ export function Navbar(props: any) {
         <div className="pc hidden sm:block">
           <div className="navLeft">
             <Link href="/" className={`homeLink navLeft`}>
-              <Image
-                src="/mxc-logo.svg"
-                width={96}
-                height={48}
-                alt="NFT marketplace sample logo"
-              />
+              <span className="spacex">MOONCHAIN</span>
             </Link>
 
             <div className="navMiddle">

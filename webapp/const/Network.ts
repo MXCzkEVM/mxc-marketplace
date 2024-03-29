@@ -19,7 +19,7 @@ const networks: any = {
     chain: "Wannsee",
     name: "Wannsee zkEVM Testnet",
     icon: {
-      url: "https://wannsee-bridge.mxc.com/assets/mxc.d04bb8f6.png",
+      url: "https://raw.githubusercontent.com/MXCzkEVM/metadata/main/logo-circle.svg",
       height: 512,
       width: 512,
       format: 'png'
@@ -41,7 +41,7 @@ const networks: any = {
     chain: "Wannsee",
     name: "zkEVM Mainnet",
     icon: {
-      url: "https://wannsee-bridge.mxc.com/assets/mxc.d04bb8f6.png",
+      url: "https://raw.githubusercontent.com/MXCzkEVM/metadata/main/logo-circle.svg",
       height: 512,
       width: 512,
       format: 'png'
@@ -63,7 +63,7 @@ const networks: any = {
     chain: "Wannsee",
     name: "Wannsee zkEVM Testnet",
     icon: {
-      url: "https://wannsee-bridge.mxc.com/assets/mxc.d04bb8f6.png",
+      url: "https://raw.githubusercontent.com/MXCzkEVM/metadata/main/logo-circle.svg",
       height: 512,
       width: 512,
       format: 'png'
@@ -85,7 +85,7 @@ const networks: any = {
     chain: "Wannsee",
     name: "Wannsee zkEVM Testnet",
     icon: {
-      url: "https://wannsee-bridge.mxc.com/assets/mxc.d04bb8f6.png",
+      url: "https://raw.githubusercontent.com/MXCzkEVM/metadata/main/logo-circle.svg",
       height: 512,
       width: 512,
       format: 'png'

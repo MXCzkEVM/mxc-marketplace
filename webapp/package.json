@@ -18,6 +18,7 @@
     "@emotion/styled": "^11.11.0",
     "@ensdomains/ensjs": "3.0.0-alpha.62",
     "@hairy/utils": "^0.6.4",
+    "@moonchain/metadata": "^0.0.5",
     "@overlays/react": "^0.4.3",
     "@pinata/sdk": "^2.1.0",
     "@rainbow-me/rainbowkit": "^1.0.2",

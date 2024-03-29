@@ -28,6 +28,7 @@ import "../styles/index.css"
 import "../styles/pages/index.scss"
 import "../styles/collection/style.scss"
 import "react-toastify/dist/ReactToastify.css"
+import "@moonchain/metadata/style.css"
 
 function axsWallet(): WalletConfig<InjectedWallet> {
   return {
@@ -67,11 +68,11 @@ function MyApp({ Component, pageProps }: AppProps) {
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <meta
               name="description"
-              content="MXC zkEVM uses LPWAN and NFC technology to track, authenticate, and submit location proofs for the real world collectables."
+              content="MoonChain uses LPWAN and NFC technology to track, authenticate, and submit location proofs for the real world collectables."
             />
             <meta
               name="keywords"
-              content="MXC, zkEVM, NFT, LPWAN, NFC, technology, track, authenticate, location proofs, real world, collectables"
+              content="MoonChain, NFT, LPWAN, NFC, technology, track, authenticate, location proofs, real world, collectables"
             ></meta>
             {/* This script will check all MXC operations and if the system experiences any downtime It will notify with a small notification*/}
             <script
