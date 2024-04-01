@@ -4,27 +4,27 @@ import { ethers } from 'ethers'
 export const CHAIN_ID = process.env.NEXT_PUBLIC_CHAINID || "5167003"
 
 const networks: any = {
-  "5167003": {
-    chainId: 5167003,
-    rpc: ["https://wannsee-rpc.mxc.com"],
+  "5167004": {
+    chainId: 5167004,
+    rpc: ["https://geneva-rpc.moonchain.com"],
     // rpc: ["http://207.246.99.8:8545"],
     nativeCurrency: {
       decimals: 18,
       name: "MXC Token",
       symbol: "MXC",
     },
-    shortName: "wannsee",
-    slug: "wannsee",
+    shortName: "geneva",
+    slug: "geneva",
     testnet: true,
-    chain: "Wannsee",
-    name: "Wannsee zkEVM Testnet",
+    chain: "Geneva",
+    name: "MoonChain Testnet",
     icon: {
       url: "https://raw.githubusercontent.com/MXCzkEVM/metadata/main/logo-circle.svg",
       height: 512,
       width: 512,
       format: 'png'
     },
-    etherscan: "http://wannsee-explorer.mxc.com",
+    etherscan: "http://geneva-explorer.moonchain.com",
     graphNode: "https://mxc-graph-node.mxc.com"
   },
   "18686": {
@@ -35,11 +35,11 @@ const networks: any = {
       name: "MXC Token",
       symbol: "MXC",
     },
-    shortName: "zkEVM Mainnet",
-    slug: "zkEVM Mainnet",
+    shortName: "MoonChain Mainnet",
+    slug: "MoonChain Mainnet",
     testnet: false,
-    chain: "Wannsee",
-    name: "zkEVM Mainnet",
+    chain: "Mainnet",
+    name: "MoonChain Mainnet",
     icon: {
       url: "https://raw.githubusercontent.com/MXCzkEVM/metadata/main/logo-circle.svg",
       height: 512,

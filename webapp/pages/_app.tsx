@@ -64,7 +64,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         >
           <ToastContainer />
           <Head>
-            <title>MXC NFT Marketplaces</title>
+            <title>MoonChain NFT Marketplaces</title>
+            <link rel="shortcut icon" type="image/png" href="https://raw.githubusercontent.com/MXCzkEVM/metadata/main/logo-circle.svg" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <meta
               name="description"

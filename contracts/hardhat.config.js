@@ -23,6 +23,7 @@ module.exports = {
       default: 0,
       167004: 0,
       5167003: 0,
+      5167004: 0,
       1337: 0,
     },
     user: {
@@ -57,8 +58,17 @@ module.exports = {
       accounts: [PRIVATE_KEY_MXCADMIN1],
       saveDeployments: true,
     },
+    geneva: {
+      // url: "https://geneva-rpc.moonchain.com",
+      // url: "http://207.246.99.8:8545",
+      url: "http://144.202.111.198:8545",
+      chainId: 5167004,
+      accounts: [PRIVATE_KEY_MXCADMIN1, PRIVATE_KEY_DOUGHNUT],
+      saveDeployments: true,
+      allowUnlimitedContractSize: true,
+    },
     wannsee: {
-      // url: "https://wannsee-rpc.mxc.com",
+      // url: "https://geneva-rpc.moonchain.com",
       // url: "http://207.246.99.8:8545",
       url: "http://144.202.111.198:8545",
       chainId: 5167003,

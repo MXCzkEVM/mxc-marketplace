@@ -154,7 +154,7 @@ export default function TokenPage() {
     //   let { MEP1002TokenId } = await contract.latestLocationProofs(tokenId)
     //   let hexId = MEP1002TokenId._hex.replace("0x", "")
     //   window.open(
-    //     `https://wannsee-explorer.mxc.com/mapper?hexid=${hexId}`,
+    //     `https://geneva-explorer.moonchain.com/mapper?hexid=${hexId}`,
     //     "_blank"
     //   )
     // }

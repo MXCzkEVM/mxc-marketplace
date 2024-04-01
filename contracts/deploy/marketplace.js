@@ -5,7 +5,7 @@ require("dotenv").config()
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
     const MXCMarketplaceUpgradeFactory = await ethers.getContractFactory(
-        "MXCMarketPlaceUpgradeV5"
+        "MXCMarketPlaceUpgradeV6"
     )
     const marketPlaceProxy = await upgrades.deployProxy(
       MXCMarketplaceUpgradeFactory, [],
