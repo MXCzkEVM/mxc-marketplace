@@ -56,7 +56,6 @@ function okxWallet(): WalletConfig<InjectedWallet> {
   }
 }
 
-
 function MyApp({ Component, pageProps }: AppProps) {
   const [showModal, setShowLangModal] = useState(false)
   const { i18n } = useTranslation()
@@ -67,7 +66,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <ThirdwebProvider
           supportedWallets={[
             axsWallet(),
-            metamaskWallet(),
+            {...metamaskWallet(), isInstalled: undefined},
             okxWallet(),
             walletConnect(),
             coinbaseWallet(),
