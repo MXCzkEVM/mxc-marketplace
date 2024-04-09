@@ -9,19 +9,19 @@
         justify-content: center;
     }
     .ant-pagination-item a {
-        color: #f43178;
+        color: rgb(33, 150, 243);
     }
     .ant-pagination-item-link svg {
-        color: #f43178;
+        color: rgb(33, 150, 243);
     }
     .ant-pagination-item-active:hover {
         border-color: none;
         a {
-            color: #f43178;
+            color: rgb(33, 150, 243);
         }
     }
     .ant-pagination-item-ellipsis {
-        color: #f43178 !important;
+        color: rgb(33, 150, 243) !important;
     }
     .ant-pagination .ant-pagination-item-active {
         border: none;

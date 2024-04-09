@@ -9,10 +9,10 @@
 <linearGradient id="paint0_linear_1677_2350" x1="11.1572" y1="-3.74621" x2="26.4678" y2="40.5568" gradientUnits="userSpaceOnUse">
 <stop stop-color="#0049FF"/>
 <stop offset="0.421875" stop-color="#6300FF"/>
-<stop offset="0.890604" stop-color="#F43178"/>
+<stop offset="0.890604" stop-color="rgb(33, 150, 243)"/>
 </linearGradient>
 <radialGradient id="paint1_radial_1677_2350" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(21.5 43) rotate(-87.4969) scale(44.7529)">
-<stop offset="0.294693" stop-color="#F43178"/>
+<stop offset="0.294693" stop-color="rgb(33, 150, 243)"/>
 <stop offset="0.723056" stop-opacity="0"/>
 </radialGradient>
 </defs>
