@@ -10,7 +10,7 @@ import {
   metamaskWallet,
   coinbaseWallet,
   WalletOptions,
-  walletConnectV1,
+  walletConnect,
 } from "@thirdweb-dev/react"
 import { WalletConfig } from "@thirdweb-dev/react-core"
 import { InjectedWallet } from "@thirdweb-dev/wallets"
@@ -43,6 +43,19 @@ function axsWallet(): WalletConfig<InjectedWallet> {
   }
 }
 
+function okxWallet(): WalletConfig<InjectedWallet> {
+  return {
+    id: "okx",
+    meta: {
+      name: "OKX Wallet",
+      iconURL: "/okx.webp",
+    },
+    create: (options: WalletOptions) => {
+      return new InjectedWallet(options)
+    },
+  }
+}
+
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [showModal, setShowLangModal] = useState(false)
@@ -55,8 +68,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           supportedWallets={[
             axsWallet(),
             metamaskWallet(),
+            okxWallet(),
+            walletConnect(),
             coinbaseWallet(),
-            walletConnectV1(),
           ]}
           activeChain={NETWORK}
           supportedChains={[NETWORK]}
