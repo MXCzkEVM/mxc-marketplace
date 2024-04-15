@@ -25,7 +25,7 @@ const networks: any = {
       format: 'png'
     },
     etherscan: "http://geneva-explorer.moonchain.com",
-    graphNode: "https://mxc-graph-node.mxc.com"
+    graphNode: "https://geneva-graph-node.moonchain.com"
   },
   "18686": {
     chainId: 18686,
@@ -69,7 +69,7 @@ const networks: any = {
       format: 'png'
     },
     etherscan: "",
-    graphNode: "https://mxc-graph-node.mxc.com"
+    graphNode: "https://geneva-graph-node.moonchain.com"
   },
   "31337": {
     chainId: 31337,
@@ -91,7 +91,7 @@ const networks: any = {
       format: 'png'
     },
     etherscan: "",
-    graphNode: "https://mxc-graph-node.mxc.com"
+    graphNode: "https://geneva-graph-node.moonchain.com"
   },
 }
 
