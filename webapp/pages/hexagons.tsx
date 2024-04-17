@@ -56,7 +56,7 @@ export default function Hexagons() {
 
   const getPageData = async (page: number = 1, search?: string) => {
     const { data } = await nftClient.query({
-      query: searchNftAssets(30, page, CONTRACTS_MAP.MEP1002Name, search)
+      query: searchNftAssets(30, page, CONTRACTS_MAP.MEP1002, search)
     })
     const _hexagons = data.nftAssets.map((nft: any) => ({
       ...nft,
