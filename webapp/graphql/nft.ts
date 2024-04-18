@@ -21,10 +21,11 @@ export const searchNftOrders = (address: string, id: string) => {
   }
 `
 }
-export const searchNftAssets = (pageSize: number = 30, page: number = 1, address: string, hexagon?: string) => {
+export const searchNftAssets = (pageSize: number = 30, page: number = 1, address: string | string[], hexagon?: string) => {
   const skip = (page - 1) * pageSize
+  const addresses = Array.isArray(address) ? address : [address]
   const where = [
-    `nftAddress: "${address}"`,
+    `nftAddress_in: [${addresses.filter(Boolean).map(a => `"${a}"`)}]`,
     hexagon && `tokenId: ${BigNumber.from(hexagon).toString()}`
   ]
   const query = [
