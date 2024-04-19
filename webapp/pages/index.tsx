@@ -74,7 +74,7 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
-      <SupportButton />
+      {/* <SupportButton /> */}
     </>
   )
 }
