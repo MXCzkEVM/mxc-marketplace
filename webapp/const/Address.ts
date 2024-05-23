@@ -81,3 +81,7 @@ export const instanceMep1002Name = async () => {
 export const instanceNameWrapper = async () => {
     return new ethers.Contract(CONTRACTS_MAP.MNSNAMEWRAP, ABI.mnsNameWrap, provider)
 }
+
+export const launchpadAddresses = [
+  
+]

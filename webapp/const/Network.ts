@@ -106,7 +106,7 @@ export const graphNode = NETWORK.graphNode
 
 export const gatewayUrls = {
   "ipfs://": [
-    "https://ipfs.io/ipfs/",
+    "https://gateway.pinata.cloud/ipfs/",
     "https://ipfs.thirdwebstorage.com/ipfs/",
     "https://gateway.ipfscdn.io/ipfs/",
     "https://ipfs.w3s.link",

@@ -4,7 +4,7 @@ import axios from "axios"
 
 export const getJsonFromIPFS = async (ipfsHash: string) => {
     try {
-        const response = await axios.get(`https://ipfs.io/ipfs/${ipfsHash}`);
+        const response = await axios.get(`https://gateway.pinata.cloud/ipfs/${ipfsHash}`);
         const jsonData = response.data;
         return jsonData;
     } catch (error) {
