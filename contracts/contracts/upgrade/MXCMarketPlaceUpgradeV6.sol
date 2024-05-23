@@ -244,7 +244,6 @@ contract MXCMarketPlaceUpgradeV6 is UUPSUpgradeable, IERC721Receiver {
         (uint256 royaltyAmount, address royaltyRecipient) = mxcToken
             .royaltyInfo(order.price);
         payable(royaltyRecipient).transfer(royaltyAmount);
-
         // send left to seller
         payable(order.seller).transfer(order.price - royaltyAmount);
         // send nft to buyer

@@ -1,8 +1,8 @@
 
 
 import { ethers } from 'ethers'
-import collectionFactory from "./abi_mxccollection/MXCCollectionFactoryV4.json"
-import collection from "./abi_mxccollection/MXCCollectionV4Upgrade.json"
+import collectionFactory from "./abi_mxccollection/MXCCollectionFactoryV5.json"
+import collection from "./abi_mxccollection/MXCCollectionV5Upgrade.json"
 import collectionv2 from "./abi_mxccollection/MXCCollectionV2Upgrade.json"
 import marketplace from './abi_mxccollection/MXCMarketPlaceUpgradeV6.json'
 import mep1002 from './abi_mep/mep1002.json'
