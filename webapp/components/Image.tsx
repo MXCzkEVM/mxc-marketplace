@@ -15,6 +15,7 @@ const ImageWithDefault = ({ src, defaultImage, alt, ...props }: any) => {
       alt={alt}
       onLoad={handleImageLoad}
       {...props}
+      style={{objectFit: 'cover', ...props.style}}
     />
   )
 }

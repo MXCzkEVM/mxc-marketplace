@@ -40,6 +40,7 @@ const CollectDetail = (props: any) => {
 
   const coverRef = useRef<any>(null)
   const profileRef = useRef<any>(null)
+  const nftFileRef = useRef<any>(null)
 
   const [name, setName] = useState("")
   const [nameError, setNameError] = useState<any>(null)
@@ -47,6 +48,8 @@ const CollectDetail = (props: any) => {
   const [coverFile, setCoverFile] = useState<any>(null)
   const [profile, setProfile] = useState<any>(null)
   const [profileImage, setprofileImage] = useState<any>(null)
+  const [nftFile, setNftFile] = useState<any>(null)
+  const [nftFileImage, setNftFileImage] = useState<any>(null)
   const [description, setDescription] = useState("")
   const [descriptionError, setDescriptionError] = useState<any>(null)
   const [domainValue, setDomainValue] = useState<any>()
@@ -121,6 +124,10 @@ const CollectDetail = (props: any) => {
     setProfile(null)
     setprofileImage(null)
   }
+  const removeNftFile = () => {
+    setProfile(null)
+    setprofileImage(null)
+  }
 
   const handleCoverSelect = (e: any) => {
     if (e.target.files.length > 0) {
@@ -146,6 +153,20 @@ const CollectDetail = (props: any) => {
       const reader = new FileReader()
       reader.onload = function (e: any) {
         setProfile(e.target.result)
+      }
+
+      reader.readAsDataURL(file)
+    }
+  }
+  const handleNftFileSelect = (e: any) => {
+    if (e.target.files.length > 0) {
+      const file = e.target.files[0]
+
+      setNftFileImage(file)
+
+      const reader = new FileReader()
+      reader.onload = function (e: any) {
+        setNftFile(e.target.result)
       }
 
       reader.readAsDataURL(file)
@@ -209,6 +230,15 @@ const CollectDetail = (props: any) => {
     return true
   }
 
+  async function pinataStoreImage(file: File) {
+    const formData = new FormData()
+    const metadata = JSON.stringify({
+      name: `${version}_${file.name}`,
+    })
+    formData.append("pinataMetadata", metadata)
+    formData.append("file", file)
+    return await storeImage(formData)
+  }
   async function saveCollection() {
     if (!name) {
       toast.warn(t("Please type your collection name"))
@@ -232,24 +262,13 @@ const CollectDetail = (props: any) => {
 
     let cover_ipfs: any = ""
     let profile_ipfs: any = ""
-    if (coverFile) {
-      const formData = new FormData()
-      const metadata = JSON.stringify({
-        name: `${version}_${coverFile.name}`,
-      })
-      formData.append("pinataMetadata", metadata)
-      formData.append("file", coverFile)
-      cover_ipfs = await storeImage(formData)
-    }
-    if (profileImage) {
-      const formData = new FormData()
-      const metadata = JSON.stringify({
-        name: `${version}_${profileImage.name}`,
-      })
-      formData.append("pinataMetadata", metadata)
-      formData.append("file", profileImage)
-      profile_ipfs = await storeImage(formData)
-    }
+    let nft_ipfs: any = ""
+    if (coverFile) 
+      cover_ipfs = await pinataStoreImage(coverFile)
+    if (profileImage) 
+      profile_ipfs = await pinataStoreImage(profileImage)
+    if (nftFileImage) 
+      nft_ipfs = await pinataStoreImage(nftFileImage)
 
     if (!cover_ipfs) {
       toast.warn(t("Please upload a cover image"))
@@ -259,10 +278,15 @@ const CollectDetail = (props: any) => {
       toast.warn(t("Please upload a profile image"))
       return
     }
+    if (!nft_ipfs) {
+      toast.warn(t("Please upload a nft image"))
+      return
+    }
 
     let formData: any = {
       cover: cover_ipfs,
       profile: profile_ipfs,
+      nft: nft_ipfs,
       name,
       description,
       royaltyRecipient,
@@ -455,6 +479,48 @@ const CollectDetail = (props: any) => {
                       accept="image/*"
                       hidden
                       onChange={handleProfileSelect}
+                    />
+                    <div className="upload">
+                      <div className="uploadInner">
+                        <img src={uploadIcon.src as any} />
+                      </div>
+                      <div className="plusIcon">
+                        <img src={plusIcon.src} />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="inputGroup">
+            <div className="inputTitle">NFT Image *</div>
+            <div className="inputSubTitle">
+              {/* {t("This image will also be used for collection detail")} */}
+            </div>
+            <div className="inputWrapper">
+              <div className="uploadBox">
+                {nftFile ? (
+                  <>
+                    <img src={nftFile} />
+                    <div className="removeOverlay">
+                      <div className="removeIcon" onClick={removeNftFile}>
+                        <img src={closeIcon.src} />
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div
+                    className="uploadOverlay"
+                    onClick={() => nftFileRef.current?.click()}
+                  >
+                    <input
+                      ref={nftFileRef}
+                      type="file"
+                      accept="image/*"
+                      hidden
+                      onChange={handleNftFileSelect}
                     />
                     <div className="upload">
                       <div className="uploadInner">

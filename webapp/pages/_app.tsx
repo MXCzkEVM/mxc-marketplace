@@ -43,6 +43,7 @@ function axsWallet(): WalletConfig<InjectedWallet> {
   }
 }
 
+
 function okxWallet(): WalletConfig<InjectedWallet> {
   return {
     id: "okx",
@@ -68,7 +69,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           secretKey="KJm90goB7ekKKDs1HdnyIYG-n9PY_QYYJm14Lo9EEc-5pZ3KCotoCuIS9WVmhqzwUxUiwPNMIdPhcY8iyBzf-A"
           supportedWallets={[
             axsWallet(),
-            {...metamaskWallet(), isInstalled: undefined},
+            metamaskWallet(),
             okxWallet(),
             walletConnect(),
             coinbaseWallet(),

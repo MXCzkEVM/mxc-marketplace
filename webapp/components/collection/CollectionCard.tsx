@@ -12,8 +12,8 @@ const CollectionCard = (props: any) => {
   const item = props.item || {}
   const collection_id = props.collection_id
   let cover = defaultCover.src
-  if (item?.metadata?.image) {
-    cover = `${IPFS_GATEWAY}${item.metadata.image}`
+  if (item?.metadata?.image || props.collection.nft) {
+    cover = `${IPFS_GATEWAY}${props.collection.nft || item.metadata.image}`
   }
   const toPath = (link: string) => {
     Router.push(link)
@@ -44,7 +44,7 @@ const CollectionCard = (props: any) => {
       <div className="image">
         <Image src={cover} defaultImage={defaultPng.src} alt="" />
       </div>
-
+      
       <div className="content">
         <div className="title">
           <span className="name text-xs">

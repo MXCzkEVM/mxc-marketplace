@@ -15,12 +15,8 @@ export default async function handler(req, res) {
   }
 
   let ops = await redis.hget(`${chainId}_launchpad_collections`, collection_id)
-  if (ops == null) {
-    return res
-      .status(200)
-      .send({ code: 500, message: i18n.t("Wrong collection") })
-  }
-  ops.tags = JSON.parse(ops.tags)
+
+  ops.tags = JSON.parse(ops.tags || '[]')
 
   return res
     .status(200)

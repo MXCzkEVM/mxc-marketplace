@@ -26,7 +26,10 @@ export default function CollectionCard(props: any) {
   })
 
   const toDetail = (id: string) => {
-    Router.push(`/collection/${id}`)
+    if (props.launchpad)
+      Router.push(`/launchpad/${id}`)
+    else
+      Router.push(`/collection/${id}`)
   }
 
   const { contract: mkpContract } = useContract(

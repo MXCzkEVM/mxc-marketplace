@@ -11,6 +11,7 @@ const BannerComponent = (props: any) => {
   let dta = props.collectionDta
   const date = new Date(dta.timestamp)
   const name = useName(dta.creator)
+  const isLaunchpad = !!dta.nft
   const monthNames = [
     "Jan",
     "Feb",
@@ -42,6 +43,7 @@ const BannerComponent = (props: any) => {
         <Image
           src={dta.profile ? dta.profile : defaultlongPng.src}
           defaultImage={defaultlongPng.src}
+          style={{ maxHeight: '400px' }}
           alt=""
         />
         <div className="profilePhoto">
@@ -62,11 +64,19 @@ const BannerComponent = (props: any) => {
           <div className="namesection">
             <span className="name">{dta.name}</span>
           </div>
+          {isLaunchpad && <button
+            className={"tw-web3button css-1fii1tk "}
+            style={{marginRight: 0}}
+            // onClick={}
+          >
+            Mint Launchpad
+          </button>}
+          
         </div>
-        <div className="article mb-3">
+        { !isLaunchpad && <div className="article mb-3">
           <span className="articlename"> By </span>
           <span className="articlename">{name}</span>
-        </div>
+        </div>}
         <div className="statisticalDataTop mb-3">
           <div className="items">
             <span className="text">Items</span>
