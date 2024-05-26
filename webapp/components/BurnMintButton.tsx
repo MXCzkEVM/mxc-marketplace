@@ -50,7 +50,7 @@ export function BurnMintButton(props: ButtonForV3Props) {
     >
       {
         !loading
-          ? <>{t("Create item")}</>
+          ? <>{t("Mint Launchpad")}</>
           : <IconLoading />
       }
     </button>

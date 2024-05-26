@@ -528,9 +528,9 @@ export default function AssetCrearePage() {
             <div className="inputSubTitle">
               {t("The proofs of location for IoT NFTs")} :
               <Link
-                href={`https://www.youtube.com/watch?v=AcJp5PE4TDg`}
-                passHref
                 legacyBehavior
+                passHref
+                href={`https://www.youtube.com/watch?v=AcJp5PE4TDg`}
               >
                 <a target="_blank" rel="noopener noreferrer">
                   {t("MXC N3XUS Provisioning Guide")}

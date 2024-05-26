@@ -7,6 +7,9 @@ import defaultlongPng from "@/assets/placeholder_long.png"
 import { CategoryMap } from "@/const/Local"
 import { useName } from "@/hooks"
 import Router from "next/router"
+import { storeJson } from "@/util/uploadToPinata"
+import { ButtonForV3 } from "../v2button"
+import { BurnMintButton } from "../BurnMintButton"
 
 const BannerComponent = (props: any) => {
   let dta = props.collectionDta
@@ -38,6 +41,24 @@ const BannerComponent = (props: any) => {
       : url
     return url
   }
+
+  async function resolveIpfs() {
+    const data = {
+      description: dta.nftDescription,
+      attributes: dta.traits,
+      image: dta.nft,
+      name: dta.nftName,
+    }
+    const json_data = JSON.stringify({
+      pinataOptions: {},
+      pinataMetadata: {
+        name,
+      },
+      pinataContent: data,
+    })
+    return storeJson(json_data)
+  }
+
   return (
     <div className="banner">
       <div className="coverPhoto">
@@ -65,16 +86,14 @@ const BannerComponent = (props: any) => {
           <div className="namesection">
             <span className="name">{dta.name}</span>
           </div>
-          {isLaunchpad && <button
-            className={"tw-web3button css-1fii1tk "}
-            style={{marginRight: 0}}
-            onClick={() => Router.push(`/launchpad/${dta.collection}/create`)}
-          >
-            Mint Launchpad
-          </button>}
-          
+          {isLaunchpad && <BurnMintButton
+            address={dta.collection}
+            resolveIpfs={resolveIpfs}
+          />}
+
+
         </div>
-        { !isLaunchpad && <div className="article mb-3">
+        {!isLaunchpad && <div className="article mb-3">
           <span className="articlename"> By </span>
           <span className="articlename">{name}</span>
         </div>}

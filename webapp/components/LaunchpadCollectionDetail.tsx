@@ -67,6 +67,8 @@ const CollectDetail = (props: any) => {
       value: "MXC Community Design",
     },
   ])
+  const address = useAddress()
+
   const [nftNameError, setNftNameError] = useState<any>(null)
   const [nameError, setNameError] = useState<any>(null)
   const [cover, setCover] = useState<any>(null)
@@ -84,12 +86,13 @@ const CollectDetail = (props: any) => {
   const [tags, setTags] = useState<any>([])
   const [inputValue, setInputValue] = useState("")
   const [royalty, setRoyalty] = useState<any>("")
-  const [royaltyRecipient, setRoyaltyRecipient] = useState("")
+  const [royaltyRecipient, setRoyaltyRecipient] = useState(address)
   const [domains, setDomins] = useState<any>([])
 
-  const [editLoading, setEditLoading] = useState(false)
+  const [trait_type, setTraitType] = useState("")
+  const [value, setValue] = useState("")
+  const [editingIndex, setEditingIndex] = useState(null)
 
-  const address = useAddress()
   // "Techcode.MXC", "HelloWorld.MXC"
   // const domains: any = []
   const nftUri = process.env.NEXT_PUBLIC_NFTURL
@@ -112,25 +115,25 @@ const CollectDetail = (props: any) => {
     }
   }, [])
 
-  useEffect(() => {
-    const fetchDomains = async () => {
-      const result = await mnsClient.query({
-        query: getMnsDomainWithAddress(1000, 1, address),
-      })
-      let domains = result?.data?.domains || []
-      domains = domains.map((item: any) => {
-        return {
-          id: item.id,
-          name: item.name,
-          owner: item.wrappedDomain.owner.id,
-        }
-      })
-      setDomins(domains)
-    }
-    if (address !== zeroAddress) {
-      fetchDomains()
-    }
-  }, [address])
+  // useEffect(() => {
+  //   const fetchDomains = async () => {
+  //     const result = await mnsClient.query({
+  //       query: getMnsDomainWithAddress(1000, 1, address),
+  //     })
+  //     let domains = result?.data?.domains || []
+  //     domains = domains.map((item: any) => {
+  //       return {
+  //         id: item.id,
+  //         name: item.name,
+  //         owner: item.wrappedDomain.owner.id,
+  //       }
+  //     })
+  //     setDomins(domains)
+  //   }
+  //   if (address !== zeroAddress) {
+  //     fetchDomains()
+  //   }
+  // }, [address])
 
   const onChangeDomain = (e: any) => {
     setDomainValue(e.target.value as string)
@@ -152,6 +155,16 @@ const CollectDetail = (props: any) => {
   const removeNftFile = () => {
     setProfile(null)
     setprofileImage(null)
+  }
+
+  const handleEditTrait = (index: any): void => {
+    setTraitType(traits[index].trait_type)
+    setValue(traits[index].value)
+    setEditingIndex(index)
+  }
+
+  const handleDeleteTrait = (index: any) => {
+    setTraits(traits.filter((_: any, i: any) => i !== index))
   }
 
   const handleCoverSelect = (e: any) => {
@@ -250,6 +263,20 @@ const CollectDetail = (props: any) => {
     }
   }
 
+  const handleAddOrEditTrait = (e: any) => {
+    e.preventDefault()
+    if (editingIndex !== null) {
+      const newTraits: any = [...traits]
+      newTraits[editingIndex] = { trait_type, value }
+      setTraits(newTraits)
+      setEditingIndex(null)
+    } else {
+      setTraits([...traits, { trait_type, value }])
+    }
+    setTraitType("")
+    setValue("")
+  }
+
   const handleTagDelete = (tagId: any) => {
     const updatedTags = tags.filter((tag: any) => tag.id !== tagId)
     setTags(updatedTags)
@@ -288,10 +315,10 @@ const CollectDetail = (props: any) => {
       toast.warn(t("Please type your collection description"))
       return
     }
-    if (!royaltyRecipient) {
-      toast.warn(t("Please type your collection royalty recipient"))
-      return
-    }
+    // if (!royaltyRecipient) {
+    //   toast.warn(t("Please type your collection royalty recipient"))
+    //   return
+    // }
     if (!ethers.utils.isAddress(royaltyRecipient)) {
       toast.warn(t("Please type a correct address"))
       return
@@ -303,11 +330,11 @@ const CollectDetail = (props: any) => {
     let cover_ipfs: any = ""
     let profile_ipfs: any = ""
     let nft_ipfs: any = ""
-    if (coverFile) 
+    if (coverFile)
       cover_ipfs = await pinataStoreImage(coverFile)
-    if (profileImage) 
+    if (profileImage)
       profile_ipfs = await pinataStoreImage(profileImage)
-    if (nftFileImage) 
+    if (nftFileImage)
       nft_ipfs = await pinataStoreImage(nftFileImage)
 
     if (!cover_ipfs) {
@@ -522,8 +549,8 @@ const CollectDetail = (props: any) => {
             </div>
           </div>
 
-          <br style={{height: 20}} />
-          
+          <br style={{ height: 20 }} />
+
           <div className="inputGroup">
             <div className="inputTitle">{t("NFT Name")} *</div>
             <div className="inputWrapper">
@@ -601,9 +628,9 @@ const CollectDetail = (props: any) => {
             </div>
           </div>
 
-         
 
-          <div className="inputGroup">
+
+          {/* <div className="inputGroup">
             <div className="inputTitle">URL</div>
             <div className="inputSubTitle">
               <p>{t("Customize your URL on MXC loT NFT Marketplace")}</p>
@@ -623,6 +650,73 @@ const CollectDetail = (props: any) => {
                   </option>
                 ))}
               </select>
+            </div>
+          </div> */}
+
+          <div className="inputGroup">
+            <div className="inputTitle">Traits</div>
+            <div className="inputSubTitle">
+              {t("Textual traits that show up as rectangles")}
+            </div>
+            <div className="inputWrapper">
+              <div className="p-4 bg-black text-white shadow-md rounded">
+                {traits.map(({ trait_type, value, edit }: any, i: any) => (
+                  <div key={i} className="flex justify-between mb-2">
+                    <p>
+                      <span className="font-semibold">{trait_type}</span>:{" "}
+                      {value}
+                    </p>
+
+
+                    <div>
+                      {edit !== false && (
+                        <button
+                          className="mr-2 text-yellow-500"
+                          onClick={() => handleEditTrait(i)}
+                        >
+                          {t("Edit")}
+                        </button>
+                      )}
+                      <button
+                        className="text-red-500"
+                        onClick={() => handleDeleteTrait(i)}
+                      >
+                        {t("Delete")}
+                      </button>
+                    </div>
+
+                  </div>
+                ))}
+
+                <form onSubmit={handleAddOrEditTrait}>
+                  <div className="flex gap-2 mb-2">
+                    <input
+                      type="text"
+                      placeholder={t("Trait Key")}
+                      value={trait_type}
+                      onChange={(e) => setTraitType(e.target.value)}
+                      className="p-2 bg-gray-800 text-white border rounded w-1/2"
+                      required
+                    />
+                    <input
+                      type="text"
+                      placeholder={t("Trait Value")}
+                      value={value}
+                      onChange={(e) => setValue(e.target.value)}
+                      className="p-2 bg-gray-800 text-white border rounded w-1/2"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <button
+                      className="py-2 px-4 bg-yellow-500 text-black rounded"
+                      type="submit"
+                    >
+                      {editingIndex !== null ? "Update Trait" : "Add Trait"}
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
 
