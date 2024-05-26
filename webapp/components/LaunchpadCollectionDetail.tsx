@@ -36,13 +36,38 @@ import {
 } from "@/const/Local"
 
 const CollectDetail = (props: any) => {
-  const type = props.type || "create"
 
   const coverRef = useRef<any>(null)
   const profileRef = useRef<any>(null)
   const nftFileRef = useRef<any>(null)
 
   const [name, setName] = useState("")
+  const [nftName, setNftName] = useState("")
+  const [nftDescription, setNftDescription] = useState("")
+  const [traits, setTraits] = useState<any>([
+    { trait_type: "Year", value: "2023" },
+    {
+      trait_type: "Producer",
+      value: "MXC DAO",
+    },
+    {
+      trait_type: "Tag",
+      value: "MXC loT Tag",
+    },
+    {
+      trait_type: "Network",
+      value: "NEO and M2Pro",
+    },
+    {
+      trait_type: "Location Proofs",
+      value: "MEP-1002",
+    },
+    {
+      trait_type: "Source",
+      value: "MXC Community Design",
+    },
+  ])
+  const [nftNameError, setNftNameError] = useState<any>(null)
   const [nameError, setNameError] = useState<any>(null)
   const [cover, setCover] = useState<any>(null)
   const [coverFile, setCoverFile] = useState<any>(null)
@@ -188,6 +213,21 @@ const CollectDetail = (props: any) => {
       setDescriptionError(null)
     }
   }
+  const validateNftName = () => {
+    if (name.length === 0) {
+      setNameError(t("This field is required"))
+    } else {
+      setNameError(null)
+    }
+  }
+
+  const validateNftDescription = () => {
+    if (description.length === 0) {
+      setDescriptionError(t("This field is required"))
+    } else {
+      setDescriptionError(null)
+    }
+  }
 
   const handleInputChange = (e: any) => {
     setInputValue(e.target.value)
@@ -287,12 +327,15 @@ const CollectDetail = (props: any) => {
       cover: cover_ipfs,
       profile: profile_ipfs,
       nft: nft_ipfs,
+      nftName,
+      nftDescription,
       name,
       description,
       royaltyRecipient,
       royaltiesCutPerMillion: royalty * 100,
       url: domainValue || "",
       category: categoryValue,
+      traits,
       tags: JSON.stringify(tags),
       site,
       social,
@@ -351,45 +394,10 @@ const CollectDetail = (props: any) => {
     return txResult
   }
 
-  const saveCollectionMock = async () => {
-    let signedMessage: string = ""
-    if (domainValue) {
-      const web3 = require("web3")
-      signedMessage = await window.ethereum.request({
-        method: "personal_sign",
-        params: [web3.utils.utf8ToHex(domainValue), address],
-      })
-    }
-    let formData: any = {
-      cover: "",
-      profile: "",
-      name,
-      description,
-      royaltyRecipient,
-      royaltiesCutPerMillion: royalty * 100,
-      url: domainValue || "",
-      category: categoryValue,
-      tags: JSON.stringify(tags),
-      site,
-      social,
-      chainId: CHAIN_ID,
-      creator: address,
-    }
-    let res = await axios.post("/api/create-collection", {
-      formData,
-      signedMessage,
-    })
-    if (res.data.status !== 200) {
-      toast.error(t("API call failed"))
-      return
-    }
-  }
   return (
     <Container maxWidth="lg">
       <div className="create_page">
         <div className="inner">
-          <div className="title">{t("Collection Detail")}</div>
-
           <div className="inputGroup">
             <div className="inputTitle">{t("Colllection Name")} *</div>
             <div className="inputWrapper">
@@ -406,6 +414,26 @@ const CollectDetail = (props: any) => {
                   <span className="hide"></span>
                 )}
                 <div className="lengthIndicator">{name.length}/60</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="inputGroup">
+            <div className="inputTitle">Description *</div>
+            <div className="inputWrapper">
+              <textarea
+                className={`input longInput ${descriptionError && "hasError"}`}
+                maxLength={1000}
+                placeholder={t("Provide your description for your collection")}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                onBlur={validateDescription}
+              />
+              <div className="flex_sc">
+                {(descriptionError && (
+                  <div className="error">{descriptionError}</div>
+                )) || <span className="hide"></span>}
+                <div className="lengthIndicator">{description.length}/1000</div>
               </div>
             </div>
           </div>
@@ -494,6 +522,43 @@ const CollectDetail = (props: any) => {
             </div>
           </div>
 
+          <br style={{height: 20}} />
+          
+          <div className="inputGroup">
+            <div className="inputTitle">{t("NFT Name")} *</div>
+            <div className="inputWrapper">
+              <input
+                className={`input ${nftNameError && "hasError"}`}
+                maxLength={30}
+                value={nftName}
+                onChange={(e) => setNftName(e.target.value)}
+                onBlur={validateNftName}
+              />
+              <div className="flex_sc">
+                {(nftNameError && <div className="error">{nftNameError}</div>) || (
+                  <span className="hide"></span>
+                )}
+                <div className="lengthIndicator">{name.length}/30</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="inputGroup">
+            <div className="inputTitle">{t("NFT Description")}</div>
+            <div className="inputSubTitle">
+              {t("The description will be inclueded on the item")}
+            </div>
+            <div className="inputWrapper">
+              <textarea
+                className={`input longInput`}
+                maxLength={1000}
+                placeholder=""
+                value={nftDescription}
+                onChange={(e) => setNftDescription(e.target.value)}
+              />
+            </div>
+          </div>
+
           <div className="inputGroup">
             <div className="inputTitle">NFT Image *</div>
             <div className="inputSubTitle">
@@ -536,25 +601,7 @@ const CollectDetail = (props: any) => {
             </div>
           </div>
 
-          <div className="inputGroup">
-            <div className="inputTitle">Description *</div>
-            <div className="inputWrapper">
-              <textarea
-                className={`input longInput ${descriptionError && "hasError"}`}
-                maxLength={1000}
-                placeholder={t("Provide your description for your collection")}
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                onBlur={validateDescription}
-              />
-              <div className="flex_sc">
-                {(descriptionError && (
-                  <div className="error">{descriptionError}</div>
-                )) || <span className="hide"></span>}
-                <div className="lengthIndicator">{description.length}/1000</div>
-              </div>
-            </div>
-          </div>
+         
 
           <div className="inputGroup">
             <div className="inputTitle">URL</div>
@@ -629,36 +676,6 @@ const CollectDetail = (props: any) => {
                   <span className="inputSubTitle">(Up to 5 labels)</span>
                 </div>
               )}
-            </div>
-          </div>
-
-          <div className="inputGroup">
-            <div className="inputTitle">{t("Creator Earnings")} *</div>
-            <div className="inputSubTitle">
-              {t("Collection owners can colelct creator earnings")}
-            </div>
-            <div className="inputWrapper flex_c">
-              <input
-                value={royaltyRecipient}
-                type="text"
-                className="addressInput w-10/12 mr-5 p-2 border border-gray-300 rounded"
-                placeholder="Please input a address"
-                onChange={(e: any) => {
-                  setRoyaltyRecipient(e.target.value)
-                }}
-              ></input>
-              <PriceInput
-                className="priceInput w-2/12"
-                placeholder={t("Collection Royalty")}
-                decimals={2}
-                value={"" + royalty}
-                onChange={(val: any) =>
-                  val[val.length - 1] === "."
-                    ? setRoyalty(val)
-                    : setRoyalty(Math.min(100, +val))
-                }
-              />
-              %
             </div>
           </div>
 

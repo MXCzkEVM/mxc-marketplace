@@ -6,6 +6,7 @@ import defaultPng from "@/assets/placeholder.png"
 import defaultlongPng from "@/assets/placeholder_long.png"
 import { CategoryMap } from "@/const/Local"
 import { useName } from "@/hooks"
+import Router from "next/router"
 
 const BannerComponent = (props: any) => {
   let dta = props.collectionDta
@@ -67,7 +68,7 @@ const BannerComponent = (props: any) => {
           {isLaunchpad && <button
             className={"tw-web3button css-1fii1tk "}
             style={{marginRight: 0}}
-            // onClick={}
+            onClick={() => Router.push(`/launchpad/${dta.collection}/create`)}
           >
             Mint Launchpad
           </button>}

@@ -15,7 +15,7 @@ contract MXCCollectionV5Upgrade is UUPSUpgradeable, ERC721Upgrade {
     uint256 public totalSupply;
     uint256 public existSupply;
 
-    uint256 public burnMXC = 500;
+    uint256 public burnMXC = 500 * (10 ** 18);
     uint256 public royaltiesCutPerMillion;
     address public royaltyRecipientAddress;
     address public creator;
@@ -30,6 +30,7 @@ contract MXCCollectionV5Upgrade is UUPSUpgradeable, ERC721Upgrade {
     string version = "3";
     error MXCCollection__StakedTokenTransferFailed();
     error MXCCollection__LockedOnlyCreatorMint();
+    error MXCCollection__BurnMintValue();
 
     modifier onlyCreator() {
         if (msg.sender != creator) revert MXCCollection__NotCreator();
@@ -77,6 +78,8 @@ contract MXCCollectionV5Upgrade is UUPSUpgradeable, ERC721Upgrade {
     function burnMXCMint(string memory _tokenURI) payable public {
       if (lockedOnlyCreatorMint) 
         revert MXCCollection__LockedOnlyCreatorMint();
+      if (msg.value < burnMXC)
+        revert MXCCollection__BurnMintValue();
       uint256 nft = _tokenIdCounter;
       _mint(msg.sender, nft);
       setTokenURI(nft, _tokenURI);
