@@ -46,7 +46,7 @@ export function BurnMintButton(props: ButtonForV3Props) {
       })
       await provider.waitForTransaction(hash)
       toast.success("NFT item create successfully!")
-      Router.push(`/launchpad/${props.address}`)
+      Router.reload()
       setLoading(false)
 
     } catch (error) {
@@ -60,7 +60,7 @@ export function BurnMintButton(props: ButtonForV3Props) {
     <button
       className="px-4 py-2 bg-blue-600 text-white tw-web3button css-1fii1tk"
       onClick={create}
-      style={{ height: '43px' }}
+      style={{ width: '150px', height: '43px' }}
     >
       {
         !loading

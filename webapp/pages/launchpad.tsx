@@ -24,7 +24,6 @@ export default function Overview() {
       let collections = collectionsAll?.collections || []
       collections = await getCollectList(collections)
       setCollections(collections)
-      console.log(collections)
       setLoading(false)
     }
     fetchData()
