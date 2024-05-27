@@ -1,12 +1,13 @@
 import IconLoading from "@/components/CartButton/IconLoading"
 import { ABI } from "@/const/Address"
-import { useContract, useContractWrite } from "@thirdweb-dev/react"
+import { provider } from "@/const/Network"
+import { useAddress, useContract, useContractWrite } from "@thirdweb-dev/react"
 import { Contract, providers } from "ethers"
 import Router from "next/router"
 import { useState } from "react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
-
+import {hexlifySignTransaction} from '@/util/ethers'
 
 export interface ButtonForV3Props {
   address: string
@@ -17,19 +18,22 @@ export interface ButtonForV3Props {
 export function ButtonForV3(props: ButtonForV3Props) {
   const { t } = useTranslation()
   const [loading, setLoading] = useState(false)
-
+  const address = useAddress()
   async function create() {
     try {
       setLoading(true)
-      const provider = new providers.Web3Provider(window.ethereum);
-      const singer = provider.getSigner()
+      const singer = provider.getSigner(address)
       const contract = new Contract(props.address, ABI.collection, singer)
       const data = await contract.populateTransaction.mint(
         `ipfs://${await props.resolveIpfs?.()}`,
         props.xsd
       )
-      const transaction = await singer.sendTransaction(data)
-      await transaction.wait()
+      const hexlifyTransaction = hexlifySignTransaction(await singer.populateTransaction(data))
+      const hash = await window.ethereum.request({
+        method: 'eth_sendTransaction',
+        params: [hexlifyTransaction]
+      })
+      await provider.waitForTransaction(hash)
       toast.success("NFT item create successfully!")
       Router.push(`/collection/${props.address}`)
       setLoading(false)

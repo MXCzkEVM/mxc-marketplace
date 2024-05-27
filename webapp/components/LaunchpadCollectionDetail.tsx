@@ -86,8 +86,7 @@ const CollectDetail = (props: any) => {
   const [tags, setTags] = useState<any>([])
   const [inputValue, setInputValue] = useState("")
   const [royalty, setRoyalty] = useState<any>("")
-  const [royaltyRecipient, setRoyaltyRecipient] = useState(address)
-  const [domains, setDomins] = useState<any>([])
+  const royaltyRecipient = address
 
   const [trait_type, setTraitType] = useState("")
   const [value, setValue] = useState("")
@@ -109,35 +108,6 @@ const CollectDetail = (props: any) => {
   const { t } = useTranslation()
 
 
-  useEffect(() => {
-    if (address && !royaltyRecipient) {
-      setRoyaltyRecipient(address)
-    }
-  }, [])
-
-  // useEffect(() => {
-  //   const fetchDomains = async () => {
-  //     const result = await mnsClient.query({
-  //       query: getMnsDomainWithAddress(1000, 1, address),
-  //     })
-  //     let domains = result?.data?.domains || []
-  //     domains = domains.map((item: any) => {
-  //       return {
-  //         id: item.id,
-  //         name: item.name,
-  //         owner: item.wrappedDomain.owner.id,
-  //       }
-  //     })
-  //     setDomins(domains)
-  //   }
-  //   if (address !== zeroAddress) {
-  //     fetchDomains()
-  //   }
-  // }, [address])
-
-  const onChangeDomain = (e: any) => {
-    setDomainValue(e.target.value as string)
-  }
 
   const onChangeCategory = (e: any) => {
     setCategory(e.target.value as string)
@@ -315,10 +285,10 @@ const CollectDetail = (props: any) => {
       toast.warn(t("Please type your collection description"))
       return
     }
-    // if (!royaltyRecipient) {
-    //   toast.warn(t("Please type your collection royalty recipient"))
-    //   return
-    // }
+    if (!royaltyRecipient) {
+      toast.warn(t("Please type your collection royalty recipient"))
+      return
+    }
     if (!ethers.utils.isAddress(royaltyRecipient)) {
       toast.warn(t("Please type a correct address"))
       return

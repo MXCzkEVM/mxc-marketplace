@@ -1,6 +1,11 @@
 [
   {
     "inputs": [],
+    "name": "MXCCollection__BurnMintError",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "MXCCollection__NotAuthorize",
     "type": "error"
   },

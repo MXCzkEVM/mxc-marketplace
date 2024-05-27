@@ -19,7 +19,6 @@ export default function MinerPage() {
   const { data: nftCounter } = useTotalCount(nftContract)
   let nftCounterNumber = nftCounter ? parseInt(nftCounter?.toString()) : 0
 
-
   const onChange = (getPage: number) => {
     if (getPage == page) {
       return

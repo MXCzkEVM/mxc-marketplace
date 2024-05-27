@@ -86,7 +86,7 @@ export default function CollectPage() {
                       key={index}
                       item={item}
                       collection_id={collectionAddress}
-                      collection={collectionDta}
+                      // collection={collectionDta}
                     />
                   )
                 })}

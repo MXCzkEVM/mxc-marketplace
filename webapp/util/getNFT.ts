@@ -30,7 +30,6 @@ export const getCollectInfo = async (collectionInfo: any) => {
     try {
         collectionInfo.cover = collectionInfo.cover ? `${IPFS_GATEWAY}${collectionInfo.cover}` : ''
         collectionInfo.profile = collectionInfo.profile ? `${IPFS_GATEWAY}${collectionInfo.profile}` : ''
-        collectionInfo.nft = collectionInfo.nft ? `${IPFS_GATEWAY}${collectionInfo.nft}` : ''
         return collectionInfo
     } catch (error) {
         console.error(error, "getCollectInfo")

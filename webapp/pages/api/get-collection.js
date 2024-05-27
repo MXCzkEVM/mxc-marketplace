@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     return res.status(200).send({ status: 500 })
   }
 
-  let ops = await redis.hget(`${chainId}_collections`, collection_id)
+  let ops = await redis.hget(`${chainId}_collections`, collection_id) || await redis.hget(`${chainId}_launchpad_collections`, collection_id)
   if (ops == null) {
     return res
       .status(200)
