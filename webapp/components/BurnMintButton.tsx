@@ -41,7 +41,7 @@ export function BurnMintButton(props: ButtonForV3Props) {
       })
       await provider.waitForTransaction(hash)
       toast.success("NFT item create successfully!")
-      Router.push(`/collection/${props.address}`)
+      Router.push(`/launchpad/${props.address}`)
       setLoading(false)
 
     } catch (error) {

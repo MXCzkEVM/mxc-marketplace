@@ -12,7 +12,6 @@ const CollectionCard = (props: any) => {
   const item = props.item || {}
   const collection_id = props.collection_id
   let cover = defaultCover.src
-  console.log({item})
   if (item?.metadata?.image) {
     cover = `${IPFS_GATEWAY}${item.metadata?.image}`
   }
