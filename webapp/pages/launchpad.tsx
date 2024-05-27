@@ -33,8 +33,8 @@ export default function Overview() {
       <Toaster></Toaster>
       <Container maxWidth="lg">
         <div className="feature mb-10">
-          <h1>Featured NFTs</h1>
-          <p>Discover the most outstanding NFTs in all topics of life.</p>
+          <h1>DePIN Launchpad</h1>
+          <p>Discover the next 100x with UXUY</p>
           <div className="nfts_feature">
             {collections && !isLoading
               ? collections.map((nft: any, index: number) => (
