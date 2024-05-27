@@ -82,7 +82,7 @@ const BannerComponent = (props: any) => {
       </div>
 
       <div className="information">
-        <div className="name">
+        <div className="name" style={{ flexWrap: 'wrap', marginBottom: '2px' }}>
           <div className="namesection">
             <span className="name">{dta.name}</span>
           </div>
@@ -90,8 +90,6 @@ const BannerComponent = (props: any) => {
             address={dta.collection}
             resolveIpfs={resolveIpfs}
           />}
-
-
         </div>
         {!isLaunchpad && <div className="article mb-3">
           <span className="articlename"> By </span>

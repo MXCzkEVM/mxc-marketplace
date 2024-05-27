@@ -3,7 +3,8 @@ import { ABI } from "@/const/Address"
 import { Contract, providers } from "ethers"
 import Router from "next/router"
 import { useState } from "react"
-import toast from "react-hot-toast"
+import { toast } from "react-toastify"
+
 import { useTranslation } from "react-i18next"
 import { parseEther } from 'ethers/lib/utils'
 import { provider } from "@/const/Network"
@@ -22,6 +23,10 @@ export function BurnMintButton(props: ButtonForV3Props) {
   const address = useAddress()
 
   async function create() {
+    if (!address) {
+      toast.warn(t("Please connect the wallet"))
+        return
+    }
     try {
       setLoading(true)
       const singer = provider.getSigner(address)
@@ -55,7 +60,7 @@ export function BurnMintButton(props: ButtonForV3Props) {
     <button
       className="px-4 py-2 bg-blue-600 text-white tw-web3button css-1fii1tk"
       onClick={create}
-      style={{ width: '150px', height: '43px' }}
+      style={{ height: '43px' }}
     >
       {
         !loading
