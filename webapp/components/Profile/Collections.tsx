@@ -32,7 +32,7 @@ const ProfileCollections: NextPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
-      let Collections: any = await api.post("/api/get-collections-launchpad", {
+      let Collections: any = await api.post("/api/get-collections", {
         chainId: CHAIN_ID,
         creator: address,
       })
