@@ -8,10 +8,12 @@ import SkeletonList from "@/components/Skeleton/SkeletonList"
 import ApiClient from "@/util/request"
 const api = new ApiClient("/")
 import { Toaster } from "react-hot-toast"
+import { useTranslation } from "react-i18next"
 
 export default function Overview() {
   const [collections, setCollections] = useState<any>([])
   const [isLoading, setLoading] = useState(false)
+  const { t } = useTranslation()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +36,7 @@ export default function Overview() {
       <Container maxWidth="lg">
         <div className="feature mb-10">
           <h1>DePIN Launchpad</h1>
-          <p>Discover the next 100x with UXUY</p>
+          <p>{t('Discover the next 100x with UXUY')}</p>
           <div className="nfts_feature">
             {collections && !isLoading
               ? collections.map((nft: any, index: number) => (
