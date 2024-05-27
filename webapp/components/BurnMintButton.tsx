@@ -17,6 +17,7 @@ export function BurnMintButton(props: ButtonForV3Props) {
   const { t } = useTranslation()
   const [loading, setLoading] = useState(false)
 
+
   async function create() {
     try {
       setLoading(true)

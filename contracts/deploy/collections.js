@@ -13,7 +13,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
     const gasPrice = (await ethers.provider.getGasPrice()).mul(2)
 
-    await deploy("MXCCollectionFactoryV4", {
+    await deploy("MXCCollectionFactoryV5", {
         from: deployer,
         args: [],
         log: true,

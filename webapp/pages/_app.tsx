@@ -65,8 +65,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     <SessionProvider session={pageProps.session}>
       <EnsProvider>
         <ThirdwebProvider
-          clientId="0c0e96d3fc507e0144759d37ac320fdc"
-          secretKey="KJm90goB7ekKKDs1HdnyIYG-n9PY_QYYJm14Lo9EEc-5pZ3KCotoCuIS9WVmhqzwUxUiwPNMIdPhcY8iyBzf-A"
+          // clientId="0c0e96d3fc507e0144759d37ac320fdc"
+          // secretKey="KJm90goB7ekKKDs1HdnyIYG-n9PY_QYYJm14Lo9EEc-5pZ3KCotoCuIS9WVmhqzwUxUiwPNMIdPhcY8iyBzf-A"
           supportedWallets={[
             axsWallet(),
             metamaskWallet(),

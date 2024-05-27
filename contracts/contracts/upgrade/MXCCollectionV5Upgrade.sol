@@ -20,17 +20,12 @@ contract MXCCollectionV5Upgrade is UUPSUpgradeable, ERC721Upgrade {
     address public royaltyRecipientAddress;
     address public creator;
 
-    bool public lockedOnlyCreatorMint = false;
-
     // erc20 collateral address
     address public collateral;
 
     mapping(uint256 => string) private _tokenURIs;
     mapping(uint256 => uint256) private _stakedOf;
-    string version = "3";
     error MXCCollection__StakedTokenTransferFailed();
-    error MXCCollection__LockedOnlyCreatorMint();
-    error MXCCollection__BurnMintValue();
 
     modifier onlyCreator() {
         if (msg.sender != creator) revert MXCCollection__NotCreator();
@@ -72,18 +67,13 @@ contract MXCCollectionV5Upgrade is UUPSUpgradeable, ERC721Upgrade {
       _tokenIdCounter = _tokenIdCounter + 1;
       totalSupply += 1;
       existSupply += 1;
-      lockedOnlyCreatorMint = true;
     }
 
     function burnMXCMint(string memory _tokenURI) payable public {
-      if (lockedOnlyCreatorMint) 
-        revert MXCCollection__LockedOnlyCreatorMint();
-      if (msg.value < burnMXC)
-        revert MXCCollection__BurnMintValue();
       uint256 nft = _tokenIdCounter;
       _mint(msg.sender, nft);
       setTokenURI(nft, _tokenURI);
-      payable(0x0000000000000000000000000000000000000000).transfer(msg.value);
+      payable(address(0)).transfer(burnMXC);
       _tokenIdCounter = _tokenIdCounter + 1;
       totalSupply += 1;
       existSupply += 1;
@@ -149,9 +139,8 @@ contract MXCCollectionV5Upgrade is UUPSUpgradeable, ERC721Upgrade {
       address owner = ERC721Upgrade.ownerOf(tokenId);
       return (spender == owner || isApprovedForAll[owner][spender] || getApproved[tokenId] == spender);
     }
-
     function getVersion() public view returns(string memory) {
-      return version;
+      return "3";
     }
     function setBurnMXC(uint256 amount) public onlyCreator {
       burnMXC = amount;
