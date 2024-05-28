@@ -30,10 +30,9 @@ export default async function handler(
     .map(() => Wallet.createRandom())
     .map(w => w.address)
 
-  console.log("addresses: ", addresses)
-  for (const recipient of addresses) {
-    const tr = await contract.gift(body.tokenUri, recipient)
-    await tr.wait()
+  for (const recipients of chunks(addresses, 5)) {
+    const promises = recipients.map((recipient) => contract.gift(body.tokenUri, recipient).then(trx => trx.wait()))
+    await Promise.all(promises)
   }
 
   return res
@@ -41,3 +40,10 @@ export default async function handler(
     .send({ code: 200 } as any)
 }
 
+
+function chunks<T>(arr: T[], size: number): T[][] {
+  const chunked: T[][] = [];
+  for (let i = 0; i < arr.length; i += size)
+      chunked.push(arr.slice(i, i + size));
+  return chunked;
+}
