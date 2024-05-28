@@ -10,7 +10,7 @@ import SkeletonList from "@/components/Skeleton/SkeletonList"
 
 const api = new ApiClient("/")
 
-const ProfileNFTs: NextPage = () => {
+const ProfileNFTs: NextPage = (props:any) => {
   const router = useRouter()
   const [collections, setCollections] = useState<any>([])
   const address = router.query.address || zeroAddress
@@ -20,12 +20,19 @@ const ProfileNFTs: NextPage = () => {
     const fetchData = async () => {
       setLoading(true)
       let collectionsAll: any = [
-        ...await api.post("/api/get-collections", {
-          chainId: CHAIN_ID,
-        }).then((d:any) => d.collections),
-        ...await api.post("/api/get-collections-launchpad", {
-          chainId: CHAIN_ID,
-        }).then((d:any) => d.collections)
+        ...props.launchpad
+          ? (
+            await api.post("/api/get-collections-launchpad", {
+              chainId: CHAIN_ID,
+            }).then((d: any) => d.collections)
+          )
+          : (
+            await api.post("/api/get-collections", {
+              chainId: CHAIN_ID,
+            }).then((d: any) => d.collections)
+          )
+        ,
+
       ].filter(Boolean)
       let collections = collectionsAll || []
       collections = await getCollectList(collections)
@@ -40,8 +47,8 @@ const ProfileNFTs: NextPage = () => {
     <div className="cardsection">
       {collections.length && !isLoading
         ? collections.map((collection: any, index: string) => (
-            <UserNFTS {...collection} key={index} user={router.query.address} />
-          ))
+          <UserNFTS {...collection} key={index} user={router.query.address} />
+        ))
         : isLoading && <SkeletonList />}
     </div>
   )

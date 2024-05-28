@@ -21,7 +21,7 @@ import { useName } from "@/hooks"
 const ProfileCollections = dynamic(
   () => import("@/components/Profile/Collections")
 )
-const ProfileNFTs = dynamic(() => import("@/components/Profile/Nfts"))
+const ProfileNFTs = dynamic(() => import("@/components/Profile/Nfts")) as any
 const ProfileHexagons = dynamic(() => import("@/components/Profile/Hexagons"))
 const ProfileDomains = dynamic(() => import("@/components/Profile/Domains"))
 const ProfileMiner = dynamic(() => import("@/components/Profile/Miner"))
@@ -35,7 +35,7 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
 
 export default function ProfilePage() {
   const [tab, setTab] = useState<
-    "nfts" | "collections" | "hexagons" | "domains" | "miners"
+    "nfts" | "collections" | "hexagons" | "domains" | "miners"  |'launchpad'
   >("collections")
   const router = useRouter()
   const address = router.query.address
@@ -76,6 +76,13 @@ export default function ProfilePage() {
 
           <h3
             className={`${styles.tab} 
+            ${tab === "launchpad" ? styles.activeTab : ""}`}
+            onClick={() => setTab("launchpad")}
+          >
+            Launchpad
+          </h3>
+          <h3
+            className={`${styles.tab} 
             ${tab === "nfts" ? styles.activeTab : ""}`}
             onClick={() => setTab("nfts")}
           >
@@ -107,6 +114,7 @@ export default function ProfilePage() {
         </div>
 
         {tab == "collections" && <ProfileCollections />}
+        {tab == "launchpad" && <ProfileNFTs launchpad />}
         {tab == "nfts" && <ProfileNFTs />}
         {tab == "hexagons" && <ProfileHexagons />}
         {tab == "domains" && <ProfileDomains />}
