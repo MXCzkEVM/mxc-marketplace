@@ -30,9 +30,7 @@ const ProfileNFTs: NextPage = (props:any) => {
             await api.post("/api/get-collections", {
               chainId: CHAIN_ID,
             }).then((d: any) => d.collections)
-          )
-        ,
-
+          ),
       ].filter(Boolean)
       let collections = collectionsAll || []
       collections = await getCollectList(collections)

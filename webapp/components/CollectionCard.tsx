@@ -47,7 +47,7 @@ export default function CollectionCard(props: any) {
     <div className="nft_item csp" style={{order: isOfficalNft ? '-2' : nft.name.startsWith('Ascendant Aura') ? '-1' : '0'}} onClick={() => toDetail(nft.url||nft.collection)}>
       <div className="image">
         <Image
-          src={nft.profile ? nft.profile : defaultPng.src}
+          src={props.launchpad ? nft.cover : (nft.profile ? nft.profile : defaultPng.src)}
           defaultImage={defaultPng.src}
           alt=""
         />

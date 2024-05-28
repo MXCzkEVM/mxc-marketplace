@@ -25,7 +25,7 @@ export function BurnMintButton(props: ButtonForV3Props) {
   async function create() {
     if (!address) {
       toast.warn(t("Please connect the wallet"))
-        return
+      return
     }
     try {
       setLoading(true)
@@ -39,7 +39,7 @@ export function BurnMintButton(props: ButtonForV3Props) {
         ...data,
         value: burnMXC
       })
-      
+
       const hash = await window.ethereum.request({
         method: 'eth_sendTransaction',
         params: [hexlifySignTransaction(transaction)]
@@ -58,13 +58,15 @@ export function BurnMintButton(props: ButtonForV3Props) {
   }
   return (
     <button
-      className="px-4 py-2 bg-blue-600 text-white tw-web3button css-1fii1tk"
+      className="px-4 py-18 bg-blue-600 text-white tw-web3button css-1fii1tk"
       onClick={create}
-      style={{ width: '150px', height: '43px' }}
     >
       {
         !loading
-          ? <>{t("Mint Launchpad")}</>
+          ? <>
+            <span className="hidden md:inline">{t("Mint Launchpad")}</span>
+            <span className="md:hidden">{t("Mint")}</span>
+          </>
           : <IconLoading />
       }
     </button>
