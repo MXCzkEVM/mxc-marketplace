@@ -39,7 +39,7 @@ const MyNFTCard = (props: any) => {
       <div className="content">
         <div className="collection flexbox">
           <div className="collection_img">
-            <img src={collection_data.cover} alt="" />
+            <img className="w-full h-full" style={{objectFit: 'cover'}} src={collection_data.cover} alt="" />
           </div>
           <div className="title text-xs">{collection_data.name}</div>
         </div>

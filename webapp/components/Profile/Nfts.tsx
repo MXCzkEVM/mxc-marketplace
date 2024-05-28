@@ -19,10 +19,15 @@ const ProfileNFTs: NextPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
-      let collectionsAll: any = await api.post("/api/get-collections", {
-        chainId: CHAIN_ID,
-      })
-      let collections = collectionsAll?.collections || []
+      let collectionsAll: any = [
+        ...await api.post("/api/get-collections", {
+          chainId: CHAIN_ID,
+        }).then((d:any) => d.collections),
+        ...await api.post("/api/get-collections-launchpad", {
+          chainId: CHAIN_ID,
+        }).then((d:any) => d.collections)
+      ].filter(Boolean)
+      let collections = collectionsAll || []
       collections = await getCollectList(collections)
       setCollections(collections)
       setLoading(false)
