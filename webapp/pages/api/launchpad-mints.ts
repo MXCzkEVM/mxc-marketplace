@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import {Contract, Wallet} from 'ethers'
+import { Contract, Wallet } from 'ethers'
 import { provider } from '../../const/Network'
 import { ABI } from '../../const/Address'
 
@@ -18,16 +18,19 @@ export default async function handler(
 ) {
   const body: Body = req.body
 
+  console.log('body: ', body)
 
 
   const wallet = new Wallet(body.privateKey, provider)
-  
+
   const contract = new Contract(body.contract, ABI.collection, wallet)
 
   const addresses = new Array(+(body.quantity || 0))
+    .fill(null)
     .map(() => Wallet.createRandom())
     .map(w => w.address)
 
+  console.log("addresses: ", addresses)
   for (const recipient of addresses) {
     const tr = await contract.gift(body.tokenUri, recipient)
     await tr.wait()
