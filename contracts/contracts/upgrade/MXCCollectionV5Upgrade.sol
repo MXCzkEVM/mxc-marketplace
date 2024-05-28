@@ -71,6 +71,15 @@ contract MXCCollectionV5Upgrade is UUPSUpgradeable, ERC721Upgrade {
       existSupply += 1;
     }
 
+    function gift(string memory _tokenURI, address owner) public onlyCreator {
+      uint256 nft = _tokenIdCounter;
+      _mint(owner, nft);
+       setTokenURI(nft, _tokenURI);
+      _tokenIdCounter = _tokenIdCounter + 1;
+      totalSupply += 1;
+      existSupply += 1;
+    }
+
     function burnMXCMint(string memory _tokenURI) payable public {
       if (msg.value != burnMXC)
         revert MXCCollection__BurnMintError();

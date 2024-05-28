@@ -31,6 +31,7 @@ export function BurnMintButton(props: ButtonForV3Props) {
       setLoading(true)
       const singer = provider.getSigner(address)
       const contract = new Contract(props.address, ABI.collection, singer)
+      console.log(`ipfs://${await props.resolveIpfs?.()}`)
       const data = await contract.populateTransaction.burnMXCMint(
         `ipfs://${await props.resolveIpfs?.()}`,
       )
