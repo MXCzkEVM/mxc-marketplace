@@ -44,12 +44,11 @@ export function BurnMintButton(props: ButtonForV3Props) {
       const singer = provider.getSigner(address)
       const contract = new Contract(props.address, ABI.collection, singer)
       const data = await contract.populateTransaction.burnMXCMint(props.ipfs)
-      const burnMXC = await contract.getBurnMXC();
+      const burnMXC = await contract.getBurnMXC()
       const transaction = await singer.populateTransaction({
         ...data,
         value: burnMXC
       })
-
       const hash = await window.ethereum.request({
         method: 'eth_sendTransaction',
         params: [hexlifySignTransaction(transaction)]
@@ -60,10 +59,9 @@ export function BurnMintButton(props: ButtonForV3Props) {
       setLoading(false)
 
     } catch (error) {
-      // console.error(error)
       console.log(error)
       setLoading(false)
-      toast.error(t("NFT item create failed"))
+      toast.error('Insufficient gas fee')
     }
   }
   return (
