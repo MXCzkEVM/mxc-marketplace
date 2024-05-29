@@ -9,7 +9,6 @@ export interface GfitButtonProps {
 }
 
 function GfitButton(props: GfitButtonProps) {
-  const { t } = useTranslation()
   const [holder, openGfitModal] = useInjectHolder<GfitModalProps, string>(GfitModal as any)
   async function gifts() {
     await openGfitModal({ contract: props.address, ipfs: props.ipfs })

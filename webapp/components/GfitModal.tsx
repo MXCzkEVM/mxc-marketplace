@@ -78,7 +78,6 @@ function GfitModal(props: PropsWidthOverlays<GfitModalProps>) {
     <div className='flex' style={{ marginBottom: '12px' }}>
       <input type="number" value={quantity} placeholder='quantity' onChange={(e) => setQuantity(e.target.value)} className='flex-1 p-3' />
     </div>
-    {/* 2000000000000000000000 */}
     <button
       style={{ width: '100%', marginTop: '24px', marginBottom: '24px' }}
       className="tw-web3button css-1fii1tk"

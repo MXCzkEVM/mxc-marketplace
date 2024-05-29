@@ -12,6 +12,7 @@ import { ButtonForV3 } from "../v2button"
 import { BurnMintButton } from "../BurnMintButton"
 import GfitButton from "../GfitButton"
 import { useAddress } from "@thirdweb-dev/react"
+import { Wallet } from "ethers"
 
 const BannerComponent = (props: any) => {
   let dta = props.collectionDta
