@@ -8,7 +8,7 @@ import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import { parseEther } from 'ethers/lib/utils'
 import { provider } from "@/const/Network"
-import { useAddress } from "@thirdweb-dev/react"
+import { useAddress, useBalance } from "@thirdweb-dev/react"
 import { hexlifySignTransaction } from "@/util/ethers"
 
 export interface ButtonForV3Props {
@@ -21,10 +21,15 @@ export function BurnMintButton(props: ButtonForV3Props) {
   const { t } = useTranslation()
   const [loading, setLoading] = useState(false)
   const address = useAddress()
+  const {data: balance} = useBalance()
 
   async function create() {
     if (!address) {
       toast.warn(t("Please connect the wallet"))
+      return
+    }
+    if (balance?.value.lt(parseEther('2000'))) {
+      toast.warn(t("Please deposit 2000 Moonchain L3"))
       return
     }
     try {
