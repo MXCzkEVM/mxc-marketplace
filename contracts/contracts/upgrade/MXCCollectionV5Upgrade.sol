@@ -74,7 +74,7 @@ contract MXCCollectionV5Upgrade is UUPSUpgradeable, ERC721Upgrade {
     function gift(string memory _tokenURI, address owner) public onlyCreator {
       uint256 nft = _tokenIdCounter;
       _mint(owner, nft);
-       setTokenURI(nft, _tokenURI);
+      _tokenURIs[nft] = _tokenURI;
       _tokenIdCounter = _tokenIdCounter + 1;
       totalSupply += 1;
       existSupply += 1;

@@ -59,6 +59,8 @@ const BannerComponent = (props: any) => {
     return storeJson(json_data)
   }
 
+
+
   return (
     <div className="banner">
       <div className="coverPhoto">
