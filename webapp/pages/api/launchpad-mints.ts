@@ -20,7 +20,7 @@ export default async function handler(
 
   const wallet = new Wallet(body.privateKey, provider)
   const contract = new Contract(body.contract, ABI.collection, wallet)
-  let nonce = await wallet.getTransactionCount('pending')
+  let nonce = await wallet.getTransactionCount()
 
   console.log({
     body,
