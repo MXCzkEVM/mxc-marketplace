@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react"
 import {
   useNFTs,
   useContract,
-  useContractRead,
   useTotalCount,
 } from "@thirdweb-dev/react"
 import Container from "@/components/Container/Container"
@@ -23,7 +22,7 @@ export default function CollectPage() {
   const [collectionDta, setCollectionDta] = useState<any>(null)
   const [page, setPage] = useState(1)
   const [nfts, setNFTS] = useState<any>([])
-
+  
   const router = useRouter()
   const collectionId: any = router.query.collection || zeroAddress
   const collectionAddress = useCollectionAddress(collectionId)
