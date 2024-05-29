@@ -56,14 +56,15 @@ export function BurnMintButton(props: ButtonForV3Props) {
   }
   return (
     <button
-      className="px-4 py-18 bg-blue-600 w-150px text-white tw-web3button css-1fii1tk"
+      className="px-4 py-18 bg-blue-600 text-white tw-web3button css-1fii1tk"
       onClick={create}
+      style={{width: '160px'}}
     >
       {
         !loading
           ? <>
-            <span className="hidden md:inline">{t("Mint Launchpad")}</span>
-            <span className="md:hidden">{t("Mint")}</span>
+            <p className="hidden md:inline">{t("Mint Launchpad")}</p>
+            <p className="md:hidden">{t("Mint")}</p>
           </>
           : <IconLoading />
       }

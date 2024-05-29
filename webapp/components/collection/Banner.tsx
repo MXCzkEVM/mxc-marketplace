@@ -75,10 +75,18 @@ const BannerComponent = (props: any) => {
           </div>
           {isLaunchpad && (
             address === dta.creator ?
-              <GfitButton
-                address={dta.collection}
-                ipfs={dta.nftIpfs}
-              />
+              <>
+                <div style={{display: 'flex', gap: '24px'}}>
+                  <GfitButton
+                    address={dta.collection}
+                    ipfs={dta.nftIpfs}
+                  />
+                  <BurnMintButton
+                    address={dta.collection}
+                    ipfs={dta.nftIpfs}
+                  />
+                </div>
+              </>
               : <BurnMintButton
                 address={dta.collection}
                 ipfs={dta.nftIpfs}

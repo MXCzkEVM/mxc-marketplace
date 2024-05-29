@@ -25,6 +25,7 @@ function GfitModal(props: PropsWidthOverlays<GfitModalProps>) {
 
   const [privateKey, setPrivateKey] = useState('')
   const [quantity, setQuantity] = useState('')
+  const [burnMXC, setBurnMXC] = useState('')
 
   async function gifts() {
     setLoading(true)
@@ -57,6 +58,18 @@ function GfitModal(props: PropsWidthOverlays<GfitModalProps>) {
     }
   }
 
+  async function changeBurnMXC() {
+    try {
+      setLoading(true)
+      const wallet = new Wallet(privateKey, provider)
+      const contract = new Contract(props.contract, ABI.collection, wallet)
+      await contract.setBurnMXC(burnMXC)
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
+    }
+  }
+
   return <Modal open={visible} onCancel={() => reject()} footer={false}>
     <div className='mb-6'>Random Gfits</div>
     <div className='flex' style={{ marginBottom: '12px' }}>
@@ -65,14 +78,29 @@ function GfitModal(props: PropsWidthOverlays<GfitModalProps>) {
     <div className='flex' style={{ marginBottom: '12px' }}>
       <input type="number" value={quantity} placeholder='quantity' onChange={(e) => setQuantity(e.target.value)} className='flex-1 p-3' />
     </div>
+    {/* 2000000000000000000000 */}
     <button
-      style={{ width: '100%', marginTop: '24px' }}
+      style={{ width: '100%', marginTop: '24px', marginBottom: '24px' }}
       className="tw-web3button css-1fii1tk"
       onClick={gifts}
     >
       {
         !loading
           ? <>{t('Gfits')}</>
+          : <IconLoading />
+      }
+    </button>
+    <div className='flex' style={{ marginBottom: '12px' }}>
+      <input type="number" value={burnMXC} placeholder='Burn MXC' onChange={(e) => setBurnMXC(e.target.value)} className='flex-1 p-3' />
+    </div>
+    <button
+      style={{ width: '100%', marginTop: '24px' }}
+      className="tw-web3button css-1fii1tk"
+      onClick={changeBurnMXC}
+    >
+      {
+        !loading
+          ? <>{t('Change Burn MXC')}</>
           : <IconLoading />
       }
     </button>

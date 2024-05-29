@@ -21,7 +21,7 @@ function GfitButton(props: GfitButtonProps) {
       className={"tw-web3button css-1fii1tk "}
       onClick={gifts}
     >
-      {t("Random Gifts")}
+      <span>Random Gifts</span>
     </button>
     {holder}
   </>
