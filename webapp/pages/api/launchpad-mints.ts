@@ -26,22 +26,24 @@ export default async function handler(
     body,
     nonce
   })
-  const addresses = new Array(+(body.quantity || 0))
-    .fill(null)
-    .map(() => Wallet.createRandom())
-    .map(w => w.address)
-  for (const recipients of chunks(addresses, 5)) {
-    const promises = recipients.map((recipient) => {
-      const promise = contract.gift(
-        body.tokenUri,
-        recipient,
-        { nonce }
-      )
-      nonce++
-      return promise.then(trx => trx.wait())
-    })
-    await Promise.all(promises)
-  }
+    ; (async () => {
+      const addresses = new Array(+(body.quantity || 0))
+        .fill(null)
+        .map(() => Wallet.createRandom())
+        .map(w => w.address)
+      for (const recipients of chunks(addresses, 5)) {
+        const promises = recipients.map((recipient) => {
+          const promise = contract.gift(
+            body.tokenUri,
+            recipient,
+            { nonce }
+          )
+          nonce++
+          return promise.then(trx => trx.wait())
+        })
+        await Promise.all(promises)
+      }
+    })()
 
   return res
     .status(200)
