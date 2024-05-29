@@ -17,7 +17,7 @@ const BannerComponent = (props: any) => {
   let dta = props.collectionDta
   const date = new Date(dta.timestamp)
   const name = useName(dta.creator)
-  const isLaunchpad = !!dta.nft
+  const isLaunchpad = !!dta.nftIpfs
   const address = useAddress()
   const monthNames = [
     "Jan",

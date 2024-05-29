@@ -37,11 +37,10 @@ export default function CollectPage() {
   let nftCounterNumber = nftCounter ? parseInt(nftCounter?.toString()) : 0
 
   const { data: nftLis, isLoading } = useNFTs(nftContract, {
-    count: 20,
-    start: (page - 1) * 20,
+    count: 30,
+    start: (page - 1) * 30,
   })
 
-  console.log({nftLis})
   useEffect(() => {
     const fetchData = async () => {
       if (collectionAddress == zeroAddress) {

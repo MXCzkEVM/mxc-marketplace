@@ -47,7 +47,7 @@ contract MXCCollectionV5Upgrade is UUPSUpgradeable, ERC721Upgrade {
         collateral = _collateral;
         initializeERC721(_name, _symbol);
         __UUPSUpgradeable_init();
-        burnMXC = 500000000000000000000;
+        burnMXC = 2000000000000000000000;
     }
 
     function _authorizeUpgrade(address) internal override {}

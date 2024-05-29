@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     signedMessage
   )
 
-  const target = await redis.hget(`${chainId}_collections`, collection)
+  const target = await redis.hget(`${chainId}_launchpad_collections`, collection)
   if (target == null) {
     return res
       .status(200)
@@ -44,7 +44,7 @@ export default async function handler(req, res) {
 
   if (target.url)
     await redis.lrem(`${chainId}_use_domains`, 0, target.url)
-  await redis.hdel(`${chainId}_collections`, collection)
+  await redis.hdel(`${chainId}_launchpad_collections`, collection)
 
   return res
     .status(200)

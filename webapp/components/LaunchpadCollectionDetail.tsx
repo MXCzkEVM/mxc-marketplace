@@ -320,40 +320,42 @@ const CollectDetail = (props: any) => {
       return
     }
 
-
-    const json_data = JSON.stringify({
-      pinataOptions: {},
-      pinataMetadata: {
-        name: nftName,
-      },
-      pinataContent: {
-        description: nftDescription,
-        attributes: traits,
-        image: nft_ipfs,
-        name: nftName,
-      },
-    })
-
-    let formData: any = {
-      cover: cover_ipfs,
-      profile: profile_ipfs,
-      nftIpfs: `ipfs://${await storeJson(json_data)}`,
-      name,
-      description,
-      royaltyRecipient,
-      royaltiesCutPerMillion: royalty * 100,
-      url: domainValue || "",
-      category: categoryValue,
-      traits,
-      tags: JSON.stringify(tags),
-      site,
-      social,
-      chainId: CHAIN_ID,
-      creator: address,
-    }
-
     let txResult
     try {
+
+      const json_data = JSON.stringify({
+        pinataOptions: {},
+        pinataMetadata: {
+          name: nftName,
+        },
+        pinataContent: {
+          description: nftDescription,
+          attributes: traits,
+          image: nft_ipfs,
+          name: nftName,
+        },
+      })
+  
+      const nftIpfs = `ipfs://${await storeJson(json_data)}`
+  
+      let formData: any = {
+        cover: cover_ipfs,
+        profile: profile_ipfs,
+        nftIpfs,
+        name,
+        description,
+        royaltyRecipient,
+        royaltiesCutPerMillion: royalty * 100,
+        url: domainValue || "",
+        category: categoryValue,
+        traits,
+        tags: JSON.stringify(tags),
+        site,
+        social,
+        chainId: CHAIN_ID,
+        creator: address,
+      }
+
       const collectionFactory = await instanceCollectionFactory()
       let filterCollection = collectionFactory.filters.newCollectionEvent(
         null,
