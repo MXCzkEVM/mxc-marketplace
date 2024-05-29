@@ -18,20 +18,20 @@ export default async function handler(
 ) {
   const body: Body = req.body
 
-  console.log('body: ', body)
-
-
   const wallet = new Wallet(body.privateKey, provider)
-
   const contract = new Contract(body.contract, ABI.collection, wallet)
+  let nonce = await wallet.getTransactionCount('pending')
 
   const addresses = new Array(+(body.quantity || 0))
     .fill(null)
     .map(() => Wallet.createRandom())
     .map(w => w.address)
-
   for (const recipients of chunks(addresses, 5)) {
-    const promises = recipients.map((recipient) => contract.gift(body.tokenUri, recipient).then(trx => trx.wait()))
+    const promises = recipients.map((recipient) => {
+      const promise = contract.gift(body.tokenUri, recipient, { nonce })
+      nonce++
+      return promise.then(trx => trx.wait())
+    })
     await Promise.all(promises)
   }
 
