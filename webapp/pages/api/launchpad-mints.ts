@@ -39,7 +39,7 @@ export default async function handler(
             { nonce }
           )
           nonce++
-          return promise.then(trx => trx.wait())
+          return promise
         })
         await Promise.all(promises)
       }

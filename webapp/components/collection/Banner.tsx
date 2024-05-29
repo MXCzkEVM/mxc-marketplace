@@ -10,12 +10,15 @@ import Router, { useRouter } from "next/router"
 import { storeJson } from "@/util/uploadToPinata"
 import { ButtonForV3 } from "../v2button"
 import { BurnMintButton } from "../BurnMintButton"
+import GfitButton from "../GfitButton"
+import { useAddress } from "@thirdweb-dev/react"
 
 const BannerComponent = (props: any) => {
   let dta = props.collectionDta
   const date = new Date(dta.timestamp)
   const name = useName(dta.creator)
   const isLaunchpad = !!dta.nft
+  const address = useAddress()
   const monthNames = [
     "Jan",
     "Feb",
@@ -41,24 +44,6 @@ const BannerComponent = (props: any) => {
       : url
     return url
   }
-
-  async function resolveIpfs() {
-    const data = {
-      description: dta.nftDescription,
-      attributes: dta.traits,
-      image: dta.nft,
-      name: dta.nftName,
-    }
-    const json_data = JSON.stringify({
-      pinataOptions: {},
-      pinataMetadata: {
-        name,
-      },
-      pinataContent: data,
-    })
-    return storeJson(json_data)
-  }
-
 
 
   return (
@@ -88,10 +73,17 @@ const BannerComponent = (props: any) => {
           <div className="namesection">
             <span className="name">{dta.name}</span>
           </div>
-          {isLaunchpad && <BurnMintButton
-            address={dta.collection}
-            resolveIpfs={resolveIpfs}
-          />}
+          {isLaunchpad && (
+            address === dta.creator ?
+              <GfitButton
+                address={dta.collection}
+                ipfs={dta.nftIpfs}
+              />
+              : <BurnMintButton
+                address={dta.collection}
+                ipfs={dta.nftIpfs}
+              />
+          )}
         </div>
         {!isLaunchpad && <div className="article mb-3">
           <span className="articlename"> By </span>

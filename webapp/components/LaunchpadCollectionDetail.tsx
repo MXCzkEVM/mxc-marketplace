@@ -8,7 +8,7 @@ import {
 } from "@thirdweb-dev/react"
 import { toast } from "react-toastify"
 // import { ChainId, ThirdwebSDK } from "@thirdweb-dev/sdk"
-import { storeImage } from "@/util/uploadToPinata"
+import { storeImage, storeJson } from "@/util/uploadToPinata"
 // import { NETWORK } from "@/const/Network"
 import FormData from "form-data"
 import axios from "axios"
@@ -320,12 +320,24 @@ const CollectDetail = (props: any) => {
       return
     }
 
+
+    const json_data = JSON.stringify({
+      pinataOptions: {},
+      pinataMetadata: {
+        name: nftName,
+      },
+      pinataContent: {
+        description: nftDescription,
+        attributes: traits,
+        image: nft_ipfs,
+        name: nftName,
+      },
+    })
+
     let formData: any = {
       cover: cover_ipfs,
       profile: profile_ipfs,
-      nft: nft_ipfs,
-      nftName,
-      nftDescription,
+      nftIpfs: `ipfs://${await storeJson(json_data)}`,
       name,
       description,
       royaltyRecipient,

@@ -6,12 +6,12 @@
   gap: 1%;
   width: calc(100% - 30px);
   margin: 0 auto;
-
+  // justify-content: center;
   .collectioncard {
     box-shadow: rgb(0 0 0 / 8%) 0px 4px 15px;
     background-color: #fff;
     color: #313131;
-    width: 17.8%;
+    width: 17.79515%;
     margin: 8px;
     position: relative;
     overflow: hidden;
@@ -78,6 +78,12 @@
       }
     }
   }
+
+  // @media (min-width: 1200) and (max-width: 1400px) {
+  //   .collectioncard {
+  //       width: 22%;
+  //   }
+  // }
 
   @media (min-width: 760px) and (max-width: 1200px) {
     .collectioncard {

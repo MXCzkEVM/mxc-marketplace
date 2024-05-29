@@ -13,8 +13,8 @@ import { hexlifySignTransaction } from "@/util/ethers"
 
 export interface ButtonForV3Props {
   address: string
+  ipfs: string
   xsd?: any
-  resolveIpfs?: Function
   onSuccess?: Function
 }
 export function BurnMintButton(props: ButtonForV3Props) {
@@ -31,9 +31,7 @@ export function BurnMintButton(props: ButtonForV3Props) {
       setLoading(true)
       const singer = provider.getSigner(address)
       const contract = new Contract(props.address, ABI.collection, singer)
-      const data = await contract.populateTransaction.burnMXCMint(
-        `ipfs://${await props.resolveIpfs?.()}`,
-      )
+      const data = await contract.populateTransaction.burnMXCMint(props.ipfs)
       const burnMXC = await contract.getBurnMXC();
       const transaction = await singer.populateTransaction({
         ...data,
@@ -58,7 +56,7 @@ export function BurnMintButton(props: ButtonForV3Props) {
   }
   return (
     <button
-      className="px-4 py-18 bg-blue-600 text-white tw-web3button css-1fii1tk"
+      className="px-4 py-18 bg-blue-600 w-150px text-white tw-web3button css-1fii1tk"
       onClick={create}
     >
       {
