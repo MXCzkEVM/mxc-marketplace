@@ -38,17 +38,25 @@ export function BurnMintButton(props: ButtonForV3Props) {
       toast.warn(t("Please deposit 2000 Moonchain L3"))
       return
     }
-    
+
     try {
       setLoading(true)
       const singer = provider.getSigner(address)
       const contract = new Contract(props.address, ABI.collection, singer)
       const data = await contract.populateTransaction.burnMXCMint(props.ipfs)
       const burnMXC = await contract.getBurnMXC()
-      const transaction = await singer.populateTransaction({
-        ...data,
-        value: burnMXC
-      })
+      let transaction: providers.TransactionRequest
+
+      try {
+        transaction = await singer.populateTransaction({
+          ...data,
+          value: burnMXC
+        })
+      } catch (error) {
+        toast.error('Insufficient gas fee')
+        throw error
+      }
+
       const hash = await window.ethereum.request({
         method: 'eth_sendTransaction',
         params: [hexlifySignTransaction(transaction)]
@@ -57,18 +65,17 @@ export function BurnMintButton(props: ButtonForV3Props) {
       toast.success("NFT item create successfully!")
       Router.reload()
       setLoading(false)
-
     } catch (error) {
       console.log(error)
       setLoading(false)
-      toast.error('Insufficient gas fee')
+      toast.error(t("NFT item create failed"))
     }
   }
   return (
     <button
       className="px-4 py-18 bg-blue-600 text-white tw-web3button css-1fii1tk"
       onClick={create}
-      style={{width: '160px'}}
+      style={{ width: '160px' }}
     >
       {
         !loading
