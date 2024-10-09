@@ -34,8 +34,8 @@ function axsWallet(): WalletConfig<InjectedWallet> {
   return {
     id: "axs",
     meta: {
-      name: "AXS Wallet",
-      iconURL: "/axs.svg",
+      name: "MoonBase",
+      iconURL: "https://raw.githubusercontent.com/MXCzkEVM/metadata/main/logo.svg",
     },
     create: (options: WalletOptions) => {
       return new InjectedWallet(options)
