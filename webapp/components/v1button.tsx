@@ -15,10 +15,13 @@ export function ButtonForV2(props: ButtonForV2Props) {
   const { mutateAsync: mintNFT } = useContractWrite(contract, "mint")
   async function create() {
     try {
-      const result = await mintNFT({ args: [`ipfs://${await props.resolveIpfs?.()}`] })
-      toast.success("NFT item create successfully!")
-      Router.push(`/collection/${props.address}`)
-      return result
+      const ipfs = await props.resolveIpfs?.()
+      if (ipfs) {
+        const result = await mintNFT({ args: [`ipfs://${ipfs}`] })
+        toast.success("NFT item create successfully!")
+        Router.push(`/collection/${props.address}`)
+        return result
+      }
     } catch (error) {
        // console.error(error)
        console.log(error)

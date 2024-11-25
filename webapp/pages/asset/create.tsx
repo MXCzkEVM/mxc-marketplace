@@ -294,7 +294,7 @@ export default function AssetCrearePage() {
   function renderButtonV3() {
     const xsd = mortgage ? toMortgage : 0
     return <ButtonForV3 
-      address={collection_address} 
+      address={collection_address}
       resolveIpfs={createItem}
       xsd={xsd}
       onSuccess={refetchXsdBalance}

@@ -24,18 +24,21 @@ export function ButtonForV3(props: ButtonForV3Props) {
       setLoading(true)
       const singer = provider.getSigner(address)
       const contract = new Contract(props.address, ABI.collection, singer)
-      const data = await contract.populateTransaction.mint(
-        `ipfs://${await props.resolveIpfs?.()}`,
-        props.xsd
-      )
-      const hexlifyTransaction = hexlifySignTransaction(await singer.populateTransaction(data))
-      const hash = await window.ethereum.request({
-        method: 'eth_sendTransaction',
-        params: [hexlifyTransaction]
-      })
-      await provider.waitForTransaction(hash)
-      toast.success("NFT item create successfully!")
-      Router.push(`/collection/${props.address}`)
+      const ipfs = await props.resolveIpfs?.()
+      if (ipfs) {
+        const data = await contract.populateTransaction.mint(
+          `ipfs://${ipfs}`,
+          props.xsd
+        )
+        const hexlifyTransaction = hexlifySignTransaction(await singer.populateTransaction(data))
+        const hash = await window.ethereum.request({
+          method: 'eth_sendTransaction',
+          params: [hexlifyTransaction]
+        })
+        await provider.waitForTransaction(hash)
+        toast.success("NFT item create successfully!")
+        Router.push(`/collection/${props.address}`)
+      }
       setLoading(false)
 
     } catch (error) {
