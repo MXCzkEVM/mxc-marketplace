@@ -133,5 +133,11 @@
   "Launchpad": "Platforma de lansare",
   "Discover the next 100x with UXUY": "Descoperiți următoarele 100x cu UXUY",
   "Please connect the wallet": "Vă rugăm să conectați portofelul",
-  "Please deposit 2000 Moonchain L3": "Vă rugăm să depuneți 2000 Moonchain L3 $MXC"
+  "Please deposit 2000 Moonchain L3": "Vă rugăm să depuneți 2000 Moonchain L3 $MXC",
+  "Transfer NFT": "Transferă NFT",
+  "Cancel Transfer": "Anulează transferul",
+  "Recipient Address": "Adresa destinatarului",
+  "Confirm Transfer": "Confirmă transferul",
+  "Transferring...": "Se transferă...",
+  "Invalid address": "Adresă invalidă"
 }

@@ -7,6 +7,7 @@ require("hardhat-abi-exporter")
 require("hardhat-contract-sizer")
 require("hardhat-gas-reporter")
 require("@openzeppelin/hardhat-upgrades")
+require("@typechain/hardhat");
 // require("solidity-coverage")
 // require("hardhat-storage-layout")
 // require("@nomicfoundation/hardhat-toolbox")

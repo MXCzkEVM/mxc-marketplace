@@ -133,5 +133,11 @@
   "Launchpad": "Панель запуска",
   "Discover the next 100x with UXUY": "Откройте для себя новые возможности в 100 раз вместе с UXUY",
   "Please connect the wallet": "Пожалуйста, подключите кошелек",
-  "Please deposit 2000 Moonchain L3": "Пожалуйста, внесите 2000 Moonchain L3 $MXC."
+  "Please deposit 2000 Moonchain L3": "Пожалуйста, внесите 2000 Moonchain L3 $MXC.",
+  "Transfer NFT": "Перевести NFT",
+  "Cancel Transfer": "Отменить перевод",
+  "Recipient Address": "Адрес получателя",
+  "Confirm Transfer": "Подтвердить перевод",
+  "Transferring...": "Перевод...",
+  "Invalid address": "Неверный адрес"
 }

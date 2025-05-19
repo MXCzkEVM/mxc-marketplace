@@ -133,5 +133,11 @@
   "Launchpad": "Landasan peluncuran",
   "Discover the next 100x with UXUY": "Temukan 100x berikutnya dengan UXUY",
   "Please connect the wallet": "Silakan sambungkan dompet",
-  "Please deposit 2000 Moonchain L3": "Silakan setorkan 2000 Moonchain L3 $MXC"
+  "Please deposit 2000 Moonchain L3": "Silakan setorkan 2000 Moonchain L3 $MXC",
+  "Transfer NFT": "Transfer NFT",
+  "Cancel Transfer": "Batalkan Transfer",
+  "Recipient Address": "Alamat Penerima",
+  "Confirm Transfer": "Konfirmasi Transfer",
+  "Transferring...": "Mentransfer...",
+  "Invalid address": "Alamat tidak valid"
 }

@@ -7,7 +7,7 @@ import {
   useContractRead,
   useAddress,
   Web3Button,
-  getContractFromAbi
+  // getContractFromAbi // Not used directly, can be removed if not needed elsewhere
 } from "@thirdweb-dev/react"
 
 import { useRouter } from "next/router"
@@ -44,6 +44,8 @@ export default function TokenPage() {
   const [nftPrice, setNftPrice] = useState<BigNumber>(BigNumber.from(0))
   const [inputPrice, setInputPrice] = useState<any>("")
   const [detail, setDetail] = useState<any>()
+  const [showTransferInput, setShowTransferInput] = useState(false)
+  const [transferToAddress, setTransferToAddress] = useState("")
   const router = useRouter()
   const address = useAddress() || zeroAddress
   const ownerName = useName(nft.owner)
@@ -93,6 +95,11 @@ export default function TokenPage() {
   const { mutateAsync: executeOrderByMiner } = useContractWrite(
     mkpContract, "executeOrderByMiner"
   )
+
+  const { mutateAsync: transferNFT, isLoading: isTransferring } = useContractWrite(
+    nftContract,
+    "safeTransferFrom"
+  );
 
   useEffect(() => {
     if (collection == zeroAddress)
@@ -217,11 +224,33 @@ export default function TokenPage() {
     return txResult
   }
 
+  const handleTransfer = async () => {
+    if (!ethers.utils.isAddress(transferToAddress)) {
+      toast.error(t("Invalid address"));
+      return;
+    }
+    if (nft.owner !== address) {
+      toast.warn(t("You are not the nft owner"));
+      return;
+    }
+    try {
+      await transferNFT({ args: [address, transferToAddress, tokenId] });
+      toast.success(t("Transfer successful"));
+      setShowTransferInput(false);
+      setTransferToAddress("");
+      // Optimistically update owner, or refetch NFT details
+      SetNFT({ ...nft, owner: transferToAddress });
+    } catch (error) {
+      console.error(error);
+      toast.error(t("Transfer failed"));
+    }
+  };
+
   const isApprovedCond =
     isApproved === zeroAddress &&
     isApproved !== CONTRACTS_MAP.MARKETPLACE &&
     isApprovedForAll
-    
+
   const isNFTOwner = nft.owner === address
 
   useEffect(() => {
@@ -229,9 +258,9 @@ export default function TokenPage() {
   }, [tokenId])
 
   async function requestDetail() {
-    if (!tokenId|| Number(tokenId) === 0)
+    if (!tokenId || Number(tokenId) === 0)
       return
-    const {data} = await axios('/mep2542/getMEP1004TokenDetail', {
+    const { data } = await axios('/mep2542/getMEP1004TokenDetail', {
       baseURL: process.env.NEXT_PUBLIC_MINING_API,
       params: { tokenId }
     })
@@ -362,7 +391,7 @@ export default function TokenPage() {
           <div className="container">
             <div className="metadataContainer">
               <div className="token_image">
-                <Image style={{height: '265px'}} src="https://matchx.io/cdn/shop/products/matchx_gateway_001.jpg?crop=center&height=675&v=1676546606&width=450" defaultImage={defaultPng.src} alt="" />
+                <Image style={{ height: '265px' }} src="https://matchx.io/cdn/shop/products/matchx_gateway_001.jpg?crop=center&height=675&v=1676546606&width=450" defaultImage={defaultPng.src} alt="" />
               </div>
               {nft.metadata.description && <>
                 <h3 className="descriptionTitle">{t("Description")}</h3>
@@ -413,6 +442,36 @@ export default function TokenPage() {
               {isNFTOwner && !nftPrice.eq(0) && isApprovedCond && renderCancel()}
               {/* {isNFTOwner && nftPrice.eq(0) && renderButtons()} */}
               {address !== zeroAddress && !isNFTOwner && !nftPrice.eq(0) && renderExcute()}
+
+              {isNFTOwner && (
+                <div className="mt-4">
+                  <button
+                    onClick={() => setShowTransferInput(!showTransferInput)}
+                    className="list_btn mb-2 w-full"
+                  >
+                    {showTransferInput ? t("Cancel Transfer") : t("Transfer NFT")}
+                  </button>
+                  {showTransferInput && (
+                    <div className="transfer_input_container flex flex-col gap-2">
+                      <input
+                        type="text"
+                        placeholder={t("Recipient Address")}
+                        value={transferToAddress}
+                        onChange={(e) => setTransferToAddress(e.target.value)}
+                        className="input_field p-2 border rounded"
+                      />
+                      <Web3Button
+                        contractAddress={collection}
+                        action={handleTransfer}
+                        isDisabled={isTransferring || !transferToAddress || !ethers.utils.isAddress(transferToAddress)}
+                        className="list_btn"
+                      >
+                        {isTransferring ? t("Transferring...") : t("Confirm Transfer")}
+                      </Web3Button>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </Container>

@@ -89,5 +89,11 @@
   "success": "成功",
   "Wrong chainId": "錯誤的鏈ID",
   "Verified": "由MXC基金會發行並驗證",
-  "Caution": "社區建設的項目。這是一個去中心化的平台，DYOR。"
+  "Caution": "社區建設的項目。這是一個去中心化的平台，DYOR。",
+  "Transfer NFT": "轉移 NFT",
+  "Cancel Transfer": "取消轉移",
+  "Recipient Address": "接收者地址",
+  "Confirm Transfer": "確認轉移",
+  "Transferring...": "轉移中...",
+  "Invalid address": "無效地址"
 }

@@ -7081,6 +7081,22 @@ typechain@^8.0.0:
     ts-command-line-args "^2.2.0"
     ts-essentials "^7.0.1"
 
+typechain@^8.3.1:
+  version "8.3.1"
+  resolved "https://registry.yarnpkg.com/typechain/-/typechain-8.3.1.tgz#dccbc839b94877997536c356380eff7325395cfb"
+  integrity sha512-fA7clol2IP/56yq6vkMTR+4URF1nGjV82Wx6Rf09EsqD4tkzMAvEaqYxVFCavJm/1xaRga/oD55K+4FtuXwQOQ==
+  dependencies:
+    "@types/prettier" "^2.1.1"
+    debug "^4.3.1"
+    fs-extra "^7.0.0"
+    glob "7.1.7"
+    js-sha3 "^0.8.0"
+    lodash "^4.17.15"
+    mkdirp "^1.0.4"
+    prettier "^2.3.1"
+    ts-command-line-args "^2.2.0"
+    ts-essentials "^7.0.1"
+
 typed-array-length@^1.0.4:
   version "1.0.4"
   resolved "https://registry.npmmirror.com/typed-array-length/-/typed-array-length-1.0.4.tgz#89d83785e5c4098bec72e08b319651f0eac9c1bb"

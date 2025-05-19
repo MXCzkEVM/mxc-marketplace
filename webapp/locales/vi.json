@@ -133,5 +133,11 @@
   "Launchpad": "Bệ phóng",
   "Discover the next 100x with UXUY": "Khám phá 100x tiếp theo với UXUY",
   "Please connect the wallet": "Vui lòng kết nối ví",
-  "Please deposit 2000 Moonchain L3": "Vui lòng gửi 2000 Moonchain L3 $MXC"
+  "Please deposit 2000 Moonchain L3": "Vui lòng gửi 2000 Moonchain L3 $MXC",
+  "Transfer NFT": "Chuyển NFT",
+  "Cancel Transfer": "Hủy chuyển",
+  "Recipient Address": "Địa chỉ người nhận",
+  "Confirm Transfer": "Xác nhận chuyển",
+  "Transferring...": "Đang chuyển...",
+  "Invalid address": "Địa chỉ không hợp lệ"
 }

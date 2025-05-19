@@ -133,5 +133,11 @@
   "Launchpad": "Lanceerplatform",
   "Discover the next 100x with UXUY": "Ontdek de volgende 100x met UXUY",
   "Please connect the wallet": "Sluit de portemonnee aan",
-  "Please deposit 2000 Moonchain L3": "Stort alstublieft 2000 Moonchain L3 $MXC"
+  "Please deposit 2000 Moonchain L3": "Stort alstublieft 2000 Moonchain L3 $MXC",
+  "Transfer NFT": "NFT overdragen",
+  "Cancel Transfer": "Overdracht annuleren",
+  "Recipient Address": "Adres ontvanger",
+  "Confirm Transfer": "Overdracht bevestigen",
+  "Transferring...": "Overdragen...",
+  "Invalid address": "Ongeldig adres"
 }

@@ -133,5 +133,11 @@
   "Launchpad": "발사대",
   "Discover the next 100x with UXUY": "UXUY와 함께 차세대 100x를 발견하세요",
   "Please connect the wallet": "지갑을 연결해주세요",
-  "Please deposit 2000 Moonchain L3": "2000 Moonchain L3 $MXC를 입금해주세요."
+  "Please deposit 2000 Moonchain L3": "2000 Moonchain L3 $MXC를 입금해주세요.",
+  "Transfer NFT": "NFT 전송",
+  "Cancel Transfer": "전송 취소",
+  "Recipient Address": "수신자 주소",
+  "Confirm Transfer": "전송 확인",
+  "Transferring...": "전송 중...",
+  "Invalid address": "잘못된 주소"
 }

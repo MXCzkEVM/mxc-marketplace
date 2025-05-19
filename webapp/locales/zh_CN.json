@@ -133,5 +133,11 @@
   "Launchpad": "Launchpad",
   "Discover the next 100x with UXUY": "与 UXUY 一起探索下一个 100 倍",
   "Please connect the wallet": "请连接钱包",
-  "Please deposit 2000 Moonchain L3": "请充值 2000 Moonchain L3 $MXC"
+  "Please deposit 2000 Moonchain L3": "请充值 2000 Moonchain L3 $MXC",
+  "Transfer NFT": "转移NFT",
+  "Cancel Transfer": "取消转移",
+  "Recipient Address": "接收者地址",
+  "Confirm Transfer": "确认转移",
+  "Transferring...": "转移中...",
+  "Invalid address": "无效地址"
 }

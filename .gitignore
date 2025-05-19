@@ -65,3 +65,5 @@ yarn-error.log*
 *.tsbuildinfo
 
 /scripts
+
+.idea

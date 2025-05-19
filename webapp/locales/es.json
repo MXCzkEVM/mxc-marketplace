@@ -133,5 +133,11 @@
   "Launchpad": "Plataforma de lanzamiento",
   "Discover the next 100x with UXUY": "Descubre el próximo 100x con UXUY",
   "Please connect the wallet": "Por favor conecta la billetera",
-  "Please deposit 2000 Moonchain L3": "Por favor deposite 2000 Moonchain L3 $MXC"
+  "Please deposit 2000 Moonchain L3": "Por favor deposite 2000 Moonchain L3 $MXC",
+  "Transfer NFT": "Transferir NFT",
+  "Cancel Transfer": "Cancelar Transferencia",
+  "Recipient Address": "Dirección del Destinatario",
+  "Confirm Transfer": "Confirmar Transferencia",
+  "Transferring...": "Transfiriendo...",
+  "Invalid address": "Dirección inválida"
 }

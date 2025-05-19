@@ -133,5 +133,11 @@
   "Launchpad": "Başlatma Çubuğu",
   "Discover the next 100x with UXUY": "UXUY ile sonraki 100x'i keşfedin",
   "Please connect the wallet": "Lütfen cüzdanı bağlayın",
-  "Please deposit 2000 Moonchain L3": "Lütfen 2000 Moonchain L3 $MXC yatırın"
+  "Please deposit 2000 Moonchain L3": "Lütfen 2000 Moonchain L3 $MXC yatırın",
+  "Transfer NFT": "NFT Aktar",
+  "Cancel Transfer": "Aktarımı İptal Et",
+  "Recipient Address": "Alıcı Adresi",
+  "Confirm Transfer": "Aktarımı Onayla",
+  "Transferring...": "Aktarılıyor...",
+  "Invalid address": "Geçersiz adres"
 }
